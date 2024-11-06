@@ -35,6 +35,23 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SFTP_KEY }}
 
+      - name: Install Expect
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y expect
+
+      - name: Establish SSH Tunnel with Double Password Prompt
+        env:
+          NUWEBSPACE_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          expect << EOF
+          spawn ssh -L 2222:localhost:22 nuwebspace
+          expect "password:" { send "$env(NUWEBSPACE_PASSWORD)\r" }
+          expect "password:" { send "$env(NUWEBSPACE_PASSWORD)\r" }
+          interact
+          EOF
+        background: true # Run in the background to keep the tunnel open
+
       - name: Establish SSH Tunnel
         env:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}

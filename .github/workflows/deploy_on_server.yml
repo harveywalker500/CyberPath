@@ -1,0 +1,54 @@
+name: Deploy to Server via SFTP
+
+on:
+  push:
+    branches:
+      - deployment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Up SSH Configuration
+        run: |
+          cd ~
+
+          mkdir -p .ssh
+
+          touch .ssh/config
+
+          echo "
+          ### NUwebspace
+          Host nuwebspace
+            User ${{ secrets.SFTP_USER }}
+            HostName ${{ secrets.SFTP_HOST }}
+            Port 22
+            ProxyJump ${{ secrets.SFTP_USER }}@nuwebspace.co.uk
+          ###" >> ~/.ssh/config
+
+      - name: Setup SSH Agent and Add Key
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SFTP_KEY }}
+
+      - name: Establish SSH Tunnel
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+        run: |
+          ssh -L 2222:localhost:22 nuwebspace -N &
+          sleep 5 # Wait for the tunnel to establish
+
+      - name: Upload HTML Files via SFTP
+        env:
+          SFTP_PORT: "2222"
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+        run: |
+          sftp -o StrictHostKeyChecking=no -P $SFTP_PORT $SFTP_USER@localhost << 'EOF'
+          put -r * /var/www/html/
+          bye
+          EOF

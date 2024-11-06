@@ -40,7 +40,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y expect
 
+<<<<<<< HEAD
       - name: Establish SSH Tunnel with Double Password Prompt
+=======
+      - name: Establish SSH Tunnel
+>>>>>>> a43828c (Fixed password issue when uploading)
         env:
           NUWEBSPACE_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
@@ -64,8 +68,13 @@ jobs:
         env:
           SFTP_PORT: "2222"
           SFTP_USER: ${{ secrets.SFTP_USER }}
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
-          sftp -o StrictHostKeyChecking=no -P $SFTP_PORT $SFTP_USER@localhost << 'EOF'
-          put -r * /var/www/html/
-          bye
+          expect << EOF
+          spawn sftp -o StrictHostKeyChecking=no -P $SFTP_PORT $SFTP_USER@localhost
+          expect "password:" { send "$env(SFTP_PASSWORD)\r" }
+          expect "sftp>"
+          send "put -r * /path/on/your/server\r"
+          expect "sftp>"
+          send "bye\r"
           EOF

@@ -50,7 +50,7 @@ jobs:
           expect "password:" { send "$env(NUWEBSPACE_PASSWORD)\r" }
           interact
           EOF
-        background: true # Run in the background to keep the tunnel open
+          background: true # Run in the background to keep the tunnel open
 
       - name: Establish SSH Tunnel
         env:

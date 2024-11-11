@@ -7,7 +7,7 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
 ?>
 
 <h1>Hello Matthew!</h1>
-<p>...</p>
+<p>..</p>
 <script src="index.js"></script>
 
 <?php

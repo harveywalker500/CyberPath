@@ -70,7 +70,7 @@ jobs:
           spawn sftp -o StrictHostKeyChecking=no -P $SFTP_PORT $SFTP_USER@localhost
           expect "password:" { send "$env(SFTP_PASSWORD)\r" }
           expect "sftp>"
-          send "put -r * /path/on/your/server\r"
+          send "put -r * /home/w22009720/public_html\r"
           expect "sftp>"
           send "bye\r"
           EOF

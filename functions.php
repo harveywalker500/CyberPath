@@ -35,6 +35,15 @@ function makePageStart($title)
 HTML;
 }
 
+function show_errors($errors) {//function to show errors, parameter should be array of errors or empty
+    echo "<h1 class='error-heading'>Errors</h1>\n";
+    $output = "";
+    foreach ($errors as $error) {
+        $output .= "<p class='error-message'>$error</p>\n";//Concatenates each error into an error message and displays on screen.
+    }
+    return $output;
+}
+
 function getEpisodes() {
     try {
         // Get database connection
@@ -56,46 +65,37 @@ function getEpisodes() {
     }
 }
 
-function validate_login(){//Function to validate the login fields
+function validate_login() {
     $input = array();
-    $errors=array();
-    $input['username'] = $_POST['username']?? '';//Gets the username user has inputted by POST
-    $input['passsword'] = $_POST['password']?? '';//Same as above
-    $input['username'] = trim($input['username']);//Trims the whitespace
-    $input['passsword'] = trim($input['passsword']);
+    $errors = array();
+    $input['username'] = $_POST['username'] ?? '';
+    $input['password'] = $_POST['password'] ?? '';
+    $input['username'] = trim($input['username']);
+    $input['password'] = trim($input['password']);
 
-    try{
-        require_once("functions.php");
+    try {
         $dbConn = getConnection();
+        $sqlQuery = "SELECT userID, username, password FROM userTable WHERE username = :username";
+        $stmt = $dbConn->prepare($sqlQuery);
+        $stmt->execute(array(':username' => $input['username']));
 
-        $sqlQuery = "SELECT username, passwordHash FROM EGN_users WHERE username = :username";//Gets the valid username and passwordHash from DB
-        
-        $stmt = $dbConn->prepare($sqlQuery);//Prepare statement
-        
-        $stmt->execute(array(':username' => $input['username']));// Execute the statement, passing in the submitted username
-
-        $user = $stmt->fetchObject();//Stores the result as object
-        if($user){
-            $passwordHash = $user->passwordHash;//Hashes the user inputted password
-            if (password_verify($input['passsword'], $passwordHash))//Checks if the hashed version of user inputted password is same as the password hash that matches the username.
-                {
-                    $_SESSION['username'] = $user->username; //Set the session username to the user's username
-                }
-            
-            else {
-                $errors[] = "Password is incorrect";
-                }//tells user password is wrong
+        $user = $stmt->fetchObject();
+        if ($user) {
+            if (password_verify($input['password'], $user->password)) {
+                $_SESSION['username'] = $user->username;
+                $_SESSION['userID'] = $user->userID;  // Optionally store the user ID
+            } else {
+                $errors[] = "Password is incorrect.";
             }
-        else {
-            $errors[] = "Username is incorrect.";//Tells user username doesnt exist
+        } else {
+            $errors[] = "Username is incorrect.";
         }
-    
-    }catch (Exception $e) {
-            echo "There was a problem: " . $e->getMessage();
+    } catch (Exception $e) {
+        echo "There was a problem: " . $e->getMessage();
     }
     return array($input, $errors);
-
 }
+
 
 function set_session($key, $value){//Function that takes two parameters to specify the session key and the corresponding value
     $_SESSION[$key]=$value;//Assigns provided value to the session variable thats identified by $key.
@@ -134,17 +134,12 @@ function logOut(){//Function to log out of account
 }
 
 function makeNavMenu($navMenuHeader, array $links) {
-    // Initial navbar HTML structure with Bulma classes
     $output = <<<HTML
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <!-- Logo -->
             <a class="navbar-item" href="index.php">
                 <img src="CyberPath.png" alt="Site Logo" style="width: 100px; height: 100px; max-height: none;">
-
             </a>
-
-            <!-- Burger menu for mobile view -->
             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -156,20 +151,28 @@ function makeNavMenu($navMenuHeader, array $links) {
             <div class="navbar-start">
 HTML;
 
-    // Loop through the provided links array and add them as navbar items
     foreach ($links as $key => $value) {
         $output .= "<a class=\"navbar-item\" href=\"$key\">$value</a>\n";
     }
 
-    // Conditional links based on login status
-    if (check_login() === true) {
+    if (check_login()) {
+        // Fetch organization info if needed
+        $userID = get_session('userID');
+        $dbConn = getConnection();
+        $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
+        $stmt = $dbConn->prepare($sql);
+        $stmt->execute([':userID' => $userID]);
+        $organisation = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($organisation) {
+            // Display organization name or manage link
+            $output .= "<a class=\"navbar-item\" href='manageOrganisation.php?id=" . $organisation['organisationID'] . "'>Manage Organization</a>\n";
+        }
         $output .= "<a class=\"navbar-item\" href='logout.php'>Logout</a>\n";
     } else {
         $output .= "<a class=\"navbar-item\" href='loginForm.php'>Login</a>\n";
         $output .= "<a class=\"navbar-item\" href='register.php'>Register</a>\n";
     }
 
-    // Close the navbar divs
     $output .= <<<HTML
             </div>
         </div>
@@ -178,6 +181,7 @@ HTML;
 
     return $output;
 }
+
 
 
 
@@ -213,4 +217,31 @@ function has_completed_part($partNumber) {
     $completed_parts = [1, 2, 3]; // Replace with actual logic
     return in_array($partNumber, $completed_parts);
 }
+
+function getUserOrganization($userID) {
+    try {
+        $dbConn = getConnection();
+        $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
+        $stmt = $dbConn->prepare($sql);
+        $stmt->execute([':userID' => $userID]);
+        $organisation = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $organisation ? $organisation['organisationID'] : null;
+    } catch (Exception $e) {
+        throw new Exception("Error fetching user organization: " . $e->getMessage(), 0, $e);
+    }
+}
+
+function getOrganization($organisationID) {
+    try {
+        $dbConn = getConnection();
+        $sql = "SELECT * FROM organisationTable WHERE organisationID = :organisationID";
+        $stmt = $dbConn->prepare($sql);
+        $stmt->execute([':organisationID' => $organisationID]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        throw new Exception("Error fetching organization: " . $e->getMessage(), 0, $e);
+    }
+}
+
+
 ?>

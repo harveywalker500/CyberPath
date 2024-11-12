@@ -3,7 +3,7 @@
     session_start();
     echo makePageStart("Login");
 
-    echo makeNavMenu("Categories", array("index.php" => "Home", "bookEventsForm.php" => "Book Event", "credits.php" => "Credits"));
+    echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php"  => "Leaderboard"));
     try{
     list($input, $errors) = validate_login(); //Creates an array with the given variables and uses the function validate_login() to check if user inputted details are correct.
     if ($errors) { //If there are any errors, do this.

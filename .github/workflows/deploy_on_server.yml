@@ -52,14 +52,6 @@ jobs:
           EOF
           background: true # Run in the background to keep the tunnel open
 
-      - name: Establish SSH Tunnel
-        env:
-          SFTP_HOST: ${{ secrets.SFTP_HOST }}
-          SFTP_USER: ${{ secrets.SFTP_USER }}
-        run: |
-          ssh -L 2222:localhost:22 nuwebspace -N &
-          sleep 5 # Wait for the tunnel to establish
-
       - name: Upload HTML Files via SFTP
         env:
           SFTP_PORT: "2222"

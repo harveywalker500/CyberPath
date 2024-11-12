@@ -4,7 +4,18 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-function makePageStart($title, $stylesheet) 
+function getConnection(){ //function to get the connection to the database, allows users to query
+    try{
+        $connection = new PDO("mysql:host=nuwebspace_db; dbname=w22009720","w22009720", "MH!UoL%Em0ph");//PDO is data abstraction layer
+        $connection ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//sets attributes on PDO connection. Turns errors and exception reporting on.
+        return $connection;
+        
+    }catch(Exception $e) {
+        throw new Exception("Connection error".$e->getMessage(), 0 ,$e);
+    }
+}
+
+function makePageStart($title) 
 {
     return <<<HTML
     <!DOCTYPE html>
@@ -16,11 +27,53 @@ function makePageStart($title, $stylesheet)
         <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="$stylesheet">
+        <link rel="stylesheet" href="stylesheet.csss">
     </head>
     <body>
 HTML;
+}
+
+function validate_login(){//Function to validate the login fields
+    $input = array();
+    $errors=array();
+    $input['username'] = $_POST['username']?? '';//Gets the username user has inputted by POST
+    $input['passsword'] = $_POST['password']?? '';//Same as above
+    $input['username'] = trim($input['username']);//Trims the whitespace
+    $input['passsword'] = trim($input['passsword']);
+
+    try{
+        require_once("functions.php");
+        $dbConn = getConnection();
+
+        $sqlQuery = "SELECT username, passwordHash FROM EGN_users WHERE username = :username";//Gets the valid username and passwordHash from DB
+        
+        $stmt = $dbConn->prepare($sqlQuery);//Prepare statement
+        
+        $stmt->execute(array(':username' => $input['username']));// Execute the statement, passing in the submitted username
+
+        $user = $stmt->fetchObject();//Stores the result as object
+        if($user){
+            $passwordHash = $user->passwordHash;//Hashes the user inputted password
+            if (password_verify($input['passsword'], $passwordHash))//Checks if the hashed version of user inputted password is same as the password hash that matches the username.
+                {
+                    $_SESSION['username'] = $user->username; //Set the session username to the user's username
+                }
+            
+            else {
+                $errors[] = "Password is incorrect";
+                }//tells user password is wrong
+            }
+        else {
+            $errors[] = "Username is incorrect.";//Tells user username doesnt exist
+        }
+    
+    }catch (Exception $e) {
+            echo "There was a problem: " . $e->getMessage();
+    }
+    return array($input, $errors);
+
 }
 
 function set_session($key, $value){//Function that takes two parameters to specify the session key and the corresponding value
@@ -60,7 +113,8 @@ function makeNavMenu($navMenuHeader, array $links) {
         <div class="navbar-brand">
             <!-- Logo -->
             <a class="navbar-item" href="index.php">
-                <img src="..." alt="Site Logo" width="112" height="28">
+                <img src="CyberPath.png" alt="Site Logo" style="width: 100px; height: 100px; max-height: none;">
+
             </a>
 
             <!-- Burger menu for mobile view -->
@@ -126,4 +180,10 @@ function makePageEnd() {
 HTML;
 }
 
+function has_completed_part($partNumber) {
+    // Example logic: Check if the user has completed part $partNumber (using a session variable or database check)
+    // For now, we'll assume parts 1-3 are completed, and 4-6 are not.
+    $completed_parts = [1, 2, 3]; // Replace with actual logic
+    return in_array($partNumber, $completed_parts);
+}
 ?>

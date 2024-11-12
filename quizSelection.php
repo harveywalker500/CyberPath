@@ -2,16 +2,15 @@
 // Include the functions file
 require_once("functions.php");
 
+session_start(); //Starts the session.
+loggedIn(); //Ensures the user is loggedIn before loading the page.
 
-// Story Episodes
-$episodes = [
-    1 => 'Episode 1: The Password Puzzle',
-    2 => 'Episode 2: Phishing in Space',
-    3 => 'Episode 3: The Network Nebula',
-    4 => 'Episode 4: Data Dangers',
-    5 => 'Episode 5: Device Defenders',
-    6 => 'Episode 6: The Insider Enigma'
-];
+try {
+    $episodes = getEpisodes();
+} catch (Exception $e) {
+    echo "An error occurred while fetching episodes: " . $e->getMessage();
+    exit; // Exit if there's an error fetching episodes
+}
 
 echo makePageStart("CyberPath | Quiz Selection");
 echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php"  => "Leaderboard"));

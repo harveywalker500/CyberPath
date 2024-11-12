@@ -35,6 +35,27 @@ function makePageStart($title)
 HTML;
 }
 
+function getEpisodes() {
+    try {
+        // Get database connection
+        $connection = getConnection();
+        
+        // Query to retrieve episodes
+        $sql = "SELECT episodeID, episodeName FROM episodesTable ORDER BY episodeID";
+        $stmt = $connection->query($sql);
+
+        // Fetch episodes into an associative array
+        $episodes = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $episodes[$row['episodeID']] = $row['episodeName'];
+        }
+
+        return $episodes;
+    } catch (Exception $e) {
+        throw new Exception("Error fetching episodes: " . $e->getMessage(), 0, $e);
+    }
+}
+
 function validate_login(){//Function to validate the login fields
     $input = array();
     $errors=array();

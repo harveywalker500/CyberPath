@@ -156,7 +156,7 @@ HTML;
     }
 
     if (check_login()) {
-        // Fetch organization info if needed
+        // Fetch organisation info if needed
         $userID = get_session('userID');
         $dbConn = getConnection();
         $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
@@ -164,8 +164,8 @@ HTML;
         $stmt->execute([':userID' => $userID]);
         $organisation = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($organisation) {
-            // Display organization name or manage link
-            $output .= "<a class=\"navbar-item\" href='manageOrganisation.php?id=" . $organisation['organisationID'] . "'>Manage Organization</a>\n";
+            // Display organisation name or manage link
+            $output .= "<a class=\"navbar-item\" href='manageOrganisation.php?id=" . $organisation['organisationID'] . "'>Manage Organisation</a>\n";
         }
         $output .= "<a class=\"navbar-item\" href='logout.php'>Logout</a>\n";
     } else {
@@ -218,7 +218,7 @@ function has_completed_part($partNumber) {
     return in_array($partNumber, $completed_parts);
 }
 
-function getUserOrganization($userID) {
+function getUserOrganisation($userID) {
     try {
         $dbConn = getConnection();
         $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
@@ -227,11 +227,11 @@ function getUserOrganization($userID) {
         $organisation = $stmt->fetch(PDO::FETCH_ASSOC);
         return $organisation ? $organisation['organisationID'] : null;
     } catch (Exception $e) {
-        throw new Exception("Error fetching user organization: " . $e->getMessage(), 0, $e);
+        throw new Exception("Error fetching user organisation: " . $e->getMessage(), 0, $e);
     }
 }
 
-function getOrganization($organisationID) {
+function getOrganisation($organisationID) {
     try {
         $dbConn = getConnection();
         $sql = "SELECT * FROM organisationTable WHERE organisationID = :organisationID";
@@ -239,7 +239,7 @@ function getOrganization($organisationID) {
         $stmt->execute([':organisationID' => $organisationID]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
-        throw new Exception("Error fetching organization: " . $e->getMessage(), 0, $e);
+        throw new Exception("Error fetching organisation: " . $e->getMessage(), 0, $e);
     }
 }
 

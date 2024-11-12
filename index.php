@@ -1,6 +1,7 @@
 <?php
 // Include the functions file
 require_once("functions.php");
+session_start(); //Starts the session.
 echo makePageStart("CyberPath");
 
 echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php"  => "Leaderboard"));

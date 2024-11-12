@@ -1,5 +1,6 @@
 <?php
 // User details
+require_once("functions.php");
 $username = 'johnsmith';
 $forename = 'John';
 $surname = 'Smith';

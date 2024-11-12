@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 function getConnection(){ //function to get the connection to the database, allows users to query
     try{
-        $connection = new PDO("mysql:host=nuwebspace_db; dbname=w22009720","w22009720", "MH!UoL%Em0ph");//PDO is data abstraction layer
+        $connection = new PDO("mysql:host=nuwebspace_db; dbname=w22009720","w22009720", "Bwjddnxa");//PDO is data abstraction layer
         $connection ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//sets attributes on PDO connection. Turns errors and exception reporting on.
         return $connection;
         

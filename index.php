@@ -6,7 +6,7 @@ echo makePageStart("CyberPath");
 echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php"  => "Leaderboard"));
 ?>
 
-<h1>Hello Matthew!</h1>
+<h1>Hello Mat!</h1>
 <p>...</p>
 <script src="index.js"></script>
 

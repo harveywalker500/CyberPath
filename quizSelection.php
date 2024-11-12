@@ -3,7 +3,7 @@
 require_once("functions.php");
 
 
-// Story Episodes and their Summaries
+// Story Episodes
 $episodes = [
     1 => 'Episode 1: The Password Puzzle',
     2 => 'Episode 2: Phishing in Space',

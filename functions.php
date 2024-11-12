@@ -156,19 +156,34 @@ HTML;
     }
 
     if (check_login()) {
-        // Fetch organisation info if needed
+        // Fetch userID from the session
         $userID = get_session('userID');
         $dbConn = getConnection();
+
+        // Query to get the organisationID for the logged-in user
         $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
         $stmt = $dbConn->prepare($sql);
         $stmt->execute([':userID' => $userID]);
         $organisation = $stmt->fetch(PDO::FETCH_ASSOC);
+
         if ($organisation) {
-            // Display organisation name or manage link
-            $output .= "<a class=\"navbar-item\" href='manageOrganisation.php?id=" . $organisation['organisationID'] . "'>Manage Organisation</a>\n";
+            // Get the teamLeaderID for this organisation
+            $organisationID = $organisation['organisationID'];
+            $sql = "SELECT teamLeaderID FROM organisationTable WHERE organisationID = :organisationID";
+            $stmt = $dbConn->prepare($sql);
+            $stmt->execute([':organisationID' => $organisationID]);
+            $orgDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($orgDetails && $orgDetails['teamLeaderID'] == $userID) {
+                // Display "Manage Organisation" link if user is the team leader
+                $output .= "<a class=\"navbar-item\" href='manageOrganisation.php?id=" . $organisationID . "'>Manage Organisation</a>\n";
+            }
         }
+        
+        // Display logout link if logged in
         $output .= "<a class=\"navbar-item\" href='logout.php'>Logout</a>\n";
     } else {
+        // Display login and register links if not logged in
         $output .= "<a class=\"navbar-item\" href='loginForm.php'>Login</a>\n";
         $output .= "<a class=\"navbar-item\" href='register.php'>Register</a>\n";
     }
@@ -181,6 +196,7 @@ HTML;
 
     return $output;
 }
+
 
 
 

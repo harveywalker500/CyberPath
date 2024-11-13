@@ -33,6 +33,11 @@ $stmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
 $stmt->execute();
 $quizlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+if (empty($quizlist)) {
+    echo "No quiz questions found for this episode.";
+    exit;
+}
+
 echo "<form action='quizResults.php'>";
 
 foreach ($quizlist as $row) {

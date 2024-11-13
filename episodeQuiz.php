@@ -30,7 +30,12 @@ if (!$hasPermission) {
 
 // Query for the quiz questions
 $dbConn = getConnection();
-$sql = "SELECT * FROM questionTable WHERE episodeID = :episodeID";
+$sql = "
+    SELECT q.*, e.episodeName
+    FROM questionTable q
+    JOIN episodeTable e ON q.episodeID = e.episodeID
+    WHERE q.episodeID = :episodeID
+";
 $stmt = $dbConn->prepare($sql);
 $stmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
 $stmt->execute();
@@ -46,8 +51,7 @@ if (empty($quizlist)) {
 ?>
 
 <div class="container">
-    <h1 class="title has-text-centered">Quiz for Episode <?php echo htmlspecialchars($episodeID); ?></h1>
-
+<h1 class="title has-text-centered">Quiz for <?php echo htmlspecialchars($episodeName); ?></h1>
     <form action="quizResults.php" method="POST">
         <?php
         // Loop through each question in the quiz and create the form inputs

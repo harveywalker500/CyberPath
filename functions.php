@@ -161,10 +161,10 @@ HTML;
     if (check_login()) {
         $userID = get_session('userID');
         
-        $userOrganisationID = getUserOrganisation($userID);
+        $userOrganisationID = getUserOrganisation($userID); // Get user's organisation ID
 
         if ($userOrganisationID) {
-            $organisationDetails = getOrganisation($userOrganisationID);
+            $organisationDetails = getOrganisation($userOrganisationID); // Get organisation details
             
             if ($organisationDetails && $organisationDetails['teamLeaderID'] == $userID) {
                 // Display "Manage Organisation" link if user is the team leader
@@ -217,11 +217,16 @@ function makePageEnd() {
 HTML;
 }
 
-function has_completed_part($partNumber) {
-    // Example logic: Check if the user has completed part $partNumber (using a session variable or database check)
-    // For now, we'll assume parts 1-3 are completed, and 4-6 are not.
-    $completed_parts = [1, 2, 3]; // Replace with actual logic
-    return in_array($partNumber, $completed_parts);
+function getUserProgress($userID) {
+    try {
+        $dbconn = getConnection();
+        $sql = "SELECT * FROM userProgress WHERE userID = :userID";
+        $stmt = $dbconn->prepare($sql);
+        $stmt->execute([':userID' => $userID]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        throw new Exception("Error fetching user progress: " . $e->getMessage(), 0, $e);
+    }
 }
 
 function getUserOrganisation($userID) {

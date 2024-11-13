@@ -22,19 +22,20 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
 <div class="container">
     <div class="columns is-multiline">
         <?php
+
+        $userProgress = getUserProgress($userID); 
+        $storyCompleted = $userProgress['storyCompleted'] ?? 0; // Get the story completion status
+        
         // Loop through the episodes and set them based on the completion of story parts
         foreach ($episodes as $partNumber => $episodeTitle) {
-            $isCompleted = has_completed_part($partNumber); // Check if the corresponding story part is completed
+            $isQuizUnlocked = ($storyCompleted >= $partNumber - 1);
+
             $buttonClass = $isCompleted ? "is-success" : "is-warning"; // Change button color based on completion status
             $buttonText = $isCompleted ? "Unlocked! Start Quiz" : "Locked, please complete part $partNumber of the story";
             $buttonState = $isCompleted ? "" : "disabled"; // Disable button if not completed
             $iconClass = $isCompleted ? "fas fa-check" : "fas fa-lock"; // Lock icon if locked, check icon if unlocked
 
-            if ($isCompleted) {
-                $quizLink = "episodeQuiz.php?episodeID=" . urlencode($partNumber);
-            } else {
-                $quizLink = "#"; // Link to nothing if locked
-            }
+            $quizLink = $isQuizUnlocked ? "episodeQuiz.php?episodeID=" . urlencode($partNumber) : "#";
 
             // Display each quiz with the corresponding story title
             echo <<<HTML

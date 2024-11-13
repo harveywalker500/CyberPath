@@ -28,7 +28,7 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
         
         // Loop through the episodes and set them based on the completion of story parts
         foreach ($episodes as $partNumber => $episodeTitle) {
-            $isQuizUnlocked = ($storyCompleted >= $partNumber - 1);
+            $isQuizUnlocked = ($storyCompleted >= $partNumber);
 
             $buttonClass = $isQuizUnlocked  ? "is-success" : "is-warning"; // Change button color based on completion status
             $buttonText = $isQuizUnlocked  ? "Unlocked! Start Quiz" : "Locked, please complete part $partNumber of the story";

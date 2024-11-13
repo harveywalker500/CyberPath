@@ -6,11 +6,11 @@ import QuizComponent from '.quizComponent';  // Import your component
 const quizData = window.quizData;
 
 
-// Ensure React renders the component to the 'quiz-root' div
+
 const rootElement = document.getElementById('quiz-root');
 if (rootElement) {
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(<quizComponent quizData={quizData} />);
+    ReactDOM.render(<QuizComponent quizData={quizData} />, rootElement); // Use render instead of createRoot
 } else {
     console.error("No element with id 'quiz-root' found.");
 }
+

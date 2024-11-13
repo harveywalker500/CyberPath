@@ -44,29 +44,23 @@ if (empty($quizlist)) {
     exit;
 }
 
-echo "<form action='quizResults.php'>";
+$quizData = json_encode([
+    'quizTitle' => "Episode $episodeID Quiz",
+    'questions' => $quizlist
+]);
 
-foreach ($quizlist as $row) {
-    echo "<h4>" . htmlspecialchars($row['questionText']) . "</h4>";
-    
-    // Display each answer option with radio buttons
-    echo "<input type='radio' name='" . htmlspecialchars($row['questionText']) . "' value='" . htmlspecialchars($row['answerA']) . "'>";
-    echo "<label for='" . htmlspecialchars($row['answerA']) . "'>" . htmlspecialchars($row['answerA']) . "</label><br>";
-    
-    echo "<input type='radio' name='" . htmlspecialchars($row['questionText']) . "' value='" . htmlspecialchars($row['answerB']) . "'>";
-    echo "<label for='" . htmlspecialchars($row['answerB']) . "'>" . htmlspecialchars($row['answerA']) . "</label><br>";
-    
-    echo "<input type='radio' name='" . htmlspecialchars($row['questionText']) . "' value='" . htmlspecialchars($row['answerC']) . "'>";
-    echo "<label for='" . htmlspecialchars($row['answerD']) . "'>" . htmlspecialchars($row['answerC']) . "</label><br>";
-    
-    echo "<input type='radio' name='" . htmlspecialchars($row['questionText']) . "' value='" . htmlspecialchars($row['answerD']) . "'>";
-    echo "<label for='" . htmlspecialchars($row['answerD']) . "'>" . htmlspecialchars($row['answerD']) . "</label><br>";
-}
+?>
 
-// Use htmlspecialchars on $episodeID in case it needs to be passed forward
-echo "<input type='hidden' name='quiz_name' value='" . htmlspecialchars($episodeID) . "'>";
-echo "<br><input type='submit' value='Submit my answers'><br>";
-echo "</form>";
+<div id='quiz-root"></div>
+
+<script src ="quizComponent.bundle.js"></script>
+
+<script>
+    const quizData = <?php echo $quizData; ?>;
+</script>
+    
+
+<?php
 
 echo makeFooter("This is the footer");
 echo makePageEnd();

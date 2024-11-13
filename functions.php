@@ -160,14 +160,11 @@ HTML;
 
     if (check_login()) {
         $userID = get_session('userID');
-        var_dump($userID); // Debug: Check if userID is set
         
         $userOrganisationID = getUserOrganisation($userID);
-        var_dump($userOrganisationID); // Debug: Check organisationID retrieved for the user
 
         if ($userOrganisationID) {
             $organisationDetails = getOrganisation($userOrganisationID);
-            var_dump($organisationDetails); // Debug: Confirm teamLeaderID
             
             if ($organisationDetails && $organisationDetails['teamLeaderID'] == $userID) {
                 // Display "Manage Organisation" link if user is the team leader

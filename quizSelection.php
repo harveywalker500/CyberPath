@@ -35,10 +35,12 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
             <div class="column is-one-third">
                 <div class="box has-text-centered">
                     <p class="title is-5">$episodeTitle</p>
-                    <button class="button $buttonClass" $buttonState>
-                        <span class="icon"><i class="$iconClass"></i></span>
-                        <span>$buttonText</span>
-                    </button>
+                    <form action="episodeQuiz.php" method="GET">
+                        <input type="hidden" name="episodeID" value="$partNumber">
+                        <button class="button $buttonClass" $buttonState type="submit">
+                            <span class="icon"><i class="$iconClass"></i></span>
+                            <span>$buttonText</span>
+                        </button>
                 </div>
             </div>
 HTML;
@@ -47,7 +49,6 @@ HTML;
     </div>
 </div>
 
-<script src="index.js"></script>
 
 <?php
 echo makeFooter("This is the footer");

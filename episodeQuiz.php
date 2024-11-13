@@ -42,7 +42,10 @@ if (empty($quizlist)) {
     echo makePageEnd();
     exit;
 }
-
+// Before echoing the PHP JSON
+echo '<script>';
+echo 'console.log(' . $quizData . ');';  // This will log the actual output to the browser's console
+echo '</script>';
 // Update the structure of quizData
 $quizData = json_encode([
     'quizTitle' => "Episode $episodeID Quiz",

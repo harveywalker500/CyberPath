@@ -48,14 +48,13 @@ $quizData = json_encode([
     'quizTitle' => "Episode $episodeID Quiz",
     'questions' => $quizlist
 ]);
-
 ?>
 
-<div id='quiz-root"></div>
+<div id="quiz-root"></div>
 
-<script src ="quizComponent.bundle.js"></script>
-
+<script src="quizComponent.bundle.js"></script> <!-- React app JS bundle -->
 <script>
+    // Pass the quiz data from PHP to JavaScript
     const quizData = <?php echo $quizData; ?>;
 </script>
     

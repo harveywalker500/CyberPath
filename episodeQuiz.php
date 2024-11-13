@@ -33,7 +33,7 @@ $dbConn = getConnection();
 $sql = "
     SELECT q.*, e.episodeName
     FROM questionTable q
-    JOIN episodeTable e ON q.episodeID = e.episodeID
+    JOIN episodesTable e ON q.episodeID = e.episodeID
     WHERE q.episodeID = :episodeID
 ";
 $stmt = $dbConn->prepare($sql);

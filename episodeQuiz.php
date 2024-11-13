@@ -5,6 +5,9 @@ require_once("functions.php");
 session_start(); // Starts the session.
 loggedIn(); // Ensures the user is logged in before loading the page.
 
+echo makePageStart("CyberPath | Quiz");
+echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php"  => "Leaderboard"));
+
 // Use $_POST to retrieve episodeID from the form submission
 $episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : null;
 
@@ -21,8 +24,6 @@ if (!$hasPermission) {
     exit;
 }
 
-echo makePageStart("CyberPath | Episode Quiz");
-echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php" => "Leaderboard"));
 
 // Query for the quiz questions
 $dbConn = getConnection();

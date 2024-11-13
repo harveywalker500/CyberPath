@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import QuizComponent from '.QuizComponent';  // Import your component
+import QuizComponent from './QuizComponent';  // Import your component
 
 // Get the quiz data from a global variable set in the HTML
 const quizData = window.quizData;

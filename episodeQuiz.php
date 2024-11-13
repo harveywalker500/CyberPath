@@ -14,6 +14,8 @@ $episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : null;
 // Debugging check
 if ($episodeID === null) {
     echo "Error: episodeID is not set.";
+    echo makeFooter("This is the footer");
+    echo makePageEnd(); 
     exit; // Exit if no episodeID is provided
 }
 
@@ -21,6 +23,8 @@ $hasPermission = userQuizPermission($_SESSION['userID'], $episodeID);
 
 if (!$hasPermission) {
     header('Location: index.php');
+    echo makeFooter("This is the footer");
+    echo makePageEnd();
     exit;
 }
 
@@ -35,6 +39,8 @@ $quizlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (empty($quizlist)) {
     echo "No quiz questions found for this episode.";
+    echo makeFooter("This is the footer");
+    echo makePageEnd();
     exit;
 }
 

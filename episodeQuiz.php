@@ -28,7 +28,6 @@ if (!$hasPermission) {
     exit;
 }
 
-
 // Query for the quiz questions
 $dbConn = getConnection();
 $sql = "SELECT * FROM questionTable WHERE episodeID = :episodeID";
@@ -44,32 +43,39 @@ if (empty($quizlist)) {
     exit;
 }
 
+// Update the structure of quizData
 $quizData = json_encode([
     'quizTitle' => "Episode $episodeID Quiz",
-    'questions' => $quizlist
+    'questions' => array_map(function ($question) use ($episodeID) {
+        // Add episodeID to each question data
+        $question['episodeID'] = $episodeID;
+        return $question;
+    }, $quizlist)
 ]);
+
 ?>
 
+<!-- Your HTML and React component rendering -->
 <div id="quiz-root"></div>
 
 <script>
     // Get the quiz data from PHP
-    const quizData = <?php echo $quizData; ?>; // This assumes the PHP data is being passed correctly.
+    const quizData = <?php echo $quizData; ?>;
+
+    // Log quizData to verify it
+    console.log(quizData);
 
     // Ensure React renders the component to the 'quiz-root' div
     const rootElement = document.getElementById('quiz-root');
     if (rootElement) {
-        const root = ReactDOM.createRoot(rootElement); // React 18+ syntax, for older versions it would be ReactDOM.render()
-        root.render(<quizComponent quizData={quizData} />);
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(<QuizComponent quizData={quizData} />);
     } else {
         console.error("No element with id 'quiz-root' found.");
     }
 </script>
 
-    
-
 <?php
-
 echo makeFooter("This is the footer");
 echo makePageEnd();
 ?>

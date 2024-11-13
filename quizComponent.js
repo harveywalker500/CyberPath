@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const quizComponent = ({ quizData }) => {
+const QuizComponent = ({ quizData }) => {
     const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
     const [answers, setAnswers] = useState({});
 
@@ -78,7 +78,7 @@ const quizComponent = ({ quizData }) => {
 
             {/* Collect and submit answers in a form */}
             <form action="quizResults.php" method="POST">
-                <input type="hidden" name="episodeID" value={quizData.episodeID} /> {/* Use episodeID instead of quizTitle */}
+                <input type="hidden" name="episodeID" value={quizData.questions[0].episodeID} /> {/* Use episodeID from the first question */}
                 {Object.keys(answers).map((question, index) => (
                     <input 
                         key={index}
@@ -93,4 +93,4 @@ const quizComponent = ({ quizData }) => {
     );
 };
 
-export default quizComponent;
+export default QuizComponent;

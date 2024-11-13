@@ -30,10 +30,10 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
         foreach ($episodes as $partNumber => $episodeTitle) {
             $isQuizUnlocked = ($storyCompleted >= $partNumber - 1);
 
-            $buttonClass = $isCompleted ? "is-success" : "is-warning"; // Change button color based on completion status
-            $buttonText = $isCompleted ? "Unlocked! Start Quiz" : "Locked, please complete part $partNumber of the story";
-            $buttonState = $isCompleted ? "" : "disabled"; // Disable button if not completed
-            $iconClass = $isCompleted ? "fas fa-check" : "fas fa-lock"; // Lock icon if locked, check icon if unlocked
+            $buttonClass = $isQuizUnlocked  ? "is-success" : "is-warning"; // Change button color based on completion status
+            $buttonText = $isQuizUnlocked  ? "Unlocked! Start Quiz" : "Locked, please complete part $partNumber of the story";
+            $buttonState = $isQuizUnlocked  ? "" : "disabled"; // Disable button if not completed
+            $iconClass = $isQuizUnlocked  ? "fas fa-check" : "fas fa-lock"; // Lock icon if locked, check icon if unlocked
 
             $quizLink = $isQuizUnlocked ? "episodeQuiz.php?episodeID=" . urlencode($partNumber) : "#";
 

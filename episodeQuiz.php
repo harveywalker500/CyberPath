@@ -47,7 +47,7 @@ if (empty($quizlist)) {
     echo makePageEnd();
     exit;
 }
-
+$episodeName = $quizlist[0]['episodeName']; 
 ?>
 
 <div class="container">

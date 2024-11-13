@@ -38,7 +38,7 @@ echo makeNavMenu("CyberPath");
             }
         
             $buttonClass = $isStoryUnlocked  ? "is-success" : "is-warning";
-            $buttonText = $isStoryUnlocked  ? "Unlocked! Start Quiz" : "Locked, please complete part " . ($partNumber - 1) . " of the story";
+            $buttonText = $isStoryUnlocked  ? "Unlocked! Start Quiz" : "Locked, please complete part " . ($partNumber - 1) . " of the quiz";
             $buttonState = $isStoryUnlocked  ? "" : "disabled";
             $iconClass = $isStoryUnlocked  ? "fas fa-check" : "fas fa-lock";
             

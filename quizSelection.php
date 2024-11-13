@@ -38,7 +38,7 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
 
             // Display each quiz with the corresponding story title
             echo <<<HTML
-            <div class="column is-one-third">
+            <div class="column is-full-mobile is-half-tablet is-one-third-desktop">
                 <div class="box has-text-centered">
                     <p class="title is-5">$episodeTitle</p>
                     <a href="$quizLink" class="button $buttonClass" $buttonState>

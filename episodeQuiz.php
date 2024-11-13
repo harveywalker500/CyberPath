@@ -21,6 +21,7 @@ if (!$hasPermission) {
     exit;
 }
 
+echo makePageStart("CyberPath | Episode Quiz");
 echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php" => "Leaderboard"));
 
 // Query for the quiz questions

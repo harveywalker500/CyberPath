@@ -23,7 +23,7 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
     <div class="columns is-multiline">
         <?php
 
-        $userProgress = getUserProgress($userID); 
+        $userProgress = getUserProgress($_SESSION['userID']); // Get the user's progress
         $storyCompleted = $userProgress['storyCompleted'] ?? 0; // Get the story completion status
         
         // Loop through the episodes and set them based on the completion of story parts

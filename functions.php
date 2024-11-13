@@ -220,7 +220,7 @@ HTML;
 function getUserProgress($userID) {
     try {
         $dbconn = getConnection();
-        $sql = "SELECT * FROM userProgress WHERE userID = :userID";
+        $sql = "SELECT * FROM userProgressTable WHERE userID = :userID";
         $stmt = $dbconn->prepare($sql);
         $stmt->execute([':userID' => $userID]);
         return $stmt->fetch(PDO::FETCH_ASSOC);

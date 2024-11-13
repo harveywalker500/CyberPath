@@ -2,8 +2,8 @@
 // Include the functions file
 require_once("functions.php");
 
-session_start(); //Starts the session.
-loggedIn(); //Ensures the user is loggedIn before loading the page.
+session_start(); // Starts the session.
+loggedIn(); // Ensures the user is logged in before loading the page.
 
 try {
     $episodes = getEpisodes();
@@ -28,10 +28,17 @@ echo makeNavMenu("CyberPath");
         
         // Loop through the episodes and set them based on the completion of story parts
         foreach ($episodes as $partNumber => $episodeTitle) {
-            $isStoryUnlocked = ($quizCompleted >= $partNumber+1);
+            // Logic for unlocking the episode
+            if ($partNumber == 1) {
+                // Story 1 is always unlocked
+                $isStoryUnlocked = true;
+            } else {
+                // For other stories, ensure the user has completed the previous quiz
+                $isStoryUnlocked = ($quizCompleted >= $partNumber - 1);
+            }
         
             $buttonClass = $isStoryUnlocked  ? "is-success" : "is-warning";
-            $buttonText = $isStoryUnlocked  ? "Unlocked! Start Quiz" : "Locked, please complete part $partNumber of the story";
+            $buttonText = $isStoryUnlocked  ? "Unlocked! Start Quiz" : "Locked, please complete part " . ($partNumber - 1) . " of the story";
             $buttonState = $isStoryUnlocked  ? "" : "disabled";
             $iconClass = $isStoryUnlocked  ? "fas fa-check" : "fas fa-lock";
             
@@ -55,7 +62,6 @@ echo makeNavMenu("CyberPath");
         ?>
     </div>
 </div>
-
 
 <?php
 echo makeFooter("This is the footer");

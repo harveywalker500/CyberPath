@@ -21,30 +21,26 @@ $stmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
 $stmt->execute();
 $quizlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-echo "<form action = 'quizResults.php'>";
+echo "<form action='quizResults.php'>";
 
-//now that the form has started I need to output the question and answers from each row of the query
-//The questions will be displayed in a heading tag and the answers will be labels on radio buttons.
-//Each set of radio buttons must have the same name (but be different for each question) so that only one option can be chosen in a single question
-
-while($row = mysqli_fetch_array($quizlist)){
-	echo "<h4>".$row['question']."</h4>";
-	
-	echo "<input type='radio' name='".$row['question']."' value='".$row['answera']."'>";
-	echo "<label for='".$row['answera']."'>".$row['answera']."</label><br>";
-	
-	echo "<input type='radio' name='".$row['question']."' value='".$row['answerb']."'>";
-	echo "<label for='".$row['answerb']."'>".$row['answerb']."</label><br>";
-	
-	echo "<input type='radio' name='".$row['question']."' value='".$row['answerc']."'>";
-	echo "<label for='".$row['answerc']."'>".$row['answerc']."</label><br>";
-	
-	echo "<input type='radio' name='".$row['question']."' value='".$row['answerd']."'>";
-	echo "<label for='".$row['answerd']."'>".$row['answerd']."</label><br>";
+foreach ($quizlist as $row) {
+    echo "<h4>" . htmlspecialchars($row['question']) . "</h4>";
     
-};	
-echo "<input type='hidden' name='quiz_name' value='".$_GET['quiz']."'>";
+    // Display each answer option with radio buttons
+    echo "<input type='radio' name='" . htmlspecialchars($row['question']) . "' value='" . htmlspecialchars($row['answera']) . "'>";
+    echo "<label for='" . htmlspecialchars($row['answera']) . "'>" . htmlspecialchars($row['answera']) . "</label><br>";
+    
+    echo "<input type='radio' name='" . htmlspecialchars($row['question']) . "' value='" . htmlspecialchars($row['answerb']) . "'>";
+    echo "<label for='" . htmlspecialchars($row['answerb']) . "'>" . htmlspecialchars($row['answerb']) . "</label><br>";
+    
+    echo "<input type='radio' name='" . htmlspecialchars($row['question']) . "' value='" . htmlspecialchars($row['answerc']) . "'>";
+    echo "<label for='" . htmlspecialchars($row['answerc']) . "'>" . htmlspecialchars($row['answerc']) . "</label><br>";
+    
+    echo "<input type='radio' name='" . htmlspecialchars($row['question']) . "' value='" . htmlspecialchars($row['answerd']) . "'>";
+    echo "<label for='" . htmlspecialchars($row['answerd']) . "'>" . htmlspecialchars($row['answerd']) . "</label><br>";
+}
 
+echo "<input type='hidden' name='quiz_name' value='" . htmlspecialchars($_GET['quiz']) . "'>";
 echo "<br><input type='submit' value='Submit my answers'><br>";
 echo "</form>";
 

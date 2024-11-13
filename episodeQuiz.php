@@ -8,6 +8,12 @@ loggedIn(); // Ensures the user is logged in before loading the page.
 // Use $_POST to retrieve episodeID from the form submission
 $episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : null;
 
+// Debugging check
+if ($episodeID === null) {
+    echo "Error: episodeID is not set.";
+    exit; // Exit if no episodeID is provided
+}
+
 $hasPermission = userQuizPermission($_SESSION['userID'], $episodeID);
 
 if (!$hasPermission) {
@@ -28,20 +34,20 @@ $quizlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo "<form action='quizResults.php'>";
 
 foreach ($quizlist as $row) {
-    echo "<h4>" . htmlspecialchars($row['question']) . "</h4>";
+    echo "<h4>" . htmlspecialchars($row['questionText']) . "</h4>";
     
     // Display each answer option with radio buttons
-    echo "<input type='radio' name='" . htmlspecialchars($row['question']) . "' value='" . htmlspecialchars($row['answera']) . "'>";
-    echo "<label for='" . htmlspecialchars($row['answera']) . "'>" . htmlspecialchars($row['answera']) . "</label><br>";
+    echo "<input type='radio' name='" . htmlspecialchars($row['questionText']) . "' value='" . htmlspecialchars($row['answerA']) . "'>";
+    echo "<label for='" . htmlspecialchars($row['answerA']) . "'>" . htmlspecialchars($row['answerA']) . "</label><br>";
     
-    echo "<input type='radio' name='" . htmlspecialchars($row['question']) . "' value='" . htmlspecialchars($row['answerb']) . "'>";
-    echo "<label for='" . htmlspecialchars($row['answerb']) . "'>" . htmlspecialchars($row['answerb']) . "</label><br>";
+    echo "<input type='radio' name='" . htmlspecialchars($row['questionText']) . "' value='" . htmlspecialchars($row['answerB']) . "'>";
+    echo "<label for='" . htmlspecialchars($row['answerB']) . "'>" . htmlspecialchars($row['answerA']) . "</label><br>";
     
-    echo "<input type='radio' name='" . htmlspecialchars($row['question']) . "' value='" . htmlspecialchars($row['answerc']) . "'>";
-    echo "<label for='" . htmlspecialchars($row['answerc']) . "'>" . htmlspecialchars($row['answerc']) . "</label><br>";
+    echo "<input type='radio' name='" . htmlspecialchars($row['questionText']) . "' value='" . htmlspecialchars($row['answerC']) . "'>";
+    echo "<label for='" . htmlspecialchars($row['answerD']) . "'>" . htmlspecialchars($row['answerC']) . "</label><br>";
     
-    echo "<input type='radio' name='" . htmlspecialchars($row['question']) . "' value='" . htmlspecialchars($row['answerd']) . "'>";
-    echo "<label for='" . htmlspecialchars($row['answerd']) . "'>" . htmlspecialchars($row['answerd']) . "</label><br>";
+    echo "<input type='radio' name='" . htmlspecialchars($row['questionText']) . "' value='" . htmlspecialchars($row['answerD']) . "'>";
+    echo "<label for='" . htmlspecialchars($row['answerD']) . "'>" . htmlspecialchars($row['answerD']) . "</label><br>";
 }
 
 // Use htmlspecialchars on $episodeID in case it needs to be passed forward

@@ -52,11 +52,20 @@ $quizData = json_encode([
 
 <div id="quiz-root"></div>
 
-<script src="quizComponent.bundle.js"></script> <!-- React app JS bundle -->
 <script>
-    // Pass the quiz data from PHP to JavaScript
-    const quizData = <?php echo $quizData; ?>;
+    // Get the quiz data from PHP
+    const quizData = <?php echo $quizData; ?>; // This assumes the PHP data is being passed correctly.
+
+    // Ensure React renders the component to the 'quiz-root' div
+    const rootElement = document.getElementById('quiz-root');
+    if (rootElement) {
+        const root = ReactDOM.createRoot(rootElement); // React 18+ syntax, for older versions it would be ReactDOM.render()
+        root.render(<QuizComponent quizData={quizData} />);
+    } else {
+        console.error("No element with id 'quiz-root' found.");
+    }
 </script>
+
     
 
 <?php

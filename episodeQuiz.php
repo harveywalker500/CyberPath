@@ -60,7 +60,7 @@ $quizData = json_encode([
     const rootElement = document.getElementById('quiz-root');
     if (rootElement) {
         const root = ReactDOM.createRoot(rootElement); // React 18+ syntax, for older versions it would be ReactDOM.render()
-        root.render(<QuizComponent quizData={quizData} />);
+        root.render(<quizComponent quizData={quizData} />);
     } else {
         console.error("No element with id 'quiz-root' found.");
     }

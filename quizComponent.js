@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const QuizComponent = ({ quizData }) => {
+const quizComponent = ({ quizData }) => {
     const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
     const [answers, setAnswers] = useState({});
 
@@ -93,4 +93,4 @@ const QuizComponent = ({ quizData }) => {
     );
 };
 
-export default QuizComponent;
+export default quizComponent;

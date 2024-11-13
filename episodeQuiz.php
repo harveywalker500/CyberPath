@@ -67,12 +67,11 @@ $quizData = json_encode([
 
     // Ensure React renders the component to the 'quiz-root' div
     const rootElement = document.getElementById('quiz-root');
-    if (rootElement) {
-        const root = ReactDOM.createRoot(rootElement);
-        root.render(<quizComponent quizData={quizData} />);
-    } else {
-        console.error("No element with id 'quiz-root' found.");
-    }
+if (rootElement) {
+    ReactDOM.render(<QuizComponent quizData={quizData} />, rootElement); // Use render instead of createRoot
+} else {
+    console.error("No element with id 'quiz-root' found.");
+}
 </script>
 
 <?php

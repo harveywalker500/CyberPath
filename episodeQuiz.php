@@ -40,7 +40,7 @@ foreach ($quizlist as $row) {
     echo "<label for='" . htmlspecialchars($row['answerd']) . "'>" . htmlspecialchars($row['answerd']) . "</label><br>";
 }
 
-echo "<input type='hidden' name='quiz_name' value='" . htmlspecialchars($_GET['quiz']) . "'>";
+echo "<input type='hidden' name='quiz_name' value='" . htmlspecialchars($episodeID) . "'>";
 echo "<br><input type='submit' value='Submit my answers'><br>";
 echo "</form>";
 

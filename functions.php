@@ -135,7 +135,7 @@ function logOut(){//Function to log out of account
 
 function makeNavMenu($navMenuHeader, array $links) {
     // Check session variables for debugging
-    var_dump($_SESSION);
+
 
     $output = <<<HTML
     <nav class="navbar" role="navigation" aria-label="main navigation">

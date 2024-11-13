@@ -30,17 +30,21 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
             $buttonState = $isCompleted ? "" : "disabled"; // Disable button if not completed
             $iconClass = $isCompleted ? "fas fa-check" : "fas fa-lock"; // Lock icon if locked, check icon if unlocked
 
+            if ($isCompleted) {
+                $quizLink = "episodeQuiz.php?episodeID=" . urlencode($partNumber);
+            } else {
+                $quizLink = "#"; // Link to nothing if locked
+            }
+
             // Display each quiz with the corresponding story title
             echo <<<HTML
             <div class="column is-one-third">
                 <div class="box has-text-centered">
                     <p class="title is-5">$episodeTitle</p>
-                    <form action="episodeQuiz.php" method="GET">
-                        <input type="hidden" name="episodeID" value="$partNumber">
-                        <button class="button $buttonClass" $buttonState type="submit">
-                            <span class="icon"><i class="$iconClass"></i></span>
-                            <span>$buttonText</span>
-                        </button>
+                    <a href="$quizLink" class="button $buttonClass" $buttonState>
+                        <span class="icon"><i class="$iconClass"></i></span>
+                        <span>$buttonText</span>
+                    </a>
                 </div>
             </div>
 HTML;

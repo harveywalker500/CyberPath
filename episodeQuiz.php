@@ -11,12 +11,14 @@ if (!$hasPermission) {
     header('Location: index.php');
     exit;
 }
-echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php"  => "Leaderboard"));
+echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "Leaderboard -V1.3.php"  => "Leaderboard"));
 
 //I now need to create a form. I will start the form here and then within the form run a loop to output the results of the query
-
-$sqlQuery = "SELECT * FROM questionsTable WHERE episodeID LIKE '".$episodeID."'";
-$quizlist = mysqli_query($link, $sqlQuery);
+$dbConn = getConnection();
+$sql = "SELECT * FROM questionsTable WHERE episodeID = :episodeID";
+$stmt = $dbConn->prepare($sql);
+$stmt->execute();
+$quizlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 echo "<form action = 'quizResults.php'>";
 

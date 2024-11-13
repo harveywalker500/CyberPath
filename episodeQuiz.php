@@ -42,10 +42,7 @@ if (empty($quizlist)) {
     echo makePageEnd();
     exit;
 }
-// Before echoing the PHP JSON
-echo '<script>';
-echo 'console.log(' . $quizData . ');';  // This will log the actual output to the browser's console
-echo '</script>';
+
 // Update the structure of quizData
 $quizData = json_encode([
     'quizTitle' => "Episode $episodeID Quiz",
@@ -61,7 +58,7 @@ $quizData = json_encode([
 <!-- Your HTML and React component rendering -->
 <div id="quiz-root"></div>
 
-<script>
+<script type="text/babel">
     // Get the quiz data from PHP
     const quizData = <?php echo $quizData; ?>;
 
@@ -72,7 +69,7 @@ $quizData = json_encode([
     const rootElement = document.getElementById('quiz-root');
     if (rootElement) {
         const root = ReactDOM.createRoot(rootElement);
-        root.render(<QuizComponent quizData={quizData} />);
+        root.render(<quizComponent quizData={quizData} />);
     } else {
         console.error("No element with id 'quiz-root' found.");
     }

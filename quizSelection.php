@@ -29,27 +29,29 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
         // Loop through the episodes and set them based on the completion of story parts
         foreach ($episodes as $partNumber => $episodeTitle) {
             $isQuizUnlocked = ($storyCompleted >= $partNumber);
-
-            $buttonClass = $isQuizUnlocked  ? "is-success" : "is-warning"; // Change button color based on completion status
+        
+            $buttonClass = $isQuizUnlocked  ? "is-success" : "is-warning";
             $buttonText = $isQuizUnlocked  ? "Unlocked! Start Quiz" : "Locked, please complete part $partNumber of the story";
-            $buttonState = $isQuizUnlocked  ? "" : "disabled"; // Disable button if not completed
-            $iconClass = $isQuizUnlocked  ? "fas fa-check" : "fas fa-lock"; // Lock icon if locked, check icon if unlocked
-
-            $quizLink = $isQuizUnlocked ? "episodeQuiz.php?episodeID=" . urlencode($partNumber) : "#";
-
-            // Display each quiz with the corresponding story title
+            $buttonState = $isQuizUnlocked  ? "" : "disabled";
+            $iconClass = $isQuizUnlocked  ? "fas fa-check" : "fas fa-lock";
+            
+            // Use a form to submit episodeID via POST
             echo <<<HTML
             <div class="column is-full-mobile is-half-tablet is-one-third-desktop">
                 <div class="box has-text-centered">
                     <p class="title is-5">$episodeTitle</p>
-                    <a href="$quizLink" class="button $buttonClass" $buttonState>
-                        <span class="icon"><i class="$iconClass"></i></span>
-                        <span>$buttonText</span>
-                    </a>
+                    <form action="episodeQuiz.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="episodeID" value="$partNumber">
+                        <button type="submit" class="button $buttonClass" $buttonState>
+                            <span class="icon"><i class="$iconClass"></i></span>
+                            <span>$buttonText</span>
+                        </button>
+                    </form>
                 </div>
             </div>
-HTML;
+        HTML;
         }
+        
         ?>
     </div>
 </div>

@@ -4,16 +4,20 @@ require_once("functions.php");
 
 session_start(); // Starts the session.
 loggedIn(); // Ensures the user is logged in before loading the page.
+
+// Use $_POST to retrieve episodeID from the form submission
 $episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : null;
-$hasPermission =  userQuizPermission($_SESSION['userID'], $episodeID);
+
+$hasPermission = userQuizPermission($_SESSION['userID'], $episodeID);
 
 if (!$hasPermission) {
     header('Location: index.php');
     exit;
 }
-echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php"  => "Leaderboard"));
 
-//I now need to create a form. I will start the form here and then within the form run a loop to output the results of the query
+echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php" => "Leaderboard"));
+
+// Query for the quiz questions
 $dbConn = getConnection();
 $sql = "SELECT * FROM questionTable WHERE episodeID = :episodeID";
 $stmt = $dbConn->prepare($sql);
@@ -40,10 +44,10 @@ foreach ($quizlist as $row) {
     echo "<label for='" . htmlspecialchars($row['answerd']) . "'>" . htmlspecialchars($row['answerd']) . "</label><br>";
 }
 
+// Use htmlspecialchars on $episodeID in case it needs to be passed forward
 echo "<input type='hidden' name='quiz_name' value='" . htmlspecialchars($episodeID) . "'>";
 echo "<br><input type='submit' value='Submit my answers'><br>";
 echo "</form>";
-
 
 echo makeFooter("This is the footer");
 echo makePageEnd();

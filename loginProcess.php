@@ -11,7 +11,7 @@
          echo "<a class ='loginLink' href='loginForm.php'>Back to Login</a>\n"; //Link back to login form
     } else { //If user details are correct, do this.
         set_session('logged-in', true); //Set logged-in to true for session.
-        header('Location: index.php'); //Send user to home page.
+        header('Location:' . $_SERVER['HTTP_REFERER']); //Send user back
     }     
     }
     catch (Exception $e) {

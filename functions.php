@@ -254,5 +254,14 @@ function getOrganisation($organisationID) {
     }
 }
 
+function userQuizPermission($userID, $currentEpisode){
+    $progress = getUserProgress($userID);
+    if ($progress && isset($progress['storyCompleted'])) {
+        if ($progress['storyCompleted'] >= $currentEpisode) {
+            return true;
+        }
+    }
+    return false;
+}
 
 ?>

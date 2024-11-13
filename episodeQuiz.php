@@ -15,7 +15,7 @@ echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story
 
 //I now need to create a form. I will start the form here and then within the form run a loop to output the results of the query
 $dbConn = getConnection();
-$sql = "SELECT * FROM questionsTable WHERE episodeID = :episodeID";
+$sql = "SELECT * FROM questionTable WHERE episodeID = :episodeID";
 $stmt = $dbConn->prepare($sql);
 $stmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
 $stmt->execute();

@@ -13,7 +13,7 @@ try {
 }
 
 echo makePageStart("CyberPath | Quiz Selection");
-echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php"  => "Leaderboard"));
+echo makeNavMenu("CyberPath");
 ?>
 
 <h1 class="title">Quiz Selection</h1>

@@ -2,7 +2,7 @@
 require_once("functions.php");
 session_start();
 echo makePageStart("Login");
-echo makeNavMenu("CyberPath", array("index.php" => "Home", "story.php" => "Story", "quizSelection.php" => "Quiz Selection", "leaderboard.php"  => "Leaderboard"));
+echo makeNavMenu("CyberPath");
 ?>
 
 <form id="loginForm" action="loginProcess.php" method="post">

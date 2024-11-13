@@ -133,9 +133,16 @@ function logOut(){//Function to log out of account
     exit();//Terminates script
 }
 
-function makeNavMenu($navMenuHeader, array $links) {
+function makeNavMenu($navMenuHeader) {
     // Check session variables for debugging
 
+    // Predefined menu links
+    $links = array(
+        "index.php" => "Home",
+        "storySelect.php" => "Story",
+        "quizSelection.php" => "Quiz Selection",
+        "leaderboard.php"  => "Leaderboard"
+    );
 
     $output = <<<HTML
     <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -154,10 +161,12 @@ function makeNavMenu($navMenuHeader, array $links) {
             <div class="navbar-start">
 HTML;
 
+    // Loop through the predefined links and create the menu items
     foreach ($links as $key => $value) {
         $output .= "<a class=\"navbar-item\" href=\"$key\">$value</a>\n";
     }
 
+    // Check if the user is logged in
     if (check_login()) {
         $userID = get_session('userID');
         
@@ -188,6 +197,7 @@ HTML;
 
     return $output;
 }
+
 
 
 

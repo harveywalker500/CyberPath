@@ -9,22 +9,24 @@ if (!isset($_SESSION['userID'])) {
     exit();
 }
 
-// Initialize an array to hold errors
-$errors = [];
+$errors = []; // Initialize errors array
 
 // Fetch all organisations from the database
-$dbConn = getConnection();
-$sql = "SELECT organisationID, name FROM organisationTable";
-$stmt = $dbConn->prepare($sql);
-$stmt->execute();
-$organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $dbConn = getConnection();
+    $sql = "SELECT organisationID, name FROM organisationTable";
+    $stmt = $dbConn->prepare($sql);
+    $stmt->execute();
+    $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $errors[] = "Error fetching organisations: " . $e->getMessage();
+}
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['createOrganisation'])) {
-        // Create new organisation
         $organisationName = trim($_POST['organisationName'] ?? '');
-
+        
         if (empty($organisationName)) {
             $errors[] = "Please provide an organisation name.";
         }
@@ -47,13 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':organisationID' => $organisationID,
                     ':userID' => $userID
                 ]);
-                
+
+                // Optionally, you can echo success or a message
+                echo "<div class='notification is-success'>Organisation created successfully!</div>";
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
         }
     } elseif (isset($_POST['joinOrganisation'])) {
-        // Join an existing organisation
         $organisationID = $_POST['organisationID'] ?? null;
 
         if (empty($organisationID)) {
@@ -62,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($errors)) {
             try {
-                // Assign the user to the selected organisation
                 $userID = $_SESSION['userID'];
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
@@ -71,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':userID' => $userID
                 ]);
 
-                // Redirect to the main page after joining
+                // Redirect to the main page after joining the organisation
                 header("Location: index.php");
                 exit();
 
@@ -105,7 +107,7 @@ echo makeNavMenu("CyberPath");
             <!-- Create Organisation Form -->
             <div class="column is-half">
                 <h2 class="subtitle">Create an Organisation</h2>
-                <form method="POST" action="organisation.php">
+                <form method="POST" action="">
                     <div class="field">
                         <label class="label">Organisation Name</label>
                         <div class="control">
@@ -124,7 +126,7 @@ echo makeNavMenu("CyberPath");
             <!-- Join Organisation Form -->
             <div class="column is-half">
                 <h2 class="subtitle">Join an Existing Organisation</h2>
-                <form method="POST" action="organisation.php">
+                <form method="POST" action="">
                     <div class="field">
                         <label class="label">Select Organisation</label>
                         <div class="control">

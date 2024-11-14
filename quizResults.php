@@ -85,7 +85,19 @@ foreach ($quizlist as $question) {
         echo "<div class='notification is-warning'>No answer provided for question {$questionID}.</div>";
     }
 }
-echo "<div class='notification is-info'>Well done ".$_SESSION['username'].", you got {$correctAnswers} out of " . count($quizlist) . " questions correct.</div>";
+
+// Determine the appropriate message based on the score
+if ($correctAnswers > 3) {
+    $message = "<strong>Well Done</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct.";
+} elseif ($correctAnswers >= 1 && $correctAnswers <= 3) {
+    $message = "<strong>Unlucky</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Better luck next time!";
+} else {
+    $message = "<strong>Ouch!</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Don't worry, you can do better next time!";
+}
+
+// Display the message
+echo "<div class='notification is-info'>{$message}</div>";
+
 
 $quizColumn = 'quiz' . $episodeID . 'Score';  // e.g., quiz1Score, quiz2Score, etc.
 $updateScoreSql = "

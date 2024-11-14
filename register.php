@@ -13,9 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password']);
     $confirmPassword = trim($_POST['confirm_password']);
     $forename = trim($_POST['forename']);
+    $surname = trim($_POST['surname']);
+    $email = trim($_POST['email']);
+    $organisationID = trim($_POST['organisationID']);
 
     // Validation checks
-    if (empty($username) || empty($password) || empty($confirmPassword) || empty($forename)) {
+    if (empty($username) || empty($password) || empty($confirmPassword) || empty($forename) || empty($surname) || empty($email) || empty($organisationID)) {
         $errors[] = "Please fill in all fields.";
     }
 
@@ -27,6 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Password must be at least 6 characters long.";
     }
 
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Invalid email format.";
+    }
+
     // If no errors, proceed with account creation
     if (empty($errors)) {
         try {
@@ -35,9 +42,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Insert the new user into the database
             $dbConn = getConnection();
-            $sql = "INSERT INTO userTable (username, password, forename) VALUES (:username, :password, :forename)";
+            $sql = "INSERT INTO userTable (username, password, forename, surname, email, organisationID) VALUES (:username, :password, :forename, :surname, :email, :organisationID)";
             $stmt = $dbConn->prepare($sql);
-            $stmt->execute([':username' => $username, ':password' => $hashedPassword, ':forename' => $forename]);
+            $stmt->execute([
+                ':username' => $username,
+                ':password' => $hashedPassword,
+                ':forename' => $forename,
+                ':surname' => $surname,
+                ':email' => $email,
+                ':organisationID' => $organisationID
+            ]);
 
             // Redirect to login page after successful registration
             header("Location: loginForm.php");
@@ -80,6 +94,27 @@ echo makeNavMenu("CyberPath");
                 <label class="label">Forename</label>
                 <div class="control">
                     <input class="input" type="text" name="forename" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Surname</label>
+                <div class="control">
+                    <input class="input" type="text" name="surname" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Email Address</label>
+                <div class="control">
+                    <input class="input" type="email" name="email" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Organisation ID</label>
+                <div class="control">
+                    <input class="input" type="text" name="organisationID" required>
                 </div>
             </div>
 

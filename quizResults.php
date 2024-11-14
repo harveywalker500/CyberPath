@@ -42,6 +42,8 @@ $stmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
 $stmt->execute();
 $quizlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+echo "<h1>". $quizList['episodeName'] ."</h1>";
+
 if (empty($quizlist)) {
     echo "<div class='notification is-warning'>No results found for this episode.</div>";
     echo makeFooter("This is the footer");
@@ -52,15 +54,17 @@ if (empty($quizlist)) {
 foreach ($quizlist as $question) {
     $questionID = $question['questionID'];
     $correctAnswer = $question['correctAnswer'];
-
+    $questionCount = 1;
     if (isset($userAnswers[$questionID])) {
         $userAnswer = $userAnswers[$questionID];
 
         if($userAnswer == $correctAnswer){
             $correctAnswer++;
-            echo "<div class='notification is-success'>Question {$questionID} is correct!</div>";
+            echo "<div class='notification is-success'>Question {$questionCount} is correct!</div>";
+            $questionCount++;
         } else {
-            echo "<div class='notification is-danger'>Question {$questionID} is incorrect. The correct answer was {$correctAnswer}.</div>";
+            echo "<div class='notification is-danger'>Question {$questionCount} is incorrect. The correct answer was {$correctAnswer}.</div>";
+            $questionCount++;
         }
     } else {
         echo "<div class='notification is-warning'>No answer provided for question {$questionID}.</div>";

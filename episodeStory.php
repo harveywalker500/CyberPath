@@ -2,11 +2,16 @@
 // Include the functions file
 require_once("functions.php");
 
-session_start(); // Starts the session.
+session_start(); //Starts the session.
 loggedIn(); // Ensures the user is logged in before loading the page.
+
+// Start the page with the header and navigation menu
+echo makePageStart("CyberPath");
+echo makeNavMenu("CyberPath");
 
 $episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : 1; // Default to episode 1 if not set.
 
+// Check if user has permission to access this episode
 $hasPermission = userStoryPermission($_SESSION['userID'], $episodeID);
 
 if (!$hasPermission) {
@@ -35,11 +40,11 @@ if (empty($storyList)) {
     exit;
 }
 
-$episodeName = $storyList[0]['episodeName'];
+$episodeName = $storyList[0]['episodeName']; // First episode name
 
 ?>
 
-<!-- FRONTEND: HTML and JavaScript -->
+<!-- Frontend: HTML and Dynamic Story Content -->
 <div class="columns">
   <div class="column is-two-thirds">
     <div class="box" id="storyText">
@@ -61,7 +66,7 @@ $episodeName = $storyList[0]['episodeName'];
             $answerC = $storyList[0]['answerC'];
             
             // Display the question and answers as a form
-            echo "<form id='quizForm' action='#' method='POST'>";
+            echo "<form id='quizForm' method='POST'>";
             echo "<div class='field'>";
             echo "<label class='label'>$question</label>";
 
@@ -97,17 +102,15 @@ $episodeName = $storyList[0]['episodeName'];
   </div>
 </div>
 
+<!-- Include Footer and Page End -->
 <?php
 echo makeFooter("This is the footer");
 echo makePageEnd();
 ?>
 
-<!-- FRONTEND: JavaScript (AJAX) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- JavaScript (AJAX to handle answer submission and story progression) -->
 <script>
 $(document).ready(function(){
-    var currentEpisode = <?php echo $episodeID; ?>; // Current episode ID
-
     // Handle form submission via AJAX
     $('#quizForm').submit(function(event) {
         event.preventDefault(); // Prevent the form from submitting the usual way
@@ -152,7 +155,7 @@ $(document).ready(function(){
 </script>
 
 <?php
-// BACKEND PHP (Logic Handling Answer and Next Story)
+// Backend PHP (Logic Handling Answer and Next Story)
 if (isset($_POST['episodeID']) && isset($_POST['answer'])) {
     $episodeID = $_POST['episodeID'];
     $userAnswer = $_POST['answer'];
@@ -193,7 +196,7 @@ if (isset($_POST['episodeID']) && isset($_POST['answer'])) {
                 'success' => true,
                 'nextStoryText' => htmlspecialchars($nextStory['storyText']),
                 'nextQuiz' => "
-                    <form id='quizForm' action='#' method='POST'>
+                    <form id='quizForm' method='POST'>
                         <div class='field'>
                             <label class='label'>" . htmlspecialchars($nextStory['storyQuestion']) . "</label>
                             <div class='control'>

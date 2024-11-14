@@ -85,7 +85,7 @@ foreach ($quizlist as $question) {
         echo "<div class='notification is-warning'>No answer provided for question {$questionID}.</div>";
     }
 }
-echo "<div class='notification is-info'>You got {$correctAnswers} out of " . count($quizlist) . " questions correct.</div>";
+echo "<div class='notification is-info'>Well done ".$_SESSION['username'].", you got {$correctAnswers} out of " . count($quizlist) . " questions correct.</div>";
 
 $quizColumn = 'quiz' . $episodeID . 'Score';  // e.g., quiz1Score, quiz2Score, etc.
 $updateScoreSql = "

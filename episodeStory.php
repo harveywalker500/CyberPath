@@ -111,6 +111,7 @@ echo makeFooter("This is the footer");
 echo makePageEnd();
 ?>
 
+<!-- Place your JavaScript and AJAX inside the HTML document -->
 <script>
 $(document).ready(function() {
     $('#quizForm').submit(function(event) {
@@ -222,4 +223,4 @@ if (isset($_POST['episodeID']) && isset($_POST['answer'])) {
     }
     exit; // Terminate the script after responding
 }
-</script>
+

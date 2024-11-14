@@ -53,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':surname' => $surname,
                 ':email' => $email
             ]);
-
             // Redirect to login page after successful registration
             header("Location: loginForm.php");
             exit();

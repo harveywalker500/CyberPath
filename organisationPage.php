@@ -3,6 +3,12 @@
 require_once("functions.php");
 session_start();
 
+// Redirect to login page if the user is not logged in
+if (!isset($_SESSION['userID'])) {
+    header("Location: loginForm.php");
+    exit();
+}
+
 // Initialize an array to hold errors
 $errors = [];
 

@@ -55,15 +55,30 @@ $questionCount = 1;
 foreach ($quizlist as $question) {
     $questionID = $question['questionID'];
     $correctAnswer = $question['correctAnswer'];
+    $questionText = $question['questionText'];
+
+    $answers = [
+        'a' => $question['answerA'],
+        'b' => $question['answerB'],
+        'c' => $question['answerC'],
+        'd' => $question['answerD']
+    ];
+
+    $correctAnswerText = isset($answers[$correctAnswer]) ? $answers[$correctAnswer] : '';
+
     if (isset($userAnswers[$questionID])) {
         $userAnswer = $userAnswers[$questionID];
 
         if($userAnswer == $correctAnswer){
             $correctAnswers++;
             echo "<div class='notification is-success'>Question {$questionCount} is correct!</div>";
+            echo "<div><strong>Question:</strong> {$questionText}</div>";
+            echo "<div><strong>Correct Answer:</strong> {$correctAnswerText}</div>";
             $questionCount++;
         } else {
-            echo "<div class='notification is-danger'>Question {$questionCount} is incorrect. The correct answer was {$correctAnswer}.</div>";
+            echo "<div class='notification is-danger'>Question {$questionCount} is incorrect. The correct answer was {$correctAnswerText}.</div>";
+            echo "<div><strong>Question:</strong> {$questionText}</div>";
+            echo "<div><strong>Correct Answer:</strong> {$correctAnswerText}</div>";
             $questionCount++;;
         }
     } else {

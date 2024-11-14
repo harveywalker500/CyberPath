@@ -4,7 +4,7 @@ require_once("functions.php");
 session_start(); //Starts the session.
 echo makePageStart("CyberPath");
 
-echo makeNavMenu("organisation.php");
+echo makeNavMenu("CyberPath");
 ?>
 
 <h1>Hello Mat!</h1>

@@ -7,7 +7,7 @@ session_start();
 $errors = [];
 
 // Initialize form variables to empty strings
-$username = $password = $confirmPassword = $forename = $surname = $email = $organisationID = "";
+$username = $password = $confirmPassword = $forename = $surname = $email = "";
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -18,10 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $forename = trim($_POST['forename'] ?? '');
     $surname = trim($_POST['surname'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $organisationID = trim($_POST['organisationID'] ?? '');
 
     // Validation checks
-    if (empty($username) || empty($password) || empty($confirmPassword) || empty($forename) || empty($surname) || empty($email) || empty($organisationID)) {
+    if (empty($username) || empty($password) || empty($confirmPassword) || empty($forename) || empty($surname) || empty($email)) {
         $errors[] = "Please fill in all fields.";
     }
 
@@ -45,15 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Insert the new user into the database
             $dbConn = getConnection();
-            $sql = "INSERT INTO userTable (username, password, forename, surname, email, organisationID) VALUES (:username, :password, :forename, :surname, :email, :organisationID)";
+            $sql = "INSERT INTO userTable (username, password, forename, surname, email) VALUES (:username, :password, :forename, :surname, :email)";
             $stmt = $dbConn->prepare($sql);
             $stmt->execute([
                 ':username' => $username,
                 ':password' => $hashedPassword,
                 ':forename' => $forename,
                 ':surname' => $surname,
-                ':email' => $email,
-                ':organisationID' => $organisationID
+                ':email' => $email
             ]);
 
             // Redirect to login page after successful registration
@@ -111,13 +109,6 @@ echo makeNavMenu("CyberPath");
                 <label class="label">Email Address</label>
                 <div class="control">
                     <input class="input" type="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
-                </div>
-            </div>
-
-            <div class="field">
-                <label class="label">Organisation ID</label>
-                <div class="control">
-                    <input class="input" type="text" name="organisationID" value="<?php echo htmlspecialchars($organisationID); ?>" required>
                 </div>
             </div>
 

@@ -2,8 +2,8 @@
 // Include the functions file
 require_once("functions.php");
 
-session_start(); //Starts the session.
-loggedIn(); // Ensures the user is logged in before loading the page.
+session_start(); // Starts the session
+loggedIn(); // Ensures the user is logged in before loading the page
 
 echo makePageStart("CyberPath");
 echo makeNavMenu("CyberPath");
@@ -26,6 +26,7 @@ if (!$hasPermission) {
     exit;
 }
 
+// Fetch the story list for the episode
 $dbConn = getConnection();
 $sql = "
     SELECT s.*, e.episodeName
@@ -45,64 +46,77 @@ if (empty($storyList)) {
     exit;
 }
 
-$episodeName = $storyList[0]['episodeName']; 
+// Initialize or update the current index in session
+if (!isset($_SESSION['currentIndex'])) {
+    $_SESSION['currentIndex'] = 0;
+} elseif (isset($_POST['next'])) {
+    $_SESSION['currentIndex']++; // Increment the index when 'next' is posted
+}
+
+// Check if the current index is within bounds of storyList
+if ($_SESSION['currentIndex'] >= count($storyList)) {
+    echo "<div class='notification is-success'>You have completed all questions in this episode!</div>";
+    unset($_SESSION['currentIndex']); // Reset index or redirect if needed
+    echo makeFooter("This is the footer");
+    echo makePageEnd();
+    exit;
+}
+
+// Get the current story and question based on the current index
+$currentStory = $storyList[$_SESSION['currentIndex']];
 ?>
 
 <div class="columns">
   <div class="column is-two-thirds">
     <div class="box">
-        <?php foreach ($storyList as $story): // Iterate through each story item ?>
-            <div>
-                <p><?php echo htmlspecialchars($story['storyText']); ?></p>
-            </div>
-        <?php endforeach; ?>
+        <div>
+            <p><?php echo htmlspecialchars($currentStory['storyText']); ?></p>
+        </div>
     </div>
   </div>
   <div class="column is-one-third">
     <div class="box">
-        <?php foreach ($storyList as $story): // Iterate through each quiz question item ?>
-            <?php
-            // Check if there's a question for this story
-            if (isset($story['storyQuestion'])) {
-                $question = $story['storyQuestion'];
-                $answerA = $story['answerA'];
-                $answerB = $story['answerB'];
-                $answerC = $story['answerC'];
-                
-                // Display the question and answers as a form
-                echo "<form action='submit_answer.php' method='POST'>";
-                echo "<div class='field'>";
-                echo "<label class='label'>$question</label>";
+        <?php
+        // Check if there's a question for this story
+        if (isset($currentStory['storyQuestion'])) {
+            $question = $currentStory['storyQuestion'];
+            $answerA = $currentStory['answerA'];
+            $answerB = $currentStory['answerB'];
+            $answerC = $currentStory['answerC'];
+            
+            // Display the question and answers as a form
+            echo "<form action='' method='POST'>";
+            echo "<div class='field'>";
+            echo "<label class='label'>$question</label>";
 
-                echo "<div class='control'>";
-                echo "<label class='radio'>";
-                echo "<input type='radio' name='answer' value='A'> $answerA";
-                echo "</label>";
-                echo "</div>";
+            echo "<div class='control'>";
+            echo "<label class='radio'>";
+            echo "<input type='radio' name='answer' value='A' required> $answerA";
+            echo "</label>";
+            echo "</div>";
 
-                echo "<div class='control'>";
-                echo "<label class='radio'>";
-                echo "<input type='radio' name='answer' value='B'> $answerB";
-                echo "</label>";
-                echo "</div>";
+            echo "<div class='control'>";
+            echo "<label class='radio'>";
+            echo "<input type='radio' name='answer' value='B' required> $answerB";
+            echo "</label>";
+            echo "</div>";
 
-                echo "<div class='control'>";
-                echo "<label class='radio'>";
-                echo "<input type='radio' name='answer' value='C'> $answerC";
-                echo "</label>";
-                echo "</div>";
-                echo "</div>";
+            echo "<div class='control'>";
+            echo "<label class='radio'>";
+            echo "<input type='radio' name='answer' value='C' required> $answerC";
+            echo "</label>";
+            echo "</div>";
+            echo "</div>";
 
-                echo "<div class='control'>";
-                echo "<input type='hidden' name='episodeID' value='$episodeID'>";
-                echo "<button class='button is-primary' type='submit'>Submit Answer</button>";
-                echo "</div>";
-                echo "</form>";
-            } else {
-                echo "<div class='notification is-warning'>No question available for this story.</div>";
-            }
-            ?>
-        <?php endforeach; ?>
+            echo "<div class='control'>";
+            echo "<input type='hidden' name='episodeID' value='$episodeID'>";
+            echo "<button class='button is-primary' type='submit' name='next'>Submit Answer</button>";
+            echo "</div>";
+            echo "</form>";
+        } else {
+            echo "<div class='notification is-warning'>No question available for this story.</div>";
+        }
+        ?>
     </div>
   </div>
 </div>

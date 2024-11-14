@@ -142,7 +142,8 @@ function makeNavMenu($navMenuHeader) {
         "index.php" => "Home",
         "storySelect.php" => "Story",
         "quizSelection.php" => "Quiz Selection",
-        "leaderboard.php"  => "Leaderboard"
+        "leaderboard.php"  => "Leaderboard",
+        "register.php" => "Register"
     );
 
     $output = <<<HTML

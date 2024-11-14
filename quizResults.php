@@ -59,12 +59,12 @@ foreach ($quizlist as $question) {
         $userAnswer = $userAnswers[$questionID];
 
         if($userAnswer == $correctAnswer){
-            $correctAnswer+=1;
+            $correctAnswer = $correctAnswer+1;
             echo "<div class='notification is-success'>Question {$questionCount} is correct!</div>";
-            $questionCount+=1;
+            $questionCount = $questionCount+1;
         } else {
             echo "<div class='notification is-danger'>Question {$questionCount} is incorrect. The correct answer was {$correctAnswer}.</div>";
-            $questionCount+=1;
+            $questionCount = $questionCount+1;
         }
     } else {
         echo "<div class='notification is-warning'>No answer provided for question {$questionID}.</div>";

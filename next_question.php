@@ -9,6 +9,7 @@ if (!isset($_POST['episodeID']) || !isset($_POST['answer'])) {
 
 $episodeID = $_POST['episodeID'];
 $selectedAnswer = $_POST['answer'];
+$userID = $_SESSION['userID']; // Assuming userID is stored in session
 
 // Fetch the story list for the episode from the database
 $dbConn = getConnection();
@@ -32,31 +33,30 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
 
 // Check if the answer is correct
 if ($selectedAnswer === $currentStory['correctAnswer']) {
-    // Increment index for next question if the answer is correct
+    // Increment index for the next question if the answer is correct
     $_SESSION['currentIndex']++;
 
     // Check if there are no more questions left
-    // Check if there are no more questions left
-if ($_SESSION['currentIndex'] >= count($storyList)) {
-    // All questions are completed; update the userProgressTable
-    $updateSql = "
-        UPDATE userProgressTable
-        SET storyCompleted = TRUE
-        WHERE userID = :userID
-    ";
-    $updateStmt = $dbConn->prepare($updateSql);
-    $updateStmt->bindParam(':userID', $userID, PDO::PARAM_INT);
-    $updateStmt->execute();
+    if ($_SESSION['currentIndex'] >= count($storyList)) {
+        // All questions are completed; update the userProgressTable
+        $updateSql = "
+            UPDATE userProgressTable
+            SET storyCompleted = :episodeID
+            WHERE userID = :userID
+        ";
+        $updateStmt = $dbConn->prepare($updateSql);
+        $updateStmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
+        $updateStmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+        $updateStmt->execute();
 
-    // Clear the session index and indicate quiz completion
-    unset($_SESSION['currentIndex']);
-    echo json_encode([
-        "completed" => true,
-        "message" => "You have completed all questions in this episode!"
-    ]);
-    exit;
-}
-
+        // Clear the session index and indicate quiz completion
+        unset($_SESSION['currentIndex']);
+        echo json_encode([
+            "completed" => true,
+            "message" => "You have completed all questions in this episode!"
+        ]);
+        exit;
+    }
 
     // Load the next question
     $nextStory = $storyList[$_SESSION['currentIndex']];
@@ -71,7 +71,7 @@ if ($_SESSION['currentIndex'] >= count($storyList)) {
         "answerC" => htmlspecialchars($nextStory['answerC']),
     ]);
 } else {
-    // Respond with an incorrect answer message without incrementing
+    // Respond with an incorrect answer message without advancing
     echo json_encode([
         "completed" => false,
         "correct" => false,

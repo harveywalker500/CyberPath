@@ -45,8 +45,25 @@ if (empty($storyList)) {
     exit;
 }
 $episodeName = $storyList[0]['episodeName']; 
-var_dump($storyList);
+?>
 
+<div class="columns">
+  <div class="column is-two-thirds">
+    <div class="box">
+      <!-- Content for the first box -->
+      Box 1 (2/3 width)
+    </div>
+  </div>
+  <div class="column is-one-third">
+    <div class="box">
+      <!-- Content for the second box -->
+      Box 2 (1/3 width)
+    </div>
+  </div>
+</div>
+
+<?php
 echo makeFooter("This is the footer");
 echo makePageEnd();
 ?>
+

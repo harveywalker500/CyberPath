@@ -32,7 +32,7 @@ $correctAnswers = 0;
 
 $dbConn = getConnection();
 $sql = "
-    SELECT q.questionID, q.correctAnswer, q.questionText, e.episodeName
+    SELECT q.*, e.episodeName
     FROM questionTable q
     JOIN episodesTable e ON q.episodeID = e.episodeID
     WHERE q.episodeID = :episodeID
@@ -59,12 +59,12 @@ foreach ($quizlist as $question) {
         $userAnswer = $userAnswers[$questionID];
 
         if($userAnswer == $correctAnswer){
-            $correctAnswer++;
+            $correctAnswer+=1;
             echo "<div class='notification is-success'>Question {$questionCount} is correct!</div>";
-            $questionCount++;
+            $questionCount+=1;
         } else {
             echo "<div class='notification is-danger'>Question {$questionCount} is incorrect. The correct answer was {$correctAnswer}.</div>";
-            $questionCount++;
+            $questionCount+=1;
         }
     } else {
         echo "<div class='notification is-warning'>No answer provided for question {$questionID}.</div>";

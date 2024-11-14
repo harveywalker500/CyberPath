@@ -264,4 +264,26 @@ function userQuizPermission($userID, $currentEpisode){
     return false;
 }
 
+function userStoryPermission($userID, $currentEpisode){
+    $progress = getUserProgress($userID);
+    if ($progress && isset($progress['quizCompleted'])) {
+        if ($progress['quizCompleted'] >= $currentEpisode -1) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function getStory($episodeID) {
+    try {
+        $dbConn = getConnection();
+        $sql = "SELECT * FROM storyTable WHERE episodeID = :episodeID";
+        $stmt = $dbConn->prepare($sql);
+        $stmt->execute([':episodeID' => $episodeID]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        throw new Exception("Error fetching story: " . $e->getMessage(), 0, $e);
+    }
+}
+
 ?>

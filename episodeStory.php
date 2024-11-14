@@ -91,6 +91,7 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
             </div>
         </div>
     </div>
+    <div id="feedback" class="notification"></div>
 </div>
 
 <script>
@@ -104,11 +105,14 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
                 data: $(this).serialize(), // Send form data
                 dataType: 'json', // Expect JSON response
                 success: function(response) {
+                    // Show completion message if quiz is completed
                     if (response.completed) {
-                        // If all questions are completed, show completion message
-                        $('#content').html('<div class="notification is-success">You have completed all questions in this episode!</div>');
-                    } else {
-                        // Update the story and question text
+                        $('#content').html('<div class="notification is-success">' + response.message + '</div>');
+                        return;
+                    }
+
+                    // If the answer was correct, load the next question
+                    if (response.correct) {
                         $('#storyText').html('<p>' + response.storyText + '</p>');
                         $('#questionField').html(
                             '<label class="label">' + response.storyQuestion + '</label>' +
@@ -116,12 +120,17 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
                             '<div class="control"><label class="radio"><input type="radio" name="answer" value="B" required> ' + response.answerB + '</label></div>' +
                             '<div class="control"><label class="radio"><input type="radio" name="answer" value="C" required> ' + response.answerC + '</label></div>'
                         );
+                        $('#feedback').removeClass('is-danger').addClass('is-success').text(response.message);
+                    } else {
+                        // Show incorrect feedback without advancing
+                        $('#feedback').removeClass('is-success').addClass('is-danger').text(response.message);
                     }
                 }
             });
         });
     });
 </script>
+
 
 <?php
 echo makeFooter("This is the footer");

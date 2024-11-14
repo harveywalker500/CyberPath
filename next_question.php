@@ -2,12 +2,15 @@
 session_start();
 require_once("functions.php");
 
-if (!isset($_POST['episodeID'])) {
-    echo json_encode(["error" => "Episode ID not set"]);
+if (!isset($_POST['episodeID']) || !isset($_POST['answer'])) {
+    echo json_encode(["error" => "Episode ID or answer not set"]);
     exit;
 }
 
 $episodeID = $_POST['episodeID'];
+$selectedAnswer = $_POST['answer'];
+
+// Fetch the story list for the episode from the database
 $dbConn = getConnection();
 $sql = "
     SELECT s.*, e.episodeName
@@ -20,25 +23,42 @@ $stmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
 $stmt->execute();
 $storyList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Increment index and check completion
+// Initialize or increment the question index in the session
 if (!isset($_SESSION['currentIndex'])) {
     $_SESSION['currentIndex'] = 0;
-} else {
-    $_SESSION['currentIndex']++;
-}
-
-if ($_SESSION['currentIndex'] >= count($storyList)) {
-    echo json_encode(["completed" => true]);
-    unset($_SESSION['currentIndex']);
-    exit;
 }
 
 $currentStory = $storyList[$_SESSION['currentIndex']];
-echo json_encode([
-    "completed" => false,
-    "storyText" => htmlspecialchars($currentStory['storyText']),
-    "storyQuestion" => htmlspecialchars($currentStory['storyQuestion']),
-    "answerA" => htmlspecialchars($currentStory['answerA']),
-    "answerB" => htmlspecialchars($currentStory['answerB']),
-    "answerC" => htmlspecialchars($currentStory['answerC']),
-]);
+
+// Check if the answer is correct
+if ($selectedAnswer === $currentStory['correctAnswer']) {
+    // Increment index for next question if the answer is correct
+    $_SESSION['currentIndex']++;
+
+    // Check if there are no more questions left
+    if ($_SESSION['currentIndex'] >= count($storyList)) {
+        echo json_encode(["completed" => true, "message" => "You have completed all questions in this episode!"]);
+        unset($_SESSION['currentIndex']);
+        exit;
+    }
+
+    // Load the next question
+    $nextStory = $storyList[$_SESSION['currentIndex']];
+    echo json_encode([
+        "completed" => false,
+        "correct" => true,
+        "message" => "Correct answer! Moving to the next question.",
+        "storyText" => htmlspecialchars($nextStory['storyText']),
+        "storyQuestion" => htmlspecialchars($nextStory['storyQuestion']),
+        "answerA" => htmlspecialchars($nextStory['answerA']),
+        "answerB" => htmlspecialchars($nextStory['answerB']),
+        "answerC" => htmlspecialchars($nextStory['answerC']),
+    ]);
+} else {
+    // Respond with an incorrect answer message without incrementing
+    echo json_encode([
+        "completed" => false,
+        "correct" => false,
+        "message" => "Incorrect answer! Please try again."
+    ]);
+}

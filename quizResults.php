@@ -51,10 +51,10 @@ if (empty($quizlist)) {
     exit;
 }
 
+$questionCount = 1;
 foreach ($quizlist as $question) {
     $questionID = $question['questionID'];
     $correctAnswer = $question['correctAnswer'];
-    $questionCount = 1;
     if (isset($userAnswers[$questionID])) {
         $userAnswer = $userAnswers[$questionID];
 

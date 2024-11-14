@@ -145,6 +145,10 @@ function makeNavMenu($navMenuHeader) {
         "leaderboard.php"  => "Leaderboard",
     );
 
+    if ($isLoggedIn) {
+        $links["organisation.php"] = "Organisation";
+    }
+
     $output = <<<HTML
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">

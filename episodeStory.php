@@ -178,7 +178,7 @@ if (isset($_POST['episodeID']) && isset($_POST['answer'])) {
         exit;
     }
 
-    // Check if the user's answer is correct
+    // Check if the user's answer is correct by comparing to the correctAnswer in the database (A, B, or C)
     if ($userAnswer === $story['correctAnswer']) {
         // Increment episodeID to go to the next part
         $nextEpisodeID = $episodeID + 1;

@@ -61,22 +61,22 @@ $episodeName = $quizlist[0]['episodeName'];
 
             // Display each answer option with radio buttons
             echo "<div class='field'>";
-            echo "<input type='radio' id='answerA_" . $row['questionID'] . "' name='question_" . $row['questionID'] . "' value='" . htmlspecialchars($row['answerA']) . "' class='is-checkradio' required>";
+            echo "<input type='radio' id='answerA_" . $row['questionID'] . "' name='question_" . $row['questionID'] . "' value='a' class='is-checkradio' required>";
             echo "<label for='answerA_" . $row['questionID'] . "'>" . htmlspecialchars($row['answerA']) . "</label>";
             echo "</div>";
 
             echo "<div class='field'>";
-            echo "<input type='radio' id='answerB_" . $row['questionID'] . "' name='question_" . $row['questionID'] . "' value='" . htmlspecialchars($row['answerB']) . "' class='is-checkradio' required>";
+            echo "<input type='radio' id='answerB_" . $row['questionID'] . "' name='question_" . $row['questionID'] . "' value='b' class='is-checkradio' required>";
             echo "<label for='answerB_" . $row['questionID'] . "'>" . htmlspecialchars($row['answerB']) . "</label>";
             echo "</div>";
 
             echo "<div class='field'>";
-            echo "<input type='radio' id='answerC_" . $row['questionID'] . "' name='question_" . $row['questionID'] . "' value='" . htmlspecialchars($row['answerC']) . "' class='is-checkradio' required>";
+            echo "<input type='radio' id='answerC_" . $row['questionID'] . "' name='question_" . $row['questionID'] . "' value='c' class='is-checkradio' required>";
             echo "<label for='answerC_" . $row['questionID'] . "'>" . htmlspecialchars($row['answerC']) . "</label>";
             echo "</div>";
 
             echo "<div class='field'>";
-            echo "<input type='radio' id='answerD_" . $row['questionID'] . "' name='question_" . $row['questionID'] . "' value='" . htmlspecialchars($row['answerD']) . "' class='is-checkradio' required>";
+            echo "<input type='radio' id='answerD_" . $row['questionID'] . "' name='question_" . $row['questionID'] . "' value='d' class='is-checkradio' required>";
             echo "<label for='answerD_" . $row['questionID'] . "'>" . htmlspecialchars($row['answerD']) . "</label>";
             echo "</div>";
 

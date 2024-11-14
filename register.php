@@ -1,17 +1,21 @@
 <?php
+// Include functions file and start session
 require_once("functions.php");
-session_start(); // Start the session to store session variables
+session_start();
 
-$errors = []; // Initialize an empty array to hold error messages
+// Initialize an array to hold errors
+$errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get form input data
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Capture the form data
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     $confirmPassword = trim($_POST['confirm_password']);
+    $forename = trim($_POST['forename']);
 
     // Validation checks
-    if (empty($username) || empty($password) || empty($confirmPassword)) {
+    if (empty($username) || empty($password) || empty($confirmPassword) || empty($forename)) {
         $errors[] = "Please fill in all fields.";
     }
 
@@ -31,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Insert the new user into the database
             $dbConn = getConnection();
-            $sql = "INSERT INTO userTable (username, password) VALUES (:username, :password)";
+            $sql = "INSERT INTO userTable (username, password, forename) VALUES (:username, :password, :forename)";
             $stmt = $dbConn->prepare($sql);
-            $stmt->execute([':username' => $username, ':password' => $hashedPassword]);
+            $stmt->execute([':username' => $username, ':password' => $hashedPassword, ':forename' => $forename]);
 
             // Redirect to login page after successful registration
             header("Location: loginForm.php");
@@ -44,50 +48,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-echo makePageStart("CyberPath - Register");
-echo makeNavMenu("Register");
-
-if (!empty($errors)) {
-    // Display errors if any
-    echo show_errors($errors);
-}
+echo makePageStart("Register - CyberPath");
+echo makeNavMenu("CyberPath");
 ?>
 
-<!-- Registration form -->
 <div class="container">
-    <h1 class="title has-text-centered">Create an Account</h1>
-    
-    <form action="register.php" method="POST" class="box">
-        <div class="field">
-            <label class="label">Username</label>
-            <div class="control">
-                <input class="input" type="text" name="username" value="<?= htmlspecialchars($username ?? '') ?>" required>
-            </div>
-        </div>
+    <div class="section">
+        <h1 class="title">Register</h1>
 
-        <div class="field">
-            <label class="label">Password</label>
-            <div class="control">
-                <input class="input" type="password" name="password" required>
+        <!-- Display any errors -->
+        <?php if (!empty($errors)): ?>
+            <div class="notification is-danger">
+                <ul>
+                    <?php foreach ($errors as $error): ?>
+                        <li><?php echo htmlspecialchars($error); ?></li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
-        </div>
+        <?php endif; ?>
 
-        <div class="field">
-            <label class="label">Confirm Password</label>
-            <div class="control">
-                <input class="input" type="password" name="confirm_password" required>
+        <!-- Registration form -->
+        <form method="POST" action="register.php">
+            <div class="field">
+                <label class="label">Username</label>
+                <div class="control">
+                    <input class="input" type="text" name="username" required>
+                </div>
             </div>
-        </div>
 
-        <div class="field is-grouped is-grouped-centered">
-            <div class="control">
-                <button type="submit" class="button is-primary">Register</button>
+            <div class="field">
+                <label class="label">Forename</label>
+                <div class="control">
+                    <input class="input" type="text" name="forename" required>
+                </div>
             </div>
-        </div>
-    </form>
+
+            <div class="field">
+                <label class="label">Password</label>
+                <div class="control">
+                    <input class="input" type="password" name="password" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Confirm Password</label>
+                <div class="control">
+                    <input class="input" type="password" name="confirm_password" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <?php
-echo makeFooter("This is the footer.");
+echo makeFooter("This is the footer");
 echo makePageEnd();
 ?>

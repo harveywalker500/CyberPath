@@ -47,11 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':organisationID' => $organisationID,
                     ':userID' => $userID
                 ]);
-
-                // Redirect to the main page after joining/creating organisation
-                header("Location: index.php");
-                exit();
-
+                
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }

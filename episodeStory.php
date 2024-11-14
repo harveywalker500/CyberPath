@@ -56,7 +56,7 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
 ?>
 
 <div id="content">
-    <div class="columns">
+    <div class="columns is-flex is-align-items-stretch">
         <div class="column is-two-thirds">
             <div class="box">
                 <div id="storyText">
@@ -93,6 +93,7 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
     </div>
     <div id="feedback" class="notification"></div>
 </div>
+
 
 <script>
     $(document).ready(function() {

@@ -22,11 +22,24 @@ try {
     $errors[] = "Error fetching organisations: " . $e->getMessage();
 }
 
+// Check if the user is already part of an organisation
+$userID = $_SESSION['userID'];
+$currentOrgID = null;
+
+try {
+    $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
+    $stmt = $dbConn->prepare($sql);
+    $stmt->execute([':userID' => $userID]);
+    $currentOrgID = $stmt->fetchColumn();
+} catch (Exception $e) {
+    $errors[] = "Error checking user's current organisation: " . $e->getMessage();
+}
+
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['createOrganisation'])) {
         $organisationName = trim($_POST['organisationName'] ?? '');
-        
+
         if (empty($organisationName)) {
             $errors[] = "Please provide an organisation name.";
         }
@@ -42,18 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $organisationID = $dbConn->lastInsertId();
 
                 // Assign the user to the newly created organisation
-                $userID = $_SESSION['userID'];
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
-                // Reload the organisations list after creation
-                $sql = "SELECT organisationID, name FROM organisationTable";
-                $stmt = $dbConn->prepare($sql);
-                $stmt->execute();
-                $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Re-fetch organisations
-
-                echo "<div class='notification is-success'>Organisation created successfully!</div>";
+                echo "<div class='notification is-success'>Organisation created and you have been assigned to it successfully!</div>";
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
@@ -66,9 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($errors)) {
+            if ($currentOrgID) {
+                echo "<div class='notification is-warning'>Warning: Joining this organisation will remove you from your current organisation.</div>";
+            }
+
             try {
                 // Assign the user to the selected organisation
-                $userID = $_SESSION['userID'];
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);

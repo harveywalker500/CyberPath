@@ -182,10 +182,10 @@ HTML;
             }
         }
 
-        // Add logout option if logged in
+        // Add organisation and logout option if logged in
+        $output .= "<a class=\"navbar-item\" href='organisationPage.php'>Organisation</a>\n";
         $output .= "<a class=\"navbar-item\" href='logout.php'>Logout</a>\n";
     } else {
-        $output .= "<a class=\"navbar-item\" href='organisationPage.php'>Organisation</a>\n";
         // Add login and register options if not logged in
         $output .= "<a class=\"navbar-item\" href='loginForm.php'>Login</a>\n";
         $output .= "<a class=\"navbar-item\" href='register.php'>Register</a>\n";

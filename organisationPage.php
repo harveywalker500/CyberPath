@@ -82,7 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 echo makePageStart("Manage Organisation - CyberPath");
-echo makeNavMenu("CyberPath");
+echo makeNavMenu("CyberPath"); // Call the updated navigation menu function
+
 ?>
 
 <div class="container">

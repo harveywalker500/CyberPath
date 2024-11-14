@@ -3,7 +3,6 @@ CREATE TABLE organisationTable (
     organisationID INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     teamLeaderID INT,
-    FOREIGN KEY (teamLeaderID) REFERENCES userTable(userID) ON DELETE SET NULL
 );
 
 -- Step 2: Create the userTable without the organisationID foreign key initially
@@ -15,7 +14,6 @@ CREATE TABLE userTable (
     surname VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
     organisationID INT,
-    FOREIGN KEY (organisationID) REFERENCES organisationTable(organisationID) ON DELETE SET NULL
 );
 
 -- Step 3: Add the foreign key constraint on teamLeaderID in organisationTable to reference userTable

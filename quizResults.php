@@ -42,7 +42,7 @@ $stmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
 $stmt->execute();
 $quizlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-echo "<h1>". $quizlist[0]['episodeName'] ."</h1>";
+echo "<h1 class='title has-text-centered'>Results for ". $quizlist[0]['episodeName'] ."</h1>";
 
 if (empty($quizlist)) {
     echo "<div class='notification is-warning'>No results found for this episode.</div>";

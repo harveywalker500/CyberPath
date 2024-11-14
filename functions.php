@@ -142,9 +142,8 @@ function makeNavMenu($navMenuHeader) {
         "index.php" => "Home",
         "storySelect.php" => "Story",
         "quizSelection.php" => "Quiz Selection",
-        "leaderboard.php"  => "Leaderboard",
-        "organisationPage.php" => "Organisation"
-    );
+        "leaderboard.php"  => "Leaderboard"
+        );
 
     $output = <<<HTML
     <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -186,6 +185,7 @@ HTML;
         // Add logout option if logged in
         $output .= "<a class=\"navbar-item\" href='logout.php'>Logout</a>\n";
     } else {
+        $output .= "<a class=\"navbar-item\" href='organisationPage.php'>Organisation</a>\n";
         // Add login and register options if not logged in
         $output .= "<a class=\"navbar-item\" href='loginForm.php'>Login</a>\n";
         $output .= "<a class=\"navbar-item\" href='register.php'>Register</a>\n";

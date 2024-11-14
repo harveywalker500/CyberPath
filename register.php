@@ -6,16 +6,19 @@ session_start();
 // Initialize an array to hold errors
 $errors = [];
 
+// Initialize form variables to empty strings
+$username = $password = $confirmPassword = $forename = $surname = $email = $organisationID = "";
+
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Capture the form data
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
-    $confirmPassword = trim($_POST['confirm_password']);
-    $forename = trim($_POST['forename']);
-    $surname = trim($_POST['surname']);
-    $email = trim($_POST['email']);
-    $organisationID = trim($_POST['organisationID']);
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    $confirmPassword = trim($_POST['confirm_password'] ?? '');
+    $forename = trim($_POST['forename'] ?? '');
+    $surname = trim($_POST['surname'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $organisationID = trim($_POST['organisationID'] ?? '');
 
     // Validation checks
     if (empty($username) || empty($password) || empty($confirmPassword) || empty($forename) || empty($surname) || empty($email) || empty($organisationID)) {
@@ -86,35 +89,35 @@ echo makeNavMenu("CyberPath");
             <div class="field">
                 <label class="label">Username</label>
                 <div class="control">
-                    <input class="input" type="text" name="username" required>
+                    <input class="input" type="text" name="username" value="<?php echo htmlspecialchars($username); ?>" required>
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Forename</label>
                 <div class="control">
-                    <input class="input" type="text" name="forename" required>
+                    <input class="input" type="text" name="forename" value="<?php echo htmlspecialchars($forename); ?>" required>
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Surname</label>
                 <div class="control">
-                    <input class="input" type="text" name="surname" required>
+                    <input class="input" type="text" name="surname" value="<?php echo htmlspecialchars($surname); ?>" required>
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Email Address</label>
                 <div class="control">
-                    <input class="input" type="email" name="email" required>
+                    <input class="input" type="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Organisation ID</label>
                 <div class="control">
-                    <input class="input" type="text" name="organisationID" required>
+                    <input class="input" type="text" name="organisationID" value="<?php echo htmlspecialchars($organisationID); ?>" required>
                 </div>
             </div>
 

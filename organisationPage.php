@@ -38,24 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Check if the insert was successful
                 if ($stmt->rowCount() > 0) {
-                    // Successfully inserted, now assign the user to the new organisation
-                    $organisationID = $dbConn->lastInsertId(); // Get the ID of the newly inserted organisation
-                    $userID = $_SESSION['userID'];
-
-                    $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-                    $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([
-                        ':organisationID' => $organisationID,
-                        ':userID' => $userID
-                    ]);
-
-                    echo "<div class='notification is-success'>Organisation created successfully!</div>";
-
-                    // Re-fetch the organisations after inserting the new one
+                    // Successfully inserted, now fetch the updated list of organisations
                     $sql = "SELECT organisationID, name FROM organisationTable";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute();
                     $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    echo "<div class='notification is-success'>Organisation created successfully!</div>";
                 } else {
                     $errors[] = "Error: Organisation not created.";
                 }
@@ -63,7 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
         }
-    } elseif (isset($_POST['joinOrganisation'])) {
+    }
+
+    if (isset($_POST['joinOrganisation'])) {
         // Join an existing organisation
         $organisationID = $_POST['organisationID'] ?? null;
 
@@ -77,15 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $userID = $_SESSION['userID'];
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
-                $stmt->execute([
-                    ':organisationID' => $organisationID,
-                    ':userID' => $userID
-                ]);
+                $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
-                // Redirect to the main page after joining
-                header("Location: index.php");
-                exit();
-
+                // Successfully joined the organisation, no need for redirect
+                echo "<div class='notification is-success'>You have successfully joined the organisation.</div>";
             } catch (Exception $e) {
                 $errors[] = "Error joining organisation: " . $e->getMessage();
             }

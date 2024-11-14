@@ -63,6 +63,7 @@ CREATE TABLE leaderboardTable (
     FOREIGN KEY (userID) REFERENCES userTable(userID)
 );
 
+
 CREATE TABLE storyTable (
     storyID INT AUTO_INCREMENT PRIMARY KEY,
     episodeID INT NOT NULL,

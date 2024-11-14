@@ -1,117 +1,54 @@
 <?php
-// Include the functions file
 require_once("functions.php");
-
-session_start(); //Starts the session.
-loggedIn(); // Ensures the user is logged in before loading the page.
-
-echo makePageStart("CyberPath");
-echo makeNavMenu("CyberPath");
+session_start();
 
 $episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : null;
+$selectedAnswer = isset($_POST['answer']) ? $_POST['answer'] : null;
 
-if ($episodeID === null) {
-    echo "<div class='notification is-danger'>Error: episodeID is not set.</div>";
-    echo makeFooter("This is the footer");
-    echo makePageEnd(); 
-    exit; // Exit if no episodeID is provided
-}
-
-$hasPermission = userStoryPermission($_SESSION['userID'], $episodeID);
-
-if (!$hasPermission) {
+if ($episodeID === null || $selectedAnswer === null) {
     header('Location: index.php');
-    echo makeFooter("This is the footer");
-    echo makePageEnd();
     exit;
 }
 
+// Get database connection
 $dbConn = getConnection();
-$sql = "
-    SELECT s.*, e.episodeName
-    FROM storyTable s
-    JOIN episodesTable e ON s.episodeID = e.episodeID
-    WHERE s.episodeID = :episodeID
-";
+
+// Query to get the correct answer for the current story
+$sql = "SELECT correctAnswer FROM storyTable WHERE episodeID = :episodeID";
 $stmt = $dbConn->prepare($sql);
 $stmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
 $stmt->execute();
-$storyList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (empty($storyList)) {
-    echo "<div class='notification is-warning'>No quiz questions found for this episode.</div>";
-    echo makeFooter("This is the footer");
-    echo makePageEnd();
+// Check if the answer is correct
+if ($result && $selectedAnswer === $result['correctAnswer']) {
+    // Correct answer, proceed to next story
+    
+    // Get the next story in the sequence
+    $nextStorySql = "
+        SELECT s.episodeID
+        FROM storyTable s
+        WHERE s.episodeID > :episodeID
+        ORDER BY s.episodeID ASC
+        LIMIT 1
+    ";
+    $nextStoryStmt = $dbConn->prepare($nextStorySql);
+    $nextStoryStmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
+    $nextStoryStmt->execute();
+    $nextStory = $nextStoryStmt->fetch(PDO::FETCH_ASSOC);
+
+    // If there's a next story, redirect to it
+    if ($nextStory) {
+        header("Location: story_page.php?episodeID=" . $nextStory['episodeID']);
+    } else {
+        // No more stories, redirect to a completion page or similar
+        header("Location: completion.php");
+    }
+    exit;
+
+} else {
+    // Incorrect answer, show an error message or redirect back to the question
+    header("Location: story_page.php?episodeID=$episodeID&error=incorrect");
     exit;
 }
-$episodeName = $storyList[0]['episodeName']; 
 ?>
-
-<div class="columns">
-  <div class="column is-two-thirds">
-    <div class="box">
-
-        <?php
-        echo "<div>";
-        echo "<p>" .htmlspecialchars($storyList[0]['storyText'])."</p>";
-        echo "</div>";
-        
-
-        ?>
-    
-    </div>
-  </div>
-  <div class="column is-one-third">
-    <div class="box">
-
-    <?php
-        // Check if there's a question for this episode
-        if (isset($storyList[0]['storyQuestion'])) {
-            $question = $storyList[0]['storyQuestion'];
-            $answerA = $storyList[0]['answerA'];
-            $answerB = $storyList[0]['answerB'];
-            $answerC = $storyList[0]['answerC'];
-            
-            // Display the question and answers as a form
-            echo "<form action='submit_answer.php' method='POST'>";
-            echo "<div class='field'>";
-            echo "<label class='label'>$question</label>";
-
-            echo "<div class='control'>";
-            echo "<label class='radio'>";
-            echo "<input type='radio' name='answer' value='A'> $answerA";
-            echo "</label>";
-            echo "</div>";
-
-            echo "<div class='control'>";
-            echo "<label class='radio'>";
-            echo "<input type='radio' name='answer' value='B'> $answerB";
-            echo "</label>";
-            echo "</div>";
-
-            echo "<div class='control'>";
-            echo "<label class='radio'>";
-            echo "<input type='radio' name='answer' value='C'> $answerC";
-            echo "</label>";
-            echo "</div>";
-            echo "</div>";
-
-            echo "<div class='control'>";
-            echo "<input type='hidden' name='episodeID' value='$episodeID'>";
-            echo "<button class='button is-primary' type='submit'>Submit Answer</button>";
-            echo "</div>";
-            echo "</form>";
-        } else {
-            echo "<div class='notification is-warning'>No question available for this episode.</div>";
-        }
-        ?>
-
-    </div>
-  </div>
-</div>
-
-<?php
-echo makeFooter("This is the footer");
-echo makePageEnd();
-?>
-

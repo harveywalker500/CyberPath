@@ -1,70 +1,74 @@
 <?php
 // Include the functions file
 require_once("functions.php");
-session_start(); // Starts the session.
+session_start(); // Starts the session
 
 echo makePageStart("CyberPath");
 echo makeNavMenu("CyberPath");
 
-// Check if the user is already logged in (if so, redirect to homepage)
+// If the user is already logged in, redirect to homepage
 if (isset($_SESSION['userID'])) {
-    header('Location: index.php');  // Redirect to homepage if already logged in
+    header('Location: index.php');
     exit();
 }
 
-// Check if the registration form is submitted
+$errors = [];
+$input = ['username' => '', 'email' => '', 'password' => '', 'confirmPassword' => ''];
+
+// If the form is submitted, validate the input and insert into the database
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Sanitize and validate user inputs
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-    $confirmPassword = trim($_POST['confirmPassword']);
-    
-    // Validate inputs
-    $errors = [];
-    
-    if (empty($username)) {
+    // Get and sanitize the input
+    $input['username'] = trim($_POST['username']);
+    $input['email'] = trim($_POST['email']);
+    $input['password'] = trim($_POST['password']);
+    $input['confirmPassword'] = trim($_POST['confirmPassword']);
+
+    // Validate the input fields
+    if (empty($input['username'])) {
         $errors[] = "Username is required.";
     }
-
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (empty($input['email']) || !filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
         $errors[] = "A valid email address is required.";
     }
-
-    if (empty($password)) {
+    if (empty($input['password'])) {
         $errors[] = "Password is required.";
     }
-
-    if ($password !== $confirmPassword) {
+    if ($input['password'] !== $input['confirmPassword']) {
         $errors[] = "Passwords do not match.";
     }
 
+    // Proceed if no errors
     if (empty($errors)) {
-        // No errors, proceed with user registration
-        $dbConn = getConnection();
+        try {
+            $dbConn = getConnection();
 
-        // Check if the username or email already exists
-        $stmt = $dbConn->prepare("SELECT * FROM users WHERE username = :username OR email = :email");
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
+            // Check if the username or email already exists
+            $sql = "SELECT * FROM userTable WHERE username = :username OR email = :email";
+            $stmt = $dbConn->prepare($sql);
+            $stmt->execute([':username' => $input['username'], ':email' => $input['email']]);
+            if ($stmt->rowCount() > 0) {
+                $errors[] = "Username or email already exists.";
+            } else {
+                // Hash the password before inserting
+                $hashedPassword = password_hash($input['password'], PASSWORD_DEFAULT);
 
-        if ($stmt->rowCount() > 0) {
-            $errors[] = "Username or email already exists.";
-        } else {
-            // Hash the password
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                // Insert the new user into the database
+                $sql = "INSERT INTO userTable (username, email, password) VALUES (:username, :email, :password)";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute([
+                    ':username' => $input['username'],
+                    ':email' => $input['email'],
+                    ':password' => $hashedPassword
+                ]);
 
-            // Insert the new user into the database
-            $insertStmt = $dbConn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
-            $insertStmt->bindParam(':username', $username);
-            $insertStmt->bindParam(':email', $email);
-            $insertStmt->bindParam(':password', $hashedPassword);
-            $insertStmt->execute();
-
-            // Redirect to login page after successful registration
-            header('Location: login.php');
-            exit();
+                // Set session and redirect to login page after successful registration
+                $_SESSION['username'] = $input['username'];
+                $_SESSION['userID'] = $dbConn->lastInsertId(); // Store user ID in session
+                header('Location: loginForm.php');
+                exit();
+            }
+        } catch (Exception $e) {
+            $errors[] = "Error registering user: " . $e->getMessage();
         }
     }
 }
@@ -91,14 +95,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="field">
             <label class="label" for="username">Username</label>
             <div class="control">
-                <input class="input" type="text" name="username" id="username" required value="<?= isset($username) ? htmlspecialchars($username) : '' ?>">
+                <input class="input" type="text" name="username" id="username" required value="<?= htmlspecialchars($input['username']) ?>">
             </div>
         </div>
 
         <div class="field">
             <label class="label" for="email">Email</label>
             <div class="control">
-                <input class="input" type="email" name="email" id="email" required value="<?= isset($email) ? htmlspecialchars($email) : '' ?>">
+                <input class="input" type="email" name="email" id="email" required value="<?= htmlspecialchars($input['email']) ?>">
             </div>
         </div>
 
@@ -123,11 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </form>
-
-<!-- Link to Login page -->
-<p class="has-text-centered">
-    Already have an account? <a href="login.php">Login here</a>.
-</p>
 
 <!-- Footer and Page End -->
 <?php

@@ -1,3 +1,9 @@
 html {
     scroll-behavior: smooth;
+    
+}
+#storyText {
+    height: 100%; /* Adjusts the height of the box */
+    overflow-y: auto; /* If content overflows, allows scrolling */
+    max-height: 500px; /* Sets a max height for the box */
 }

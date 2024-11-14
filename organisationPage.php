@@ -9,22 +9,24 @@ if (!isset($_SESSION['userID'])) {
     exit();
 }
 
-// Initialize an array to hold errors
-$errors = [];
+$errors = []; // Initialize errors array
 
 // Fetch all organisations from the database
-$dbConn = getConnection();
-$sql = "SELECT organisationID, name FROM organisationTable";
-$stmt = $dbConn->prepare($sql);
-$stmt->execute();
-$organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $dbConn = getConnection();
+    $sql = "SELECT organisationID, name FROM organisationTable";
+    $stmt = $dbConn->prepare($sql);
+    $stmt->execute();
+    $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $errors[] = "Error fetching organisations: " . $e->getMessage();
+}
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['createOrganisation'])) {
-        // Create new organisation
         $organisationName = trim($_POST['organisationName'] ?? '');
-
+        
         if (empty($organisationName)) {
             $errors[] = "Please provide an organisation name.";
         }
@@ -36,45 +38,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':name' => $organisationName]);
 
-                // Check if the insert was successful
-                if ($stmt->rowCount() > 0) {
-                    // Successfully inserted, now fetch the updated list of organisations
-                    $sql = "SELECT organisationID, name FROM organisationTable";
-                    $stmt = $dbConn->prepare($sql);
-                    $stmt->execute();
-                    $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    echo "<div class='notification is-success'>Organisation created successfully!</div>";
-                } else {
-                    $errors[] = "Error: Organisation not created.";
-                }
+                // Get the newly created organisation ID
+                $organisationID = $dbConn->lastInsertId();
+
+                // Assign the user to the newly created organisation
+                $userID = $_SESSION['userID'];
+                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute([
+                    ':organisationID' => $organisationID,
+                    ':userID' => $userID
+                ]);
+
+                // Optionally, you can echo success or a message
+                echo "<div class='notification is-success'>Organisation created successfully!</div>";
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
         }
-    }
-
-    if (isset($_POST['joinOrganisation'])) {
-        // Join an existing organisation
+    } elseif (isset($_POST['joinOrganisation'])) {
         $organisationID = $_POST['organisationID'] ?? null;
 
-        if (empty($organisationID)) {
-            $errors[] = "Please select an organisation.";
-        }
+        if (empty($organisationName)) {
+    $errors[] = "Please provide an organisation name.";
+}
 
-        if (empty($errors)) {
-            try {
-                // Assign the user to the selected organisation
-                $userID = $_SESSION['userID'];
-                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-                $stmt = $dbConn->prepare($sql);
-                $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+if (empty($errors)) {
+    try {
+        // Insert the new organisation into the database
+        $sql = "INSERT INTO organisationTable (name) VALUES (:name)";
+        $stmt = $dbConn->prepare($sql);
+        $stmt->execute([':name' => $organisationName]);
 
-                // Successfully joined the organisation, no need for redirect
-                echo "<div class='notification is-success'>You have successfully joined the organisation.</div>";
-            } catch (Exception $e) {
-                $errors[] = "Error joining organisation: " . $e->getMessage();
-            }
+        // Check if the insert was successful
+        if ($stmt->rowCount() > 0) {
+            // Successfully inserted, now assign the user to the new organisation
+            $organisationID = $dbConn->lastInsertId(); // Get the ID of the newly inserted organisation
+            $userID = $_SESSION['userID'];
+
+            $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+            $stmt = $dbConn->prepare($sql);
+            $stmt->execute([
+                ':organisationID' => $organisationID,
+                ':userID' => $userID
+            ]);
+
+            echo "<div class='notification is-success'>Organisation created successfully!</div>";
+        } else {
+            $errors[] = "Error: Organisation not created.";
         }
+    } catch (Exception $e) {
+        $errors[] = "Error creating organisation: " . $e->getMessage();
+    }
+}
+
     }
 }
 
@@ -101,7 +118,7 @@ echo makeNavMenu("CyberPath");
             <!-- Create Organisation Form -->
             <div class="column is-half">
                 <h2 class="subtitle">Create an Organisation</h2>
-                <form method="POST" action="organisation.php">
+                <form method="POST" action="">
                     <div class="field">
                         <label class="label">Organisation Name</label>
                         <div class="control">
@@ -120,7 +137,7 @@ echo makeNavMenu("CyberPath");
             <!-- Join Organisation Form -->
             <div class="column is-half">
                 <h2 class="subtitle">Join an Existing Organisation</h2>
-                <form method="POST" action="organisation.php">
+                <form method="POST" action="">
                     <div class="field">
                         <label class="label">Select Organisation</label>
                         <div class="control">

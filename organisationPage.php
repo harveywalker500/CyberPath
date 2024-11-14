@@ -59,28 +59,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (isset($_POST['joinOrganisation'])) {
         $organisationID = $_POST['organisationID'] ?? null;
 
-        if (empty($organisationID)) {
-            $errors[] = "Please select an organisation.";
+        if (empty($organisationName)) {
+            $errors[] = "Please provide an organisation name.";
         }
-
+        
         if (empty($errors)) {
             try {
-                $userID = $_SESSION['userID'];
-                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                // Insert the new organisation into the database
+                $sql = "INSERT INTO organisationTable (name) VALUES (:name)";
                 $stmt = $dbConn->prepare($sql);
-                $stmt->execute([
-                    ':organisationID' => $organisationID,
-                    ':userID' => $userID
-                ]);
-
-                // Redirect to the main page after joining the organisation
-                header("Location: index.php");
-                exit();
-
+                $stmt->execute([':name' => $organisationName]);
+        
+                // Check if the insert was successful
+                if ($stmt->rowCount() > 0) {
+                    // Successfully inserted, now assign the user to the new organisation
+                    $organisationID = $dbConn->lastInsertId(); // Get the ID of the newly inserted organisation
+                    $userID = $_SESSION['userID'];
+        
+                    $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                    $stmt = $dbConn->prepare($sql);
+                    $stmt->execute([
+                        ':organisationID' => $organisationID,
+                        ':userID' => $userID
+                    ]);
+        
+                    echo "<div class='notification is-success'>Organisation created successfully!</div>";
+                } else {
+                    $errors[] = "Error: Organisation not created.";
+                }
             } catch (Exception $e) {
-                $errors[] = "Error joining organisation: " . $e->getMessage();
+                $errors[] = "Error creating organisation: " . $e->getMessage();
             }
         }
+        
     }
 }
 

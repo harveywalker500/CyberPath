@@ -50,14 +50,24 @@ $episodeName = $storyList[0]['episodeName'];
 <div class="columns">
   <div class="column is-two-thirds">
     <div class="box">
-      <!-- Content for the first box -->
-      Box 1 (2/3 width)
+
+        <?php
+        echo "<div>";
+        echo "<p>" .htmlspecialchars($quizList[0])."</p>";
+        echo "</div>";
+        
+
+        ?>
+    
     </div>
   </div>
   <div class="column is-one-third">
     <div class="box">
-      <!-- Content for the second box -->
-      Box 2 (1/3 width)
+
+    <?php
+    
+        ?>
+
     </div>
   </div>
 </div>

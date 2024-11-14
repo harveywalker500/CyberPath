@@ -38,16 +38,29 @@ if ($selectedAnswer === $currentStory['correctAnswer']) {
 
     // Check if there are no more questions left
     if ($_SESSION['currentIndex'] >= count($storyList)) {
-        // All questions are completed; update the userProgressTable
-        $updateSql = "
-            UPDATE userProgressTable
-            SET storyCompleted = :episodeID
+        // Check the current value of storyCompleted in userProgressTable
+        $checkSql = "
+            SELECT storyCompleted
+            FROM userProgressTable
             WHERE userID = :userID
         ";
-        $updateStmt = $dbConn->prepare($updateSql);
-        $updateStmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
-        $updateStmt->bindParam(':userID', $userID, PDO::PARAM_INT);
-        $updateStmt->execute();
+        $checkStmt = $dbConn->prepare($checkSql);
+        $checkStmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+        $checkStmt->execute();
+        $currentProgress = $checkStmt->fetchColumn();
+
+        // Only update if the current episodeID is greater than the stored storyCompleted
+        if ($currentProgress === false || $episodeID > $currentProgress) {
+            $updateSql = "
+                UPDATE userProgressTable
+                SET storyCompleted = :episodeID
+                WHERE userID = :userID
+            ";
+            $updateStmt = $dbConn->prepare($updateSql);
+            $updateStmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
+            $updateStmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+            $updateStmt->execute();
+        }
 
         // Clear the session index and indicate quiz completion
         unset($_SESSION['currentIndex']);

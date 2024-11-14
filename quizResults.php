@@ -87,6 +87,17 @@ foreach ($quizlist as $question) {
 }
 echo "<div class='notification is-info'>You got {$correctAnswers} out of " . count($quizlist) . " questions correct.</div>";
 
+$quizColumn = 'quiz' . $episodeID . 'Score';  // e.g., quiz1Score, quiz2Score, etc.
+$updateScoreSql = "
+    UPDATE leaderboardTable
+    SET {$quizColumn} = :score
+    WHERE userID = :userID AND {$quizColumn} < :score
+";
+$updateStmt = $dbConn->prepare($updateScoreSql);
+$updateStmt->bindParam(':score', $correctAnswers, PDO::PARAM_INT);
+$updateStmt->bindParam(':userID', $_SESSION['userID'], PDO::PARAM_INT);
+$updateStmt->execute();
+
 echo makeFooter("This is the footer");
 echo makePageEnd();
 ?>

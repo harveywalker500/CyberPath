@@ -131,6 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- Footer and Page End -->
 <?php
-echo makeFooter("This is the footer");
+echo makeFooter("This is the footer with a registration link.");
 echo makePageEnd();
 ?>

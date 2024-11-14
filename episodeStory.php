@@ -1,7 +1,9 @@
 <?php
 // Include the functions file
 require_once("functions.php");
+
 session_start(); //Starts the session.
+loggedIn(); // Ensures the user is logged in before loading the page.
 
 echo makePageStart("CyberPath");
 echo makeNavMenu("CyberPath");
@@ -23,6 +25,27 @@ if (!$hasPermission) {
     echo makePageEnd();
     exit;
 }
+
+$dbConn = getConnection();
+$sql = "
+    SELECT s.*, e.episodeName
+    FROM storyTable s
+    JOIN episodesTable e ON s.episodeID = e.episodeID
+    WHERE s.episodeID = :episodeID
+";
+$stmt = $dbConn->prepare($sql);
+$stmt->bindParam(':episodeID', $episodeID, PDO::PARAM_INT);
+$stmt->execute();
+$storyList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (empty($storyList)) {
+    echo "<div class='notification is-warning'>No quiz questions found for this episode.</div>";
+    echo makeFooter("This is the footer");
+    echo makePageEnd();
+    exit;
+}
+$episodeName = $storyList[0]['episodeName']; 
+var_dump($storyList);
 
 echo makeFooter("This is the footer");
 echo makePageEnd();

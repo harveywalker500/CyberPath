@@ -2,20 +2,26 @@
 // Include the functions file
 require_once("functions.php");
 
-session_start(); //Starts the session.
+session_start(); // Starts the session.
 loggedIn(); // Ensures the user is logged in before loading the page.
 
-// Start the page with the header and navigation menu
 echo makePageStart("CyberPath");
 echo makeNavMenu("CyberPath");
 
-$episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : 1; // Default to episode 1 if not set.
+// Get episode ID from POST or set it to null if not provided
+$episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : null;
 
-// Check if user has permission to access this episode
+if ($episodeID === null) {
+    echo "<div class='notification is-danger'>Error: episodeID is not set.</div>";
+    echo makeFooter("This is the footer");
+    echo makePageEnd(); 
+    exit; // Exit if no episodeID is provided
+}
+
 $hasPermission = userStoryPermission($_SESSION['userID'], $episodeID);
 
 if (!$hasPermission) {
-    echo "<div class='notification is-danger'>You do not have permission to view this episode.</div>";
+    header('Location: index.php');
     echo makeFooter("This is the footer");
     echo makePageEnd();
     exit;
@@ -23,7 +29,7 @@ if (!$hasPermission) {
 
 $dbConn = getConnection();
 $sql = "
-    SELECT s.*, e.episodeName
+    SELECT s.*, e.episodeName, s.correctAnswer
     FROM storyTable s
     JOIN episodesTable e ON s.episodeID = e.episodeID
     WHERE s.episodeID = :episodeID
@@ -40,23 +46,20 @@ if (empty($storyList)) {
     exit;
 }
 
-$episodeName = $storyList[0]['episodeName']; // First episode name
-
+$episodeName = $storyList[0]['episodeName']; 
 ?>
 
-<!-- Frontend: HTML and Dynamic Story Content -->
 <div class="columns">
   <div class="column is-two-thirds">
-    <div class="box" id="storyText">
-        <?php
-        echo "<div>";
-        echo "<p>" . htmlspecialchars($storyList[0]['storyText']) . "</p>";
-        echo "</div>";
-        ?>
+    <div class="box">
+        <div>
+            <p><?php echo htmlspecialchars($storyList[0]['storyText']); ?></p>
+        </div>
     </div>
   </div>
   <div class="column is-one-third">
-    <div class="box" id="quizBox">
+    <div class="box">
+
         <?php
         // Check if there's a question for this episode
         if (isset($storyList[0]['storyQuestion'])) {
@@ -98,56 +101,45 @@ $episodeName = $storyList[0]['episodeName']; // First episode name
             echo "<div class='notification is-warning'>No question available for this episode.</div>";
         }
         ?>
+
     </div>
   </div>
 </div>
 
-<!-- Include Footer and Page End -->
 <?php
 echo makeFooter("This is the footer");
 echo makePageEnd();
 ?>
 
-<!-- JavaScript (AJAX to handle answer submission and story progression) -->
 <script>
-$(document).ready(function(){
-    // Handle form submission via AJAX
+$(document).ready(function() {
     $('#quizForm').submit(function(event) {
-        event.preventDefault(); // Prevent the form from submitting the usual way
-        
-        var selectedAnswer = $("input[name='answer']:checked").val(); // Get the selected answer
-        var episodeID = $("input[name='episodeID']").val(); // Get the episode ID
-        
-        if (!selectedAnswer) {
-            alert("Please select an answer.");
-            return;
-        }
+        event.preventDefault(); // Prevent the default form submission
 
-        // Send the answer to the server via AJAX
+        var formData = $(this).serialize(); // Serialize the form data
+
         $.ajax({
-            url: '', // The same page
-            method: 'POST',
-            data: {
-                episodeID: episodeID,
-                answer: selectedAnswer
-            },
+            url: '', // Submit to the same page
+            type: 'POST',
+            data: formData,
             success: function(response) {
-                // If answer is correct, update the story content
-                if (response.success) {
-                    // Update the story text and quiz question with the next part
-                    $('#storyText').html("<p>" + response.nextStoryText + "</p>");
-                    $('#quizBox').html(response.nextQuiz);
-
-                    // If it's the last part, redirect to completion.php
-                    if (response.isLastPart) {
-                        window.location.href = "completion.php";
+                var data = JSON.parse(response);
+                
+                if (data.success) {
+                    // If the answer is correct, show the next story part
+                    if (!data.isLastPart) {
+                        // Display the next story and quiz question
+                        $('div.columns .column.is-two-thirds').html("<div class='box'><p>" + data.nextStoryText + "</p></div>");
+                        $('div.columns .column.is-one-third').html(data.nextQuiz);
+                    } else {
+                        // If it's the last part, show completion message
+                        $('div.columns .column.is-two-thirds').html("<div class='box'><p>Congratulations! You've completed the story!</p></div>");
+                        $('div.columns .column.is-one-third').html("");
                     }
                 } else {
-                    alert("Incorrect answer. Please try again.");
+                    // If the answer was incorrect, notify the user
+                    alert('Incorrect answer. Please try again.');
                 }
-            },
-            error: function() {
-                alert("There was an error submitting your answer. Please try again.");
             }
         });
     });
@@ -155,12 +147,12 @@ $(document).ready(function(){
 </script>
 
 <?php
-// Backend PHP (Logic Handling Answer and Next Story)
+// Backend logic for checking the submitted answer
 if (isset($_POST['episodeID']) && isset($_POST['answer'])) {
-    $episodeID = $_POST['episodeID'];
-    $userAnswer = $_POST['answer'];
+    $episodeID = $_POST['episodeID']; // Get the episode ID
+    $userAnswer = $_POST['answer'];   // Get the user's selected answer (A, B, or C)
 
-    // Get the correct answer for the given episode from the database
+    // Fetch the correct answer from the database
     $dbConn = getConnection();
     $sql = "
         SELECT s.*, e.episodeName, s.correctAnswer
@@ -173,25 +165,21 @@ if (isset($_POST['episodeID']) && isset($_POST['answer'])) {
     $stmt->execute();
     $story = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$story) {
-        echo json_encode(['success' => false, 'message' => 'Story not found.']);
-        exit;
-    }
+    // Ensure the correct answer is trimmed of whitespace
+    $correctAnswer = trim($story['correctAnswer']);
+    $nextEpisodeID = $episodeID + 1; // Increment the episode ID to get the next part of the story
 
-    // Check if the user's answer is correct by comparing to the correctAnswer in the database (A, B, or C)
-    if ($userAnswer === $story['correctAnswer']) {
-        // Increment episodeID to go to the next part
-        $nextEpisodeID = $episodeID + 1;
-
-        // Get the next story part
+    // Compare the user's answer to the correct answer
+    if ($userAnswer === $correctAnswer) {
+        // Correct answer: Get the next story part
         $sqlNext = "SELECT * FROM storyTable WHERE episodeID = :episodeID";
         $stmtNext = $dbConn->prepare($sqlNext);
         $stmtNext->bindParam(':episodeID', $nextEpisodeID, PDO::PARAM_INT);
         $stmtNext->execute();
         $nextStory = $stmtNext->fetch(PDO::FETCH_ASSOC);
 
+        // If there is a next episode, return the updated story and quiz
         if ($nextStory) {
-            // Return the next part of the story and quiz
             echo json_encode([
                 'success' => true,
                 'nextStoryText' => htmlspecialchars($nextStory['storyText']),
@@ -219,14 +207,19 @@ if (isset($_POST['episodeID']) && isset($_POST['answer'])) {
                         <button class='button is-primary' type='submit'>Submit Answer</button>
                     </form>
                 ",
-                'isLastPart' => false // Change this if it's the last part of the story
+                'isLastPart' => false // This flag can be set to true if it's the final episode part
             ]);
         } else {
-            echo json_encode(['success' => true, 'isLastPart' => true]);
+            // No more episodes, end of the story
+            echo json_encode([
+                'success' => true,
+                'isLastPart' => true
+            ]);
         }
     } else {
+        // Incorrect answer
         echo json_encode(['success' => false]);
     }
-    exit;
+    exit; // Terminate the script after responding
 }
-?>
+</script>

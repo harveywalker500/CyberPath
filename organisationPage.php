@@ -45,12 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $userID = $_SESSION['userID'];
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
-                $stmt->execute([
-                    ':organisationID' => $organisationID,
-                    ':userID' => $userID
-                ]);
+                $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
-                // Optionally, you can echo success or a message
+                // Reload the organisations list after creation
+                $sql = "SELECT organisationID, name FROM organisationTable";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute();
+                $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Re-fetch organisations
+
                 echo "<div class='notification is-success'>Organisation created successfully!</div>";
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
@@ -59,39 +61,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (isset($_POST['joinOrganisation'])) {
         $organisationID = $_POST['organisationID'] ?? null;
 
-        if (empty($organisationName)) {
-    $errors[] = "Please provide an organisation name.";
-}
-
-if (empty($errors)) {
-    try {
-        // Insert the new organisation into the database
-        $sql = "INSERT INTO organisationTable (name) VALUES (:name)";
-        $stmt = $dbConn->prepare($sql);
-        $stmt->execute([':name' => $organisationName]);
-
-        // Check if the insert was successful
-        if ($stmt->rowCount() > 0) {
-            // Successfully inserted, now assign the user to the new organisation
-            $organisationID = $dbConn->lastInsertId(); // Get the ID of the newly inserted organisation
-            $userID = $_SESSION['userID'];
-
-            $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-            $stmt = $dbConn->prepare($sql);
-            $stmt->execute([
-                ':organisationID' => $organisationID,
-                ':userID' => $userID
-            ]);
-
-            echo "<div class='notification is-success'>Organisation created successfully!</div>";
-        } else {
-            $errors[] = "Error: Organisation not created.";
+        if (empty($organisationID)) {
+            $errors[] = "Please select an organisation.";
         }
-    } catch (Exception $e) {
-        $errors[] = "Error creating organisation: " . $e->getMessage();
-    }
-}
 
+        if (empty($errors)) {
+            try {
+                // Assign the user to the selected organisation
+                $userID = $_SESSION['userID'];
+                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+
+                echo "<div class='notification is-success'>You have successfully joined the organisation.</div>";
+            } catch (Exception $e) {
+                $errors[] = "Error joining organisation: " . $e->getMessage();
+            }
+        }
     }
 }
 

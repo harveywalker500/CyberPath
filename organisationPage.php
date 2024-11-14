@@ -10,6 +10,7 @@ if (!isset($_SESSION['userID'])) {
 }
 
 $errors = []; // Initialize errors array
+$successMessage = ""; // Initialize success message variable
 
 // Fetch all organisations from the database
 try {
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
-                echo "<div class='notification is-success'>Organisation created and you have been assigned to it successfully!</div>";
+                $successMessage = "Organisation created and you have been assigned to it successfully!";
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
@@ -72,17 +73,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($errors)) {
-            if ($currentOrgID) {
-                echo "<div class='notification is-warning'>Warning: Joining this organisation will remove you from your current organisation.</div>";
-            }
-
             try {
                 // Assign the user to the selected organisation
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
-                echo "<div class='notification is-success'>You have successfully joined the organisation.</div>";
+                $successMessage = "You have successfully joined the organisation.";
             } catch (Exception $e) {
                 $errors[] = "Error joining organisation: " . $e->getMessage();
             }
@@ -97,6 +94,13 @@ echo makeNavMenu("CyberPath");
 <div class="container">
     <div class="section">
         <h1 class="title">Manage Organisation</h1>
+
+        <!-- Display success message, if any -->
+        <?php if (!empty($successMessage)): ?>
+            <div class="notification is-success">
+                <?php echo htmlspecialchars($successMessage); ?>
+            </div>
+        <?php endif; ?>
 
         <!-- Display any errors -->
         <?php if (!empty($errors)): ?>
@@ -132,7 +136,7 @@ echo makeNavMenu("CyberPath");
             <!-- Join Organisation Form -->
             <div class="column is-half">
                 <h2 class="subtitle">Join an Existing Organisation</h2>
-                <form method="POST" action="">
+                <form method="POST" action="" onsubmit="return confirmChange();">
                     <div class="field">
                         <label class="label">Select Organisation</label>
                         <div class="control">
@@ -159,6 +163,16 @@ echo makeNavMenu("CyberPath");
         </div>
     </div>
 </div>
+
+<!-- Confirmation Script -->
+<script>
+    function confirmChange() {
+        <?php if ($currentOrgID): ?> // Check if user is already in an organisation
+            return confirm("Warning: Joining a new organisation will remove you from your current organisation. Do you wish to continue?");
+        <?php endif; ?>
+        return true;
+    }
+</script>
 
 <?php
 echo makeFooter("This is the footer");

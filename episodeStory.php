@@ -53,7 +53,7 @@ $episodeName = $storyList[0]['episodeName'];
 
         <?php
         echo "<div>";
-        echo "<p>" .htmlspecialchars($quizList[0])."</p>";
+        echo "<p>" .htmlspecialchars($storyList[0])."</p>";
         echo "</div>";
         
 

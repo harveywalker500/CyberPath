@@ -65,7 +65,45 @@ $episodeName = $storyList[0]['episodeName'];
     <div class="box">
 
     <?php
-    
+        // Check if there's a question for this episode
+        if (isset($storyList[0]['storyQuestion'])) {
+            $question = $storyList[0]['storyQuestion'];
+            $answerA = $storyList[0]['answerA'];
+            $answerB = $storyList[0]['answerB'];
+            $answerC = $storyList[0]['answerC'];
+            
+            // Display the question and answers as a form
+            echo "<form action='submit_answer.php' method='POST'>";
+            echo "<div class='field'>";
+            echo "<label class='label'>$question</label>";
+
+            echo "<div class='control'>";
+            echo "<label class='radio'>";
+            echo "<input type='radio' name='answer' value='A'> $answerA";
+            echo "</label>";
+            echo "</div>";
+
+            echo "<div class='control'>";
+            echo "<label class='radio'>";
+            echo "<input type='radio' name='answer' value='B'> $answerB";
+            echo "</label>";
+            echo "</div>";
+
+            echo "<div class='control'>";
+            echo "<label class='radio'>";
+            echo "<input type='radio' name='answer' value='C'> $answerC";
+            echo "</label>";
+            echo "</div>";
+            echo "</div>";
+
+            echo "<div class='control'>";
+            echo "<input type='hidden' name='episodeID' value='$episodeID'>";
+            echo "<button class='button is-primary' type='submit'>Submit Answer</button>";
+            echo "</div>";
+            echo "</form>";
+        } else {
+            echo "<div class='notification is-warning'>No question available for this episode.</div>";
+        }
         ?>
 
     </div>

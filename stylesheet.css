@@ -76,18 +76,3 @@ html, body {
     height: 100%;
 }
 
-.columns.is-flex{
-    display: flex;
-    align-items: stretch;
-}
-
-.columns.is-flex .box {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-.column.is-flex .column{
-    display: flex;
-    flex-direction: column;
-}

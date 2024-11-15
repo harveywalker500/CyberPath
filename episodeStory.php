@@ -5,11 +5,7 @@ require_once("functions.php");
 session_start(); // Starts the session
 loggedIn(); // Ensures the user is logged in before loading the page
 
-// Pass a custom class to the makePageStart function (example: 'quiz-page')
-echo makePageStart("CyberPath"); // Do not change this line. 
-
-// Now, you can target this page using CSS with .quiz-page in your stylesheet
-
+echo makePageStart("CyberPath");
 echo makeNavMenu("CyberPath");
 
 $episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : null;
@@ -98,6 +94,7 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
     <div id="feedback" class="notification"></div>
 </div>
 
+
 <script>
     $(document).ready(function() {
         $('#quizForm').on('submit', function(e) {
@@ -134,6 +131,7 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
         });
     });
 </script>
+
 
 <?php
 echo makeFooter();

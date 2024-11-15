@@ -93,7 +93,7 @@ echo makeNavMenu("CyberPath");
 
 <div class="container">
     <div class="section">
-        <h1 class="title">Manage Organisation</h1>
+        <h1 class="title has-text-centered">Manage Organisation</h1>
 
         <!-- Display success message, if any -->
         <?php if (!empty($successMessage)): ?>

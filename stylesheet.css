@@ -12,11 +12,12 @@ body {
 }
 
 .hero-body {
-    height: 100vh; /* Make the hero-body span the full viewport height */
-    display: flex; /* Center content if needed */
-    align-items: center; /* Vertically align content */
-    justify-content: center; /* Horizontally align content */
+    width: 100vw; /* Make the hero-body span the full viewport width */
+    margin: 0; /* Remove any default margins */
+    padding: 0; /* Remove any default padding */
+    box-sizing: border-box; /* Include padding and border in the element's total width */
 }
+
 
 
 .content {

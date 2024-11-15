@@ -10,6 +10,8 @@ echo makeNavMenu("CyberPath");
 if (isset($_SESSION['username'])) {
     // User is logged in, show personalized message
     echo "<div class='container'>";
+    
+    // Show welcome message without repeating username
     echo "<section class='hero is-info is-bold'>";
     echo "<div class='hero-body'>";
     echo "<div class='container'>";
@@ -18,11 +20,38 @@ if (isset($_SESSION['username'])) {
     echo "</div>";
     echo "</section>";
 
-    echo "<section class='section'>";
-    echo "<div class='content'>";
-    echo "<p class='has-text-weight-semibold'>Hello, " . htmlspecialchars($_SESSION['username']) . "! Continue your journey!</p>";
-    echo "</div>";
-    echo "</section>";
+    // Query to fetch the user's current story episode
+    $userID = $_SESSION['userID']; // Assuming userID is stored in the session
+    $dbConn = getConnection();
+
+    // Fetch the current episode name based on user's story progress
+    $sql = "
+        SELECT e.episodeName
+        FROM userProgress up
+        JOIN episodesTable e ON up.storyCompleted = e.episodeID
+        WHERE up.userID = :userID
+    ";
+    $stmt = $dbConn->prepare($sql);
+    $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+    $stmt->execute();
+    $currentEpisode = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Display episode information if available
+    if ($currentEpisode) {
+        echo "<section class='section'>";
+        echo "<div class='content'>";
+        echo "<p class='has-text-weight-semibold'>You are currently up to: <strong>" . htmlspecialchars($currentEpisode['episodeName']) . "</strong></p>";
+        echo "<p>Get ready to continue your journey with Captain Solara! The path ahead is filled with challenges and adventures that will test your skills and wit. Stay sharp and keep progressing!</p>";
+        echo "</div>";
+        echo "</section>";
+    } else {
+        echo "<section class='section'>";
+        echo "<div class='content'>";
+        echo "<p>It seems like you haven't completed any episodes yet. Start your journey and unlock your first story!</p>";
+        echo "</div>";
+        echo "</section>";
+    }
+
     echo "</div>";
 } else {
     // User is not logged in, show generic message

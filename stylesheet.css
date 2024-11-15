@@ -11,16 +11,6 @@ body {
     flex-direction: column; /* This is important to ensure body content is stacked vertically */
 }
 
-.hero-body .container {
-    width: 100%; /* Ensure the container spans the full width */
-    max-width: none; /* Remove any maximum width */
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-}
-
-
-
-
 .content {
     flex: 1; /* This ensures that the content takes up as much space as needed */
     padding-bottom: 20px; /* Add some space between content and footer */

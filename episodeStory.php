@@ -60,7 +60,10 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
         <div class="column is-two-thirds">
             <div class="box">
                 <div id="storyText">
-                    <p><?php echo htmlspecialchars($currentStory['storyText']); ?></p>
+                <img src="happyRobot.png" alt="Character" class="character">
+                    <div class="speech-bubble">
+                        <p><?php echo htmlspecialchars($currentStory['storyText']); ?></p>
+                    </div>
                 </div>
             </div>
         </div>

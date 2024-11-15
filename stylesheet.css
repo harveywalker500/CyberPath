@@ -75,3 +75,14 @@ footer.footer {
 html, body {
     height: 100%;
 }
+
+.columns.is-flex{
+    display: flex;
+    align-items: stretch;
+}
+
+.columns.is-flex .box {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}

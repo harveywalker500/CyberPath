@@ -216,6 +216,7 @@ HTML;
 
 function makePageEnd() {
     return <<<HTML
+    </div> <!-- End of content div -->
     <script src="burger.js"></script>
     </body>
     </html>

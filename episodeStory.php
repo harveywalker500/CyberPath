@@ -134,5 +134,6 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
 
 
 <?php
-echo makeFooter();echo makePageEnd();
+echo makeFooter();
+echo makePageEnd();
 ?>

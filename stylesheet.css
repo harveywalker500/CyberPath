@@ -11,12 +11,13 @@ body {
     flex-direction: column; /* This is important to ensure body content is stacked vertically */
 }
 
-.hero-body {
-    width: 100vw; /* Make the hero-body span the full viewport width */
-    margin: 0; /* Remove any default margins */
-    padding: 0; /* Remove any default padding */
-    box-sizing: border-box; /* Include padding and border in the element's total width */
+.hero-body .container {
+    width: 100%; /* Ensure the container spans the full width */
+    max-width: none; /* Remove any maximum width */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
 }
+
 
 
 

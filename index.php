@@ -27,7 +27,7 @@ if (isset($_SESSION['username'])) {
     // Fetch the current episode name based on user's story progress
     $sql = "
         SELECT e.episodeName
-        FROM userProgress up
+        FROM userProgressTable up
         JOIN episodesTable e ON up.storyCompleted = e.episodeID
         WHERE up.userID = :userID
     ";

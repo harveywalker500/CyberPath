@@ -12,10 +12,10 @@ body {
 }
 
 /* Ensure the content area takes the remaining space */
-.content {
-    flex: 1; /* This makes sure the content takes up the available space */
-    padding-bottom: 20px; /* Space between content and footer */
+#content {
+    margin-top: 4rem; /* Ensure it clears the navbar */
 }
+
 
 /* Footer styles */
 footer.footer {

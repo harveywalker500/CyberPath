@@ -1,15 +1,18 @@
 html {
     scroll-behavior: smooth;
-    
+    height: 100%;
 }
-html, body {
+
+body {
     height: 100%;
     margin: 0;
-    
+    display: block;
+    padding-bottom: 100px; /* Give space at the bottom of the page for the footer */
 }
 
 .content {
-    flex-grow: 1;
+    min-height: 100%; /* Ensures content takes at least the full height of the viewport */
+    padding-bottom: 50px; /* Adds space below content to prevent overlap with footer */
 }
 
 footer.footer {
@@ -17,7 +20,7 @@ footer.footer {
     padding: 1.5rem;
     text-align: center;
     width: 100%;
+    position: relative;
+    bottom: 0;
     margin-top: auto;
 }
-
-

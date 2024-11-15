@@ -23,3 +23,27 @@ footer.footer {
     position: relative;
     bottom: 0;
 }
+
+/* Container adjustments without flexbox */
+.container {
+    width: 100%; /* Ensure the container takes up the full width */
+    padding-top: 50px; /* Space above the login form */
+    padding-bottom: 50px; /* Space below the login form */
+}
+
+.columns.is-centered {
+    display: block; /* Use block display, no flexbox */
+    width: 100%;
+    text-align: center; /* Center the column content */
+}
+
+.column.is-half {
+    margin: 0 auto; /* Center the form horizontally */
+    width: 100%; /* Take up full width */
+    max-width: 400px; /* Limit form size */
+}
+
+.box {
+    padding: 2rem;
+    width: 100%;
+}

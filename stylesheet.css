@@ -47,3 +47,14 @@ footer.footer {
     padding: 2rem;
     width: 100%;
 }
+.navbar {
+    position: relative; /* Ensure it respects normal document flow */
+    z-index: 1000; /* Keep it above other content */
+}
+
+.navbar + .content, 
+.navbar + .container, 
+.navbar + .hero, 
+.navbar + .section {
+    margin-top: 4rem; /* Add spacing below the navbar */
+}

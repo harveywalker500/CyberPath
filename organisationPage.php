@@ -48,9 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($errors)) {
             try {
                 // Insert the new organisation into the database
-                $sql = "INSERT INTO organisationTable (name) VALUES (:name)";
+                $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
                 $stmt = $dbConn->prepare($sql);
-                $stmt->execute([':name' => $organisationName]);
+                // Include the current user as the team leader
+                $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
 
                 // Get the newly created organisation ID
                 $organisationID = $dbConn->lastInsertId();

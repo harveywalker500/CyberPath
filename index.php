@@ -6,9 +6,9 @@ session_start(); // Starts the session.
 echo makePageStart("CyberPath");
 echo makeNavMenu("CyberPath");
 
-// Check if the user is logged in, using loggedIn() function
-if (loggedIn()) {
-    // Display welcome message if the user is logged in
+// Check if the session variable for username is set (i.e., the user is logged in)
+if (isset($_SESSION['username'])) {
+    // User is logged in, show personalized message
     echo "<div class='container'>";
     echo "<section class='hero is-info is-bold'>";
     echo "<div class='hero-body'>";
@@ -25,7 +25,7 @@ if (loggedIn()) {
     echo "</section>";
     echo "</div>";
 } else {
-    // If the user is not logged in, show a generic message
+    // User is not logged in, show generic message
     echo "<div class='container'>";
     echo "<section class='hero is-info is-bold'>";
     echo "<div class='hero-body'>";

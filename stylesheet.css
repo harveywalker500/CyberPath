@@ -11,6 +11,14 @@ body {
     flex-direction: column; /* This is important to ensure body content is stacked vertically */
 }
 
+.hero-body {
+    height: 100vh; /* Make the hero-body span the full viewport height */
+    display: flex; /* Center content if needed */
+    align-items: center; /* Vertically align content */
+    justify-content: center; /* Horizontally align content */
+}
+
+
 .content {
     flex: 1; /* This ensures that the content takes up as much space as needed */
     padding-bottom: 20px; /* Add some space between content and footer */

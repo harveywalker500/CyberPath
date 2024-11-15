@@ -203,13 +203,16 @@ HTML;
 
 
 
-function makeFooter($footerText) {
+function makeFooter() {
     return <<<HTML
-    <footer>
-        <p>$footerText</p>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>&copy; 2024 CyberPath. All rights reserved.</p>
+        </div>
     </footer>
 HTML;
 }
+
 
 function makePageEnd() {
     return <<<HTML

@@ -94,6 +94,6 @@ $episodeName = $quizlist[0]['episodeName'];
 </div>
 
 <?php
-echo makeFooter("This is the footer");
+echo makeFooter();
 echo makePageEnd();
 ?>

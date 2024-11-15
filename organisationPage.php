@@ -175,6 +175,6 @@ echo makeNavMenu("CyberPath");
 </script>
 
 <?php
-echo makeFooter("This is the footer");
+echo makeFooter();
 echo makePageEnd();
 ?>

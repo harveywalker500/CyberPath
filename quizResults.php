@@ -110,6 +110,6 @@ $updateStmt->bindParam(':score', $correctAnswers, PDO::PARAM_INT);
 $updateStmt->bindParam(':userID', $_SESSION['userID'], PDO::PARAM_INT);
 $updateStmt->execute();
 
-echo makeFooter("This is the footer");
+echo makeFooter();
 echo makePageEnd();
 ?>

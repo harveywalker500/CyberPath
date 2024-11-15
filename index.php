@@ -12,6 +12,6 @@ echo makeNavMenu("CyberPath");
 <script src="index.js"></script>
 
 <?php
-echo makeFooter("This is the footer");
+echo makeFooter();
 echo makePageEnd();
 ?>

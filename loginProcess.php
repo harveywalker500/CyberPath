@@ -18,6 +18,6 @@
         echo "Problem " . $e->getMessage();
     }
         
-    echo makeFooter("Footer");
+    echo makeFooter();
     echo makePageEnd();
     ?>

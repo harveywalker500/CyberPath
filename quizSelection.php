@@ -58,6 +58,6 @@ echo makeNavMenu("CyberPath");
 
 
 <?php
-echo makeFooter("This is the footer");
+echo makeFooter();
 echo makePageEnd();
 ?>

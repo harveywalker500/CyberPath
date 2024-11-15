@@ -20,23 +20,22 @@ footer.footer {
     width: 100%;
     margin-top: auto;
 }
-/* Ensure that both boxes stretch to the same height */
-.columns.is-flex.is-align-items-stretch {
+.quiz-page .columns.is-flex.is-align-items-stretch {
     display: flex;
-    align-items: stretch; /* Ensures all child columns are stretched */
+    align-items: stretch;
 }
 
-.column .box {
+.quiz-page .column .box {
     display: flex;
     flex-direction: column;
-    height: 100%; /* Make sure the box fills the column's full height */
+    height: 100%; 
 }
 
-.column .box > * {
-    flex-grow: 1; /* Ensures the content inside the box grows to fill the space */
+.quiz-page .column .box > * {
+    flex-grow: 1; 
 }
 
-/* Optional: If you want the content inside the boxes to have space around, you can use padding */
-.column .box {
+.quiz-page .column .box {
     padding: 20px;
 }
+

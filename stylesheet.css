@@ -1,19 +1,19 @@
 html {
     scroll-behavior: smooth;
-    height: 100%;
+    height: 100%; /* Ensure the html element takes the full height of the viewport */
 }
 
 body {
     margin: 0;
-    padding-top: 4rem;
-    height: 100%;
+    padding-top: 4rem; /* Space for fixed navbar */
+    height: 100%; /* Ensure body takes the full height of the viewport */
     display: flex;
-    flex-direction: column; /* This is important to ensure body content is stacked vertically */
+    flex-direction: column; /* Stack content vertically */
 }
 
 .content {
-    flex: 1; /* This ensures that the content takes up as much space as needed */
-    padding-bottom: 20px; /* Add some space between content and footer */
+    flex: 1; /* This makes sure the content takes up the available space */
+    padding-bottom: 20px; /* Space between content and footer */
 }
 
 footer.footer {
@@ -23,43 +23,56 @@ footer.footer {
     width: 100%;
     position: relative;
     bottom: 0;
+    margin-top: auto; /* Pushes the footer to the bottom of the page */
 }
 
 /* Container adjustments without flexbox */
 .container {
-    width: 100%; /* Ensure the container takes up the full width */
-    padding-top: 50px; /* Space above the login form */
-    padding-bottom: 50px; /* Space below the login form */
+    width: 100%;
+    padding-top: 50px; /* Space above the content */
+    padding-bottom: 50px; /* Space below the content */
 }
 
 .columns.is-centered {
-    display: block; /* Use block display, no flexbox */
+    display: block; /* Use block display for centering */
     width: 100%;
     text-align: center; /* Center the column content */
 }
 
 .column.is-half {
-    margin: 0 auto; /* Center the form horizontally */
-    width: 100%; /* Take up full width */
-    max-width: 400px; /* Limit form size */
+    margin: 0 auto; /* Center horizontally */
+    width: 100%;
+    max-width: 400px; /* Limit the width of the form */
 }
 
 .box {
     padding: 2rem;
     width: 100%;
 }
+
 .navbar {
-    position: fixed; /* Sticks to the top of the screen */
-    top: 0; /* Align it to the very top */
-    width: 100%; /* Ensure it spans the full width */
-    z-index: 1000; /* Place it above other elements */
-    background-color: #fff; /* Optional: Add a background to make it visible */
-    border-bottom: 1px solid #ddd; /* Optional: Add a border for separation */
+    position: fixed; /* Fixed at the top */
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it stays above other content */
+    background-color: #fff;
+    border-bottom: 1px solid #ddd; /* Optional: Add border for separation */
 }
 
+/* Add margin-top to elements that come after the navbar */
 .navbar + .content, 
 .navbar + .container, 
 .navbar + .hero, 
 .navbar + .section {
-    margin-top: 4rem; /* Add spacing below the navbar */
+    margin-top: 4rem; /* Ensure content is pushed below the navbar */
+}
+
+/* Ensure the body and html elements have full height */
+html, body {
+    height: 100%;
+}
+
+/* Ensure the .content section takes up remaining space */
+.content {
+    flex: 1;
 }

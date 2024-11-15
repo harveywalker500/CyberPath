@@ -6,13 +6,12 @@ html {
 body {
     height: 100%;
     margin: 0;
-    display: block;
-    padding-bottom: 100px; /* Give space at the bottom of the page for the footer */
+    padding-bottom: 100px; /* Make space for footer */
 }
 
 .content {
-    min-height: 100%; /* Ensures content takes at least the full height of the viewport */
-    padding-bottom: 50px; /* Adds space below content to prevent overlap with footer */
+    min-height: 100%; /* Ensure the content takes at least the full height of the viewport */
+    padding-bottom: 50px; /* To avoid content overlapping with footer */
 }
 
 footer.footer {

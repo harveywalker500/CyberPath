@@ -26,12 +26,25 @@ try {
 // Check if the user is already part of an organisation
 $userID = $_SESSION['userID'];
 $currentOrgID = null;
+$isTeamLeader = false;
 
 try {
-    $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
+    $sql = "SELECT organisationID, teamLeaderID FROM organisationTable WHERE teamLeaderID = :userID";
     $stmt = $dbConn->prepare($sql);
     $stmt->execute([':userID' => $userID]);
-    $currentOrgID = $stmt->fetchColumn();
+    $teamLeaderOrg = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($teamLeaderOrg) {
+        // If the user is already a team leader, don't allow them to create a new organisation
+        $isTeamLeader = true;
+        $currentOrgID = $teamLeaderOrg['organisationID'];
+    } else {
+        // Check if the user is already part of any other organisation
+        $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
+        $stmt = $dbConn->prepare($sql);
+        $stmt->execute([':userID' => $userID]);
+        $currentOrgID = $stmt->fetchColumn();
+    }
 } catch (Exception $e) {
     $errors[] = "Error checking user's current organisation: " . $e->getMessage();
 }
@@ -43,6 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($organisationName)) {
             $errors[] = "Please provide an organisation name.";
+        }
+
+        // If the user is a team leader, they cannot create a new organisation
+        if ($isTeamLeader) {
+            $errors[] = "You are already a team leader of an existing organisation. You cannot create a new organisation.";
         }
 
         if (empty($errors)) {
@@ -118,7 +136,7 @@ echo makeNavMenu("CyberPath");
             <!-- Create Organisation Form -->
             <div class="column is-half">
                 <h2 class="subtitle">Create an Organisation</h2>
-                <form method="POST" action="">
+                <form method="POST" action="" onsubmit="return confirmCreate();">
                     <div class="field">
                         <label class="label">Organisation Name</label>
                         <div class="control">
@@ -170,6 +188,14 @@ echo makeNavMenu("CyberPath");
     function confirmChange() {
         <?php if ($currentOrgID): ?> // Check if user is already in an organisation
             return confirm("Warning: Joining a new organisation will remove you from your current organisation. Do you wish to continue?");
+        <?php endif; ?>
+        return true;
+    }
+
+    // Additional confirmation for creating organisation
+    function confirmCreate() {
+        <?php if ($isTeamLeader): ?> // Check if the user is already a team leader
+            return confirm("Warning: You are already a team leader of an existing organisation. Do you wish to continue?");
         <?php endif; ?>
         return true;
     }

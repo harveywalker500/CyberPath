@@ -86,3 +86,8 @@ html, body {
     flex-direction: column;
     flex: 1;
 }
+
+.column.is-flex .column{
+    display: flex;
+    flex-direction: column;
+}

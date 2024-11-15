@@ -38,4 +38,29 @@ footer.footer {
 .quiz-page .column .box {
     padding: 20px;
 }
+/* Make the login form larger */
+#loginForm {
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* Add space above the form */
+}
+
+#loginForm .title {
+    margin-bottom: 20px; /* Add space between the title and form fields */
+}
+
+#loginForm .field {
+    margin-bottom: 20px; /* Add space between fields */
+}
+
+#loginForm .control input {
+    padding: 10px;
+    font-size: 16px;
+}
+
+button.is-primary {
+    padding: 10px;
+    font-size: 16px;
+}
 

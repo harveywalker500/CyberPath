@@ -7,7 +7,7 @@ echo makeNavMenu("CyberPath");
 
 <div class="container mt-5">
     <div class="columns is-centered">
-        <div class="column is-half">
+        <div class="column is-three-quarters"> <!-- Increase width to 75% -->
             <form id="loginForm" action="loginProcess.php" method="post" class="box">
                 <fieldset>
                     <legend class="title is-4 has-text-centered">Login</legend>
@@ -39,7 +39,6 @@ echo makeNavMenu("CyberPath");
         </div>
     </div>
 </div>
-
 
 <?php
 echo makeFooter();

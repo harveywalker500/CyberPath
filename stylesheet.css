@@ -19,7 +19,7 @@ body {
     text-align: center; /* Center text */
 }
 
-.storyText {
+.title.is-1 {
     position: relative;
     display: flex;
     align-items: flex-start; /* Align character and speech bubble */

@@ -128,7 +128,7 @@ button:hover {
     margin-top: 4rem; /* Ensure content is pushed below the navbar */
 }
 
-#welcomeMessage h1 {
+#typeWriterEffect h1 {
     margin-inline: auto;
     overflow: hidden;
     white-space: nowrap;

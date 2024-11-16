@@ -129,29 +129,29 @@ button:hover {
 }
 
 #typeWriterEffect h1 {
-    display: inline-block; /* Ensure inline-block for controlled width */
-    overflow: hidden; /* Hide overflowing text */
-    white-space: nowrap; /* Prevent text wrapping */
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: 'Courier New', Courier, monospace; /* Typewriter-style font */
     border-right: 2px solid black; /* Blinking cursor effect */
-    font-family: 'Courier New', Courier, monospace; /* Optional: Typewriter-style font */
-    animation: typing 4s steps(40, end) forwards, /* Typewriter effect */
-               blink 0.7s step-end infinite; /* Blinking cursor effect */
+    animation: typing 4s steps(30) 1s forwards, blink 0.7s step-end infinite;
 }
 
 @keyframes typing {
     from {
-        width: 0; /* Start with no text visible */
+        width: 0;
     }
     to {
-        width: 100%; /* Reveal full text */
+        width: 100%;
     }
 }
 
 @keyframes blink {
     50% {
-        border-color: transparent; /* Cursor disappears at 50% */
+        border-color: transparent;
     }
 }
+
 
 /* Ensure the html and body take full height */
 html, body {

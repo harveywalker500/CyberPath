@@ -38,6 +38,30 @@ body {
     animation: fadeIn 1s; /* Animate the appearance */
 }
 
+#welcomeMessage h1 {
+    margin-inline: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 1px solid;
+    animation: typing 3s steps(22) forwards,
+    blink 1s step-end infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+       width: 100%;
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
 /* Speech bubble triangle */
 .speech-bubble::after {
     content: '';

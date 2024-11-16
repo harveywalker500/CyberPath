@@ -19,7 +19,7 @@ body {
     text-align: center; /* Center text */
 }
 
-.title.is-1 {
+#storyText {
     position: relative;
     display: flex;
     align-items: flex-start; /* Align character and speech bubble */
@@ -43,6 +43,9 @@ body {
 }
 
 @keyframes blink {
+    from, to {
+        border-color: black;
+    }
     50% {
     border-color: transparent;
     }

@@ -15,7 +15,7 @@ if (isset($_SESSION['username'])) {
     echo "<section class='hero is-info is-bold'>";
     echo "<div class='hero-body'>";
     echo "<div class='container'>";
-    echo "<div id='typeWriterEffect'><h1 class='title is-1'>Welcome back, " . htmlspecialchars($_SESSION['username']) . "!</h1></div>";
+    echo "<h1 class='title is-1'>Welcome back, " . htmlspecialchars($_SESSION['username']) . "!</h1>";
     echo "</div>";
     echo "</div>";
     echo "</section>";

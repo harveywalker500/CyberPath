@@ -128,13 +128,13 @@ button:hover {
     margin-top: 4rem; /* Ensure content is pushed below the navbar */
 }
 
-#typeWriterEffect h1 {
-    display: inline-block;
+#typeWriterEffect h1{
+    margin-inline: auto;
     overflow: hidden;
     white-space: nowrap;
-    font-family: 'Courier New', Courier, monospace; /* Typewriter-style font */
-    border-right: 2px solid black; /* Blinking cursor effect */
-    animation: typing 4s steps(30) 1s forwards, blink 0.7s step-end infinite;
+    border-right: 1px solid;
+    animation: typing 3s steps(22) forwards,
+    blink 1s step-end infinite;
 }
 
 @keyframes typing {
@@ -142,7 +142,7 @@ button:hover {
         width: 0;
     }
     to {
-        width: 100%;
+       width: 100%;
     }
 }
 
@@ -151,7 +151,6 @@ button:hover {
         border-color: transparent;
     }
 }
-
 
 /* Ensure the html and body take full height */
 html, body {

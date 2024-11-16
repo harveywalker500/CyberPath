@@ -59,7 +59,7 @@ if (isset($_SESSION['username'])) {
     echo "<section class='hero is-info is-bold'>";
     echo "<div class='hero-body'>";
     echo "<div class='container'>";
-    echo "<h1 class='title is-1'>Welcome to CyberPath!</h1>";
+    echo "<div id=welcomeMessage'>='title is-1'>Welcome to CyberPath!</h1>";
     echo "</div>";
     echo "</div>";
     echo "</section>";

@@ -75,27 +75,10 @@ echo makePageStart("CyberPath | Leaderboard", "stylesheet.css");
 echo makeNavMenu("CyberPath");
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Leaderboard </title>
-<link media="all" rel="stylesheet" href="dev3.css">
-<link media="all" rel="stylesheet" href="stylesheet.css">
 
-<link href="DataTables/datatables.min.css" rel="stylesheet">
-<script src="jquery.js"></script>
-<script src="DataTables/datatables.min.js"></script>
 <!--<script src="jquery.cookie.js"></script>-->
-<script src="dev2.js"></script>
-</head>
 
-<body>
-<header>
-</header>
-<main>
 <!--<table class="table table-striped">
   <thead>  <tr  class="leaderboard">
         <th>Name</th>

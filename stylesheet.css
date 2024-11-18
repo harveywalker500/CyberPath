@@ -129,7 +129,7 @@ button:hover {
 .navbar + .container, 
 .navbar + .hero, 
 .navbar + .section {
-    margin-top: 4rem; /* Ensure content is pushed below the navbar */
+    margin-top: 10rem; /* Ensure content is pushed below the navbar */
 }
 
 /* Ensure the html and body take full height */

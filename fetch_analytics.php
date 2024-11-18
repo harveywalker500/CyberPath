@@ -16,7 +16,7 @@ $organizationID = $_GET['organizationID'] ?? null;
 try {
     $pdo = getConnection();
 
-    // Fetch organization-level progress
+    // Fetch organisation-level progress
     $orgQuery = "
         SELECT o.name AS organizationName, 
                COUNT(u.userID) AS totalUsers,

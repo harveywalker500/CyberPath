@@ -43,7 +43,7 @@ function linktoScores($userid){
         // Query to retrieve user and organisation data
         $sql = "select userID, quiz1Score, quiz2Score,  quiz3Score, quiz4Score, quiz5Score, quiz6Score ";
 		$sql .= "from  ";
-		$sql .= "leaderboardtable ";
+		$sql .= "leaderboardTable ";
 		$sql .= "WHERE userID = " . $userid;
         $stmt = $connection->query($sql);
 		

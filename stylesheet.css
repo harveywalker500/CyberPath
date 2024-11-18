@@ -4,13 +4,15 @@ body {
     height: 100%; /* Ensure body takes the full height of the viewport */
     display: flex;
     flex-direction: column; /* Stack content vertically */
+    background-color: #DAF1FA; /* Light blue background for space feel */
+    color: #0A183B; /* Dark text for contrast */
+    font-family: 'Arial', sans-serif; /* Font style */
 }
 
-/* Ensure the content area takes the remaining space */
+/* Ensures the content area takes the remaining space */
 #content {
     margin-top: 4rem; /* Ensure it clears the navbar */
 }
-
 
 /* Footer styles */
 footer.footer {
@@ -20,14 +22,16 @@ footer.footer {
     width: 100%;
     position: relative;
     bottom: 0;
-    margin-top: auto; /* Pushes the footer to the bottom of the page */
+    margin-top: auto; /* Pushes the footer to the bottom */
 }
 
 /* Container styling */
 .container {
     width: 100%;
-    padding-top: 50px; /* Space above the content */
-    padding-bottom: 50px; /* Space below the content */
+    padding: 50px 20px; /* Space above and below the content */
+    background-color: #FFFFFF; /* White background for content area */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 /* Columns styling */
@@ -43,6 +47,8 @@ footer.footer {
     max-width: 400px; /* Limit the width of the form */
 }
 
+
+/* Character and speech bubble styles */
 .character {
     width: 100px; /* Adjust as necessary */
     height: auto;
@@ -52,12 +58,13 @@ footer.footer {
 /* Speech bubble styles */
 .speech-bubble {
     position: relative;
-    background-color: #fff; /* Bubble color */
-    border: 2px solid #3498db; /* Border color */
+    background-color: #FFFFFF; /* Bubble color */
+    border: 2px solid #4178D3; /* Border color */
     border-radius: 10px; /* Rounded corners */
     padding: 10px;
     max-width: 300px; /* Maximum width for the speech bubble */
     animation: fadeIn 1s; /* Animate the appearance */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 /* Speech bubble triangle */
@@ -69,7 +76,7 @@ footer.footer {
     margin-left: -10px; /* Center the triangle */
     border-width: 10px;
     border-style: solid;
-    border-color: transparent transparent #3498db transparent; /* Triangle pointing down */
+    border-color: transparent transparent #4178D3 transparent; /* Triangle pointing down */
 }
 
 .box {
@@ -83,14 +90,15 @@ footer.footer {
     top: 0;
     width: 100%;
     z-index: 1000; /* Ensure it stays above other content */
-    background-color: #fff;
-    border-bottom: 1px solid #ddd; /* Optional: Add border for separation */
+    background-color: #0A183B; /* Dark blue navbar */
+    color: #FFFFFF; /* White text for contrast */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Light border for separation */
 }
 
 /* Add margin-top to elements that come after the navbar to prevent overlap */
-.navbar + .content, 
-.navbar + .container, 
-.navbar + .hero, 
+.navbar + .content,
+.navbar + .container,
+.navbar + .hero,
 .navbar + .section {
     margin-top: 4rem; /* Ensure content is pushed below the navbar */
 }
@@ -98,5 +106,60 @@ footer.footer {
 /* Ensure the html and body take full height */
 html, body {
     height: 100%;
-} 
+}
 
+/* Button Styles */
+button {
+    background-color: #4178D3; /* Main button color */
+    color: #FFFFFF; /* Button text color */
+    padding: 10px 15px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Transition effect */
+}
+
+button:hover {
+    background-color: #0A183B; /* Darker on hover */
+}
+
+/* Textarea for questions */
+textarea {
+    width: 100%; /* Full width */
+    max-width: 350px; /* Maximum width */
+    border: 2px solid #4178D3; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Inner spacing */
+    resize: none; /* Disable resizing */
+    margin-bottom: 10px; /* Space between textarea and button */
+}
+
+/* Label styling */
+label {
+    font-size: 16px; /* Label text size */
+    color: #0A183B; /* Label color */
+    margin-bottom: 8px; /* Space between label and textarea */
+}
+
+/* Additional styling for the text */
+p {
+    margin: 0; /* Remove default margin */
+    line-height: 1.5; /* Space between lines */
+    font-size: 16px; /* Adjust font size as necessary */
+    color: #0A183B; /* Text color */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .column.is-half {
+        max-width: 90%; /* Responsive scaling */
+    }
+
+    .character {
+        width: 80px; /* Adjust character size for smaller screens */
+    }
+
+    .speech-bubble {
+        max-width: 80%; /* Make bubble more responsive */
+    }
+}

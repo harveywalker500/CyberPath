@@ -2,7 +2,8 @@
 //now a php file for database connection
 include 'functions.php';
 
-
+session_start(); // Starts the session
+loggedIn(); // Ensures the user is logged in before loading the page
 //var_dump($getUserinfo);
 
 function getScores() {
@@ -68,8 +69,7 @@ $tableresults .= '<tbody id="Leaderboard">';
 		
 	}
 $tableresults .= '</tbody></table>';
-session_start(); // Starts the session
-loggedIn(); // Ensures the user is logged in before loading the page
+
 
 //echo makePageStart("CyberPath | Leaderboard", "stylesheet.css");
 //echo makeNavMenu("CyberPath");

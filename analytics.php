@@ -10,7 +10,7 @@
 require 'functions.php';
 
 
-echo makePageStart("CyberPath | Analytics");
+echo makePageStart("CyberPath | Analytics", "analytics.css");
 echo makeNavMenu("CyberPath");
 
 ?>
@@ -44,7 +44,7 @@ echo makeNavMenu("CyberPath");
         </section>
     </main>
 
-    <link rel="stylesheet" href="analytics.css"> <!-- Include analytics.css here -->
+
     
 
 

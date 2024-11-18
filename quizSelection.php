@@ -12,7 +12,7 @@ try {
     exit; // Exit if there's an error fetching episodes
 }
 
-echo makePageStart("CyberPath | Quiz Selection");
+echo makePageStart("CyberPath | Quiz Selection", "stylesheet.css");
 echo makeNavMenu("CyberPath");
 ?>
 

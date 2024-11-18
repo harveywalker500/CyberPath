@@ -5,7 +5,7 @@ body {
     display: flex;
     flex-direction: column; /* Stack content vertically */
     background-color: #DAF1FA; /* Light blue background for space feel */
-    color: #0A183B; /* Dark text for contrast */
+    color: white; /* Dark text for contrast */
     font-family: 'Arial', sans-serif; /* Font style */
 }
 

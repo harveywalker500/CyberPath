@@ -121,7 +121,7 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
                                                 <img src="happyRobot.png" alt="Character" class="character">
                                                 <div class="speech-bubble">${response.storyText}</div>
                                             </div>`;
-                        $('#storyText').html(robotBubble + '<p>' + response.storyText + '</p>');
+                        $('#storyText').html(robotBubble);
                         $('#questionField').html(
                             '<label class="label">' + response.storyQuestion + '</label>' +
                             '<div class="control"><label class="radio"><input type="radio" name="answer" value="A" required> ' + response.answerA + '</label></div>' +

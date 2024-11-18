@@ -156,7 +156,7 @@ footer.footer {
 }
 
 .navbar a {
-    color: #FFFFFF; /* White text for contrast */
+    color: #FFFFFF !important; /* White text for contrast */
 }
 
 /* Add margin-top to elements that come after the navbar to prevent overlap */

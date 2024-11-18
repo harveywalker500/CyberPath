@@ -160,7 +160,7 @@ echo makeNavMenu("CyberPath");
                         <div class="control">
                             <div class="select">
                                 <select name="organisationID" required>
-                                    <option value=""> Select an Organisation </option>
+                                    <option value="">-- Select an Organisation --</option>
                                     <?php foreach ($organisations as $organisation): ?>
                                         <option value="<?php echo $organisation['organisationID']; ?>">
                                             <?php echo htmlspecialchars($organisation['name']); ?>

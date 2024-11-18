@@ -9,6 +9,8 @@
 
 require 'functions.php';
 
+session_start(); // Starts the session
+loggedIn(); // Ensures the user is logged in before loading the page
 
 echo makePageStart("CyberPath | Analytics", "analytics.css");
 echo makeNavMenu("CyberPath");

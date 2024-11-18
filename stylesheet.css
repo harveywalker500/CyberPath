@@ -17,6 +17,9 @@ body {
     max-width: 400px; /* Limit the maximum width */
     width: 100%; /* Responsive */
     text-align: center; /* Center text */
+    display: flex;                /* Use flexbox for layout */
+    flex-direction: column;       /* Stack all elements in a column */
+    align-items: center;          /* Center content */
 }
 
 .storyText {
@@ -78,6 +81,7 @@ p {
     display: flex;
     flex-direction: column; /* Stack elements vertically */
     align-items: center;
+    width: 100%; /* Full width for the form */
 }
 
 label {

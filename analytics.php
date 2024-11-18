@@ -1,3 +1,4 @@
+<?php
 /**
  * File: analytics.php
  * author: Md Rifat
@@ -5,7 +6,7 @@
 */
 
 
-<?php 
+
 require 'functions.php';
 
 

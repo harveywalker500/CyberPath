@@ -1,11 +1,11 @@
+<?php
 /**
  * Filename: fetch_analytics.php
  * Author: Md Rifat
  * Description: This file contains the implementation of fetching and processing analytics data from the server.
  */
 
- 
-<?php
+
 require 'functions.php'; // Database connection and helper functions
 
 header('Content-Type: application/json');

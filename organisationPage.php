@@ -137,6 +137,7 @@ echo makeNavMenu("CyberPath");
                 <h2 class="subtitle">Create an Organisation</h2>
                 <form method="POST" action="" onsubmit="return confirmCreate();">
                     <div class="field">
+                    <option value=""> Create an organisation </option>
                         <label class="label">Organisation Name</label>
                         <div class="control">
                             <input class="input" type="text" name="organisationName" required>
@@ -160,7 +161,7 @@ echo makeNavMenu("CyberPath");
                         <div class="control">
                             <div class="select">
                                 <select name="organisationID" required>
-                                    <option value="">-- Select an Organisation --</option>
+                                    <option value=""> Select an Organisation </option>
                                     <?php foreach ($organisations as $organisation): ?>
                                         <option value="<?php echo $organisation['organisationID']; ?>">
                                             <?php echo htmlspecialchars($organisation['name']); ?>

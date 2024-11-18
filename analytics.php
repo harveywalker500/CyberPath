@@ -95,8 +95,8 @@ echo makeFooter();
 
 </script>
 
-<script>src="burger.js"</script>
 <script src="analytics.js"></script>
-</body>
-</html>
+<?php
+echo makePageEnd();
+?>
 

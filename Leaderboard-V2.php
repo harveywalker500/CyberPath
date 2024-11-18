@@ -61,7 +61,8 @@ function linktoScores($userid){
 
 }
 $getUserinfo = getScores();
-$tableresults = '<table class="table table-striped" id="resultstable">';
+$tableresults = '<div class="box">';
+$tableresults .= '<table class="table table-striped" id="resultstable">';
 $tableresults .= '<thead><tr class="leaderboard"><th>Name</th><th>Score</th><th>Organisation Name</th></tr></thead>';
 $tableresults .= '<tbody id="Leaderboard">';
 	foreach ($getUserinfo as list($one,$two,$three)) {
@@ -69,6 +70,7 @@ $tableresults .= '<tbody id="Leaderboard">';
 		
 	}
 $tableresults .= '</tbody></table>';
+$tableresults = '</div>';
 
 
 echo makePageStart("CyberPath | Leaderboard", "stylesheet.css");

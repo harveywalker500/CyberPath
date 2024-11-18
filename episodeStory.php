@@ -117,7 +117,11 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
 
                     // If the answer was correct, load the next question
                     if (response.correct) {
-                        $('#storyText').html('<p>' + response.storyText + '</p>');
+                        const robotBubble = `<div class="character-container">
+                                                <img src="happyRobot.png" alt="Character" class="character">
+                                                <div class="speech-bubble">${response.storyText}</div>
+                                            </div>`;
+                        $('#storyText').html(robotBubble + '<p>' + response.storyText + '</p>');
                         $('#questionField').html(
                             '<label class="label">' + response.storyQuestion + '</label>' +
                             '<div class="control"><label class="radio"><input type="radio" name="answer" value="A" required> ' + response.answerA + '</label></div>' +

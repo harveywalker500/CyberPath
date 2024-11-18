@@ -137,7 +137,6 @@ echo makeNavMenu("CyberPath");
                 <h2 class="subtitle">Create an Organisation</h2>
                 <form method="POST" action="" onsubmit="return confirmCreate();">
                     <div class="field">
-                    <option value=""> Create an organisation </option>
                         <label class="label">Organisation Name</label>
                         <div class="control">
                             <input class="input" type="text" name="organisationName" required>

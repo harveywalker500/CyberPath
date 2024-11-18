@@ -3,7 +3,7 @@
 include 'functions.php';
 
 session_start(); // Starts the session
-//loggedIn(); // Ensures the user is logged in before loading the page
+loggedIn(); // Ensures the user is logged in before loading the page
 //var_dump($getUserinfo);
 
 function getScores() {

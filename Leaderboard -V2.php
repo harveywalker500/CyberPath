@@ -19,8 +19,11 @@ function getScores() {
         $userdata = [];
 		$i=0;
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				$thisuserid = $row['userID'];
+				$thisscore = linktoScores($thisuserid);
+			
 			    $userdata[$i][0] = $row['username'];
-				$userdata[$i][1] = $row['userID'];
+				$userdata[$i][1] = $thisscore;
 				$userdata[$i][2] = $row['name'];
 				$i++;
 				//var_dump($row);
@@ -32,8 +35,33 @@ function getScores() {
     }
 }
 
+function linktoScores($userid){
+	    try {
+        // Get database connection
+        $connection = getConnection();
+        $scoretotal = 0;
+        // Query to retrieve user and organisation data
+        $sql = "select userID, quiz1Score, quiz2Score,  quiz3Score, quiz4Score, quiz5Score, quiz6Score ";
+		$sql .= "from  ";
+		$sql .= "leaderboardtable ";
+		$sql .= "WHERE userID = " . $userid;
+        $stmt = $connection->query($sql);
+		
+		        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			    $scoretotal = $row['quiz1Score'] + $row['quiz2Score'] + $row['quiz3Score'] + $row['quiz4Score'] + $row['quiz5Score'] + $row['quiz6Score'];
+				}
+        
+
+        return $scoretotal;
+		
+		} catch (Exception $e) {
+        throw new Exception("Error fetching episodes: " . $e->getMessage(), 0, $e);
+		}
+
+}
+
 $tableresults = '<table class="table table-striped" id="resultstable">';
-$tableresults .= '<thead><tr class="leaderboard"><th>Name</th><th>Score</th></tr></thead>';
+$tableresults .= '<thead><tr class="leaderboard"><th>Name</th><th>Score</th><th>Organisation Name</th></tr></thead>';
 $tableresults .= '<tbody id="Leaderboard">';
 	foreach ($getUserinfo as list($one,$two,$three)) {
 		$tableresults .= '<tr><td>'.$one.'</td><td>'.$two.'</td><td>'.$three.'</td></tr>';

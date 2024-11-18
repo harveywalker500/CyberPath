@@ -79,7 +79,7 @@ footer.footer {
     border-color: transparent transparent #4178D3 transparent; /* Triangle pointing down */
 }
 
-.quizForm {
+.questionField {
     background-color: #FFFFFF; /* White background for the form */
     border-radius: 10px; /* Rounded corners */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
@@ -90,20 +90,20 @@ footer.footer {
 }
 
 /* Question Section */
-.quizForm .question {
+.questionField .question {
     margin-bottom: 15px; /* Space below each question */
     font-weight: bold; /* Emphasize question text */
     color: #0A183B; /* Dark blue color for question text */
 }
 
 /* Answer Options */
-.quizForm .answers {
+.questionField .answers {
     display: flex;
     flex-direction: column; /* Stack options vertically */
 }
 
 /* Individual Answer Option */
-.quizForm .answer {
+.questionField .answer {
     background-color: #DAF1FA; /* Light blue background for answer */
     border: 2px solid #4178D3; /* Border color */
     border-radius: 5px; /* Rounded corners */
@@ -114,18 +114,18 @@ footer.footer {
 }
 
 /* Hover effect for answer options */
-.quizForm .answer:hover {
+.questionField .answer:hover {
     background-color: #C8E1F9; /* Lighten on hover */
 }
 
 /* Selected answer state */
-.quizForm .answer.selected {
+.questionField .answer.selected {
     background-color: #4178D3; /* Highlight selected answer */
     color: #FFFFFF; /* White text for contrast */
 }
 
 /* Submit Button */
-.quizForm button.submit {
+.questionField button.submit {
     background-color: #4178D3; /* Submit button color */
     color: #FFFFFF; /* Button text color */
     padding: 10px 15px; /* Button padding */
@@ -136,7 +136,7 @@ footer.footer {
 }
 
 /* Submit Button Hover effect */
-.quizForm button.submit:hover {
+.questionField button.submit:hover {
     background-color: #0A183B; /* Darken on hover */
 }
 

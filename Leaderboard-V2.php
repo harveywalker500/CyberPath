@@ -71,8 +71,8 @@ $tableresults .= '<tbody id="Leaderboard">';
 $tableresults .= '</tbody></table>';
 
 
-//echo makePageStart("CyberPath | Leaderboard", "stylesheet.css");
-//echo makeNavMenu("CyberPath");
+echo makePageStart("CyberPath | Leaderboard", "stylesheet.css");
+echo makeNavMenu("CyberPath");
 
 ?>
 <!DOCTYPE html>
@@ -82,7 +82,9 @@ $tableresults .= '</tbody></table>';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title> Leaderboard </title>
-<link media="all" rel="stylesheet" href="dev2.css">
+<link media="all" rel="stylesheet" href="dev3.css">
+<link media="all" rel="stylesheet" href="stylesheet.css">
+
 <link href="DataTables/datatables.min.css" rel="stylesheet">
 <script src="jquery.js"></script>
 <script src="DataTables/datatables.min.js"></script>

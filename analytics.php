@@ -10,7 +10,7 @@
 require 'functions.php';
 
 
-// echo makePageStart("CyberPath | Analytics");
+echo makePageStart("CyberPath | Analytics");
 echo makeNavMenu("CyberPath");
 
 ?>

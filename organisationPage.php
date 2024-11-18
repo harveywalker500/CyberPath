@@ -1,5 +1,5 @@
-<!-- Organisation Page to create or join an organisation -->
-<!-- test -->
+<!--  Organisation Page to create or join an organisation  -->
+
 <?php
 // Include functions file and start session
 require_once("functions.php");

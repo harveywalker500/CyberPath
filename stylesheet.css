@@ -119,7 +119,7 @@ footer.footer {
 }
 
 /* Selected answer state */
-.field .control.selected {
+.field .control::selection {
     background-color: #4178D3; /* Highlight selected answer */
     color: #FFFFFF; /* White text for contrast */
 }

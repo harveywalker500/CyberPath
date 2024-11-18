@@ -152,7 +152,7 @@ footer.footer {
     width: 100%;
     z-index: 1000; /* Ensure it stays above other content */
     background-color: #0A183B; /* Dark blue navbar */
-    color: white; /* White text for contrast */
+    color: red; /* White text for contrast */
     border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Light border for separation */
 }
 

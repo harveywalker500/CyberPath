@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-echo makePageStart("Register - CyberPath");
+echo makePageStart("Register - CyberPath", "stylesheet.css");
 echo makeNavMenu("CyberPath");
 ?>
 

@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-echo makePageStart("Manage Organisation - CyberPath");
+echo makePageStart("Manage Organisation - CyberPath", "stylesheet.css");
 echo makeNavMenu("CyberPath");
 ?>
 

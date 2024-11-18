@@ -4,7 +4,7 @@ require_once("functions.php");
 session_start(); //Starts the session.
 loggedIn();
 
-echo makePageStart("CyberPath");
+echo makePageStart("CyberPath", "stylesheet.css");
 echo makeNavMenu("CyberPath");
 
 $episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : null;

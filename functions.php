@@ -15,7 +15,7 @@ function getConnection(){ //function to get the connection to the database, allo
     }
 }
 
-function makePageStart($title) 
+function makePageStart($title, $stylesheet) 
 {
     return <<<HTML
     <!DOCTYPE html>
@@ -29,6 +29,7 @@ function makePageStart($title)
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery CDN -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="$stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="stylesheet.css">
     </head>
@@ -179,6 +180,7 @@ HTML;
             if ($organisationDetails && $organisationDetails['teamLeaderID'] == $userID) {
                 // Display "Manage Organisation" link if user is the team leader
                 $output .= "<a class=\"navbar-item\" href='manageOrganisation.php?id=" . $userOrganisationID . "'>Manage Organisation</a>\n";
+                $output .= "<a class=\"navbar-item\" href='analytics.php?id=" . $userOrganisationID . "'>Analytics</a>\n";
             }
         }
 

@@ -1,0 +1,48 @@
+/**
+ * @file analytics.css
+ * @author Md Rifat
+ * @description This file contains the style for the analytics page.
+ */
+
+.body{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.header {
+    text-align: center;
+    padding: 1rem;
+    background-color: #343a40;
+    color: #fff;
+}
+.main {
+    margin: 2rem auto;
+    max-width: 1000px;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.h2 {
+    margin-top: 2rem;
+    text-align: center;
+    color: #333;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+.th, .td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    text-align: left;
+}
+.th {
+    background-color: #f4f4f4;
+}

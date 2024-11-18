@@ -43,6 +43,35 @@ footer.footer {
     max-width: 400px; /* Limit the width of the form */
 }
 
+.character {
+    width: 100px; /* Adjust as necessary */
+    height: auto;
+    margin-right: 15px; /* Space between character and speech bubble */
+}
+
+/* Speech bubble styles */
+.speech-bubble {
+    position: relative;
+    background-color: #fff; /* Bubble color */
+    border: 2px solid #3498db; /* Border color */
+    border-radius: 10px; /* Rounded corners */
+    padding: 10px;
+    max-width: 300px; /* Maximum width for the speech bubble */
+    animation: fadeIn 1s; /* Animate the appearance */
+}
+
+/* Speech bubble triangle */
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: 100%; /* Position above the bubble */
+    left: 20px; /* Position of the triangle */
+    margin-left: -10px; /* Center the triangle */
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent #3498db transparent; /* Triangle pointing down */
+}
+
 .box {
     padding: 2rem;
     width: 100%;

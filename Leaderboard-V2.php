@@ -2,6 +2,11 @@
 //now a php file for database connection
 include 'functions.php';
 
+session_start(); // Starts the session
+loggedIn(); // Ensures the user is logged in before loading the page
+
+echo makePageStart("CyberPath | Leaderboard", "analytics.css");
+echo makeNavMenu("CyberPath");
 $getUserinfo = getScores();
 //var_dump($getUserinfo);
 
@@ -146,13 +151,7 @@ print $tableresults;
 	}
 
 </script>-->
-</main>
-<footer>
 <?php
-
+echo makeFooter();
+echo makePageEnd();
 ?>
-</footer>
-
-</body>
-
-</html>

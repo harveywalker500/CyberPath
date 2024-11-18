@@ -6,9 +6,6 @@ session_start(); // Starts the session
 loggedIn(); // Ensures the user is logged in before loading the page
 //var_dump($getUserinfo);
 
-echo makePageStart("CyberPath", "stylesheet.css");  
-echo makeNavMenu("CyberPath");
-
 function getScores() {
     try {
         // Get database connection

@@ -87,9 +87,7 @@ $episodeName = $quizlist[0]['episodeName'];
         <!-- Hidden input to pass the episodeID -->
         <input type="hidden" name="episodeID" value="<?php echo htmlspecialchars($episodeID); ?>">
 
-        <div class="field has-text-centered">
-            <button type="submit" class="button is-primary">Submit my answers</button>
-        </div>
+            <button type="submit" class="button is-primary has-text-centred">Submit my answers</button>
     </form>
 </div>
 

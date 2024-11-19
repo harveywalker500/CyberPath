@@ -8,6 +8,7 @@ loggedIn(); // Ensures the user is logged in before loading the page
 echo makePageStart("CyberPath | Leaderboard", "stylesheet.css");
 echo makeNavMenu("CyberPath");
 
+
 function getScores() {
     try {
         // Get database connection
@@ -141,6 +142,8 @@ echo $tableresults;
 	}
 
 </script>-->
+<script src="dev2.js"></script>
+<script src="DataTables/datatables.min.js"></script>
 <?php
 echo makeFooter();
 echo makePageEnd();

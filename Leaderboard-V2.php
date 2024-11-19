@@ -62,6 +62,9 @@ function linktoScores($userid){
 		}
 
 }
+echo "<div class='displayBody'>";
+echo "<h1 class='title'>Leaderboard</h1>";
+echo "<p>Check out the leaderboard below to see how you compare to other users!</p>";
 echo "<div class='box'>";
 $getUserinfo = getScores();
 $tableresults = '<table class="table table-striped" id="resultstable">';
@@ -108,6 +111,7 @@ print $tableresults;
 </div>
 <div id="inputdatabtn">
 <button id="inputbutton" type="button">Add to Score</button>
+</div>
 </div>
 </div>
 

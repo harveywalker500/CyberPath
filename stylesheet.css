@@ -151,7 +151,7 @@ footer.footer {
 
 .box {
     padding: 2rem;
-    width: 100%;
+    width: 100vh;
 }
 
 /* Navbar styles */

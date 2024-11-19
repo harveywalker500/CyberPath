@@ -254,6 +254,6 @@ p {
     background-color: #DAF1FA;
 }
 
-.navbar-menu is-active{
+.navbar-menu.is-active{
     background-color: #0A183B;
 }

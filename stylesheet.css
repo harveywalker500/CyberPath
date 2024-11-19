@@ -241,3 +241,11 @@ p {
 .navbar-item{
     color: #FFFFFF;
 }
+
+.hero-is-info{
+    color: #000000;
+}
+
+.hero-body{
+    background-color: #DAF1FA;
+}

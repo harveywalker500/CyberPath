@@ -98,10 +98,7 @@ echo $tableresults;
     </tbody>
 </table>-->
 
-<?php
-print $tableresults;
 
-?>
 
 <div id="inputdataname">
 <label for="nameinput">Name</label>

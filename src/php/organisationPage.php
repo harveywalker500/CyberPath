@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors[] = "Error fetching data: " . $e->getMessage();
 }
 
-echo makePageStart("Manage Organisation - CyberPath", "css/stylesheet.css");
+echo makePageStart("Manage Organisation - CyberPath", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");
 ?>
 

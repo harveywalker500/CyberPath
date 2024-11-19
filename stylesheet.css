@@ -178,11 +178,6 @@ footer.footer {
     margin-top: 4rem; /* Ensure content is pushed below the navbar */
 }
 
-/* Ensure the html and body take full height */
-html, body {
-    height: 100%;
-}
-
 /* Button Styles */
 button {
     background-color: #4178D3; /* Main button color */

@@ -63,18 +63,18 @@ function linktoScores($userid){
 
 }
 echo "<div class='displayBody'>";
-echo "<h1 class='title'>Leaderboard</h1>";
-echo "<p>Check out the leaderboard below to see how you compare to other users!</p>";
-echo "<div class='box'>";
+echo "<h1 class='title'>Leaderboard</h1>\n";
+echo "<p>Check out the leaderboard below to see how you compare to other users!</p>\n";
+echo "<div class='box'>\n";
 $getUserinfo = getScores();
-$tableresults = '<table class="table table-striped" id="resultstable">';
-$tableresults .= '<thead><tr class="leaderboard"><th>Name</th><th>Score</th><th>Organisation Name</th></tr></thead>';
-$tableresults .= '<tbody id="Leaderboard">';
+$tableresults = '<table class="table table-striped" id="resultstable">\n';
+$tableresults .= '<thead><tr class="leaderboard"><th>Name</th><th>Score</th><th>Organisation Name</th></tr></thead>\n';
+$tableresults .= '<tbody id="Leaderboard">\n';
 	foreach ($getUserinfo as list($one,$two,$three)) {
-		$tableresults .= '<tr><td>'.$one.'</td><td>'.$two.'</td><td>'.$three.'</td></tr>';
+		$tableresults .= '<tr><td>'.$one.'</td>\n<td>'.$two.'</td>\n<td>'.$three.'</td></tr>\n';
 		
 	}
-$tableresults .= '</tbody></table>';
+$tableresults .= '</tbody></table>\n';
 
 
 

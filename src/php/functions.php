@@ -139,10 +139,10 @@ function makeNavMenu($navMenuHeader) {
 
     // Predefined menu links
     $links = array(
-        "index.php" => "Home",
-        "storySelect.php" => "Story",
-        "quizSelection.php" => "Quiz Selection",
-        "Leaderboard-V2.php"  => "Leaderboard"
+        "../../index.php" => "Home",
+        "../../src/php/storySelect.php" => "Story",
+        "../../src/php/quizSelection.php" => "Quiz Selection",
+        "../../src/php/Leaderboard-V2.php"  => "Leaderboard"
         );
 
     $output = <<<HTML
@@ -178,18 +178,18 @@ HTML;
             
             if ($organisationDetails && $organisationDetails['teamLeaderID'] == $userID) {
                 // Display "Manage Organisation" link if user is the team leader
-                $output .= "<a class=\"navbar-item\" href='manageOrganisation.php?id=" . $userOrganisationID . "'>Manage Organisation</a>\n";
+                $output .= "<a class=\"navbar-item\" href='../../src/php/manageOrganisation.php?id=" . $userOrganisationID . "'>Manage Organisation</a>\n";
                 $output .= "<a class=\"navbar-item\" href='analytics.php?id=" . $userOrganisationID . "'>Analytics</a>\n";
             }
         }
 
         // Add organisation and logout option if logged in
-        $output .= "<a class=\"navbar-item\" href='organisationPage.php'>Organisation</a>\n";
-        $output .= "<a class=\"navbar-item\" href='logout.php'>Logout</a>\n";
+        $output .= "<a class=\"navbar-item\" href='../../src/php/organisationPage.php'>Organisation</a>\n";
+        $output .= "<a class=\"navbar-item\" href='../../src/php/logout.php'>Logout</a>\n";
     } else {
         // Add login and register options if not logged in
-        $output .= "<a class=\"navbar-item\" href='loginForm.php'>Login</a>\n";
-        $output .= "<a class=\"navbar-item\" href='register.php'>Register</a>\n";
+        $output .= "<a class=\"navbar-item\" href='../../src/php/loginForm.php'>Login</a>\n";
+        $output .= "<a class=\"navbar-item\" href='../../src/php/register.php'>Register</a>\n";
     }
 
     $output .= <<<HTML

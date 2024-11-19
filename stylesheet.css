@@ -1,7 +1,8 @@
 body {
     margin: 0;
     padding-top: 4rem; /* Space for fixed navbar */
-    height: 100%; /* Ensure body takes the full height of the viewport */
+    min-height: 100%; /* Ensure body takes the full height of the viewport */
+    height: auto;
     display: flex;
     flex-direction: column; /* Stack content vertically */
     background-color: #DAF1FA; /* Light blue background for space feel */

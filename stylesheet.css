@@ -254,6 +254,6 @@ p {
     background-color: #DAF1FA;
 }
 
-.button is-primary has-text-centred{
-    
+.navbar-menu is-active{
+    background-color: #0A183B;
 }

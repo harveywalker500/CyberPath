@@ -224,6 +224,15 @@ function makePageEnd() {
 HTML;
 }
 
+function makePageEndIndex() {
+    return <<<HTML
+    </div> <!-- End of content div -->
+    <script src="src/js/burger.js"></script>
+    </body>
+    </html>
+HTML;
+}
+
 function getUserProgress($userID) {
     try {
         $dbconn = getConnection();

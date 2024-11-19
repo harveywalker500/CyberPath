@@ -74,5 +74,5 @@ if (isset($_SESSION['username'])) {
 }
 
 echo makeFooter();
-echo makePageEnd();
+echo makePageEndIndex();
 ?>

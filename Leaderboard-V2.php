@@ -142,7 +142,7 @@ echo $tableresults;
 	}
 
 </script>-->
-<script src="dev2.js"></script>
+<script src="src/js/dev2.js"></script>
 <script src="DataTables/datatables.min.js"></script>
 <?php
 echo makeFooter();

@@ -40,7 +40,7 @@ echo makeNavMenu("CyberPath");
             <div class="column is-full-mobile is-half-tablet is-one-third-desktop">
                 <div class="box has-text-centered">
                     <p class="title is-5">$episodeTitle</p>
-                    <form action="episodeQuiz.php" method="POST" style="display:inline;">
+                    <form action="src/php/episodeQuiz.php" method="POST" style="display:inline;">
                         <input type="hidden" name="episodeID" value="$partNumber">
                         <button type="submit" class="button $buttonClass" $buttonState>
                             <span class="icon"><i class="$iconClass"></i></span>

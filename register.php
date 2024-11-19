@@ -53,6 +53,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':surname' => $surname,
                 ':email' => $email
             ]);
+
+            $userID = $dbConn->lastInsertId();
+
+            // Step 3: Insert the user into userProgressTable with default values
+            $sqlUserProgress = "INSERT INTO userProgressTable (userID, storyCompleted, quizCompleted) 
+                                VALUES (:userID, FALSE, FALSE)";
+            $stmtUserProgress = $dbConn->prepare($sqlUserProgress);
+            $stmtUserProgress->execute([
+                ':userID' => $userID
+            ]);
+
+            // Step 4: Insert the user into leaderboardTable with default quiz scores of 0
+            $sqlLeaderboard = "INSERT INTO leaderboardTable (userID, quiz1Score, quiz2Score, quiz3Score, quiz4Score, quiz5Score, quiz6Score) 
+                            VALUES (:userID, 0, 0, 0, 0, 0, 0)";
+            $stmtLeaderboard = $dbConn->prepare($sqlLeaderboard);
+            $stmtLeaderboard->execute([
+                ':userID' => $userID
+            ]);
             // Redirect to login page after successful registration
             header("Location: loginForm.php");
             exit();

@@ -15,7 +15,7 @@ try {
 echo makePageStart("CyberPath | Quiz Selection", "stylesheet.css");
 echo makeNavMenu("CyberPath");
 ?>
-
+<div class="displayBody">
 <h1 class="title">Quiz Selection</h1>
 <p>Select a quiz below to test your knowledge!</p>
 
@@ -55,6 +55,7 @@ echo makeNavMenu("CyberPath");
         ?>
     </div>
 </div>
+</div> 
 
 
 <?php

@@ -184,12 +184,12 @@ HTML;
         }
 
         // Add organisation and logout option if logged in
-        $output .= " href='organisationPage.php'>Organisation</a>\n";
-        $output .= " href='logout.php'>Logout</a>\n";
+        $output .= "<a class=\"navbar-item\" href='organisationPage.php'>Organisation</a>\n";
+        $output .= "<a class=\"navbar-item\" href='logout.php'>Logout</a>\n";
     } else {
         // Add login and register options if not logged in
-        $output .= " href='loginForm.php'>Login</a>\n";
-        $output .= " href='register.php'>Register</a>\n";
+        $output .= "<a class=\"navbar-item\" href='loginForm.php'>Login</a>\n";
+        $output .= "<a class=\"navbar-item\" href='register.php'>Register</a>\n";
     }
 
     $output .= <<<HTML
@@ -218,7 +218,7 @@ HTML;
 function makePageEnd() {
     return <<<HTML
     </div> <!-- End of content div -->
-    <script src="../js/burger.js"></script>
+    <script src="burger.js"></script>
     </body>
     </html>
 HTML;

@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding-top: 4rem; /* Space for fixed navbar */
-    min-height: 100%; /* Ensure body takes the full height of the viewport */
+    min-height: 100vh; /* Ensure body takes the full height of the viewport */
     height: auto;
     display: flex;
     flex-direction: column; /* Stack content vertically */
@@ -252,4 +252,8 @@ p {
 
 .notification{
     background-color: #DAF1FA;
+}
+
+.button is-primary has-text-centred{
+    
 }

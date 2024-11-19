@@ -60,7 +60,6 @@ function linktoScores($userid){
 		}
 
 }
-echo "<div class='box'>";
 $getUserinfo = getScores();
 $tableresults = '<table class="table table-striped" id="resultstable">';
 $tableresults .= '<thead><tr class="leaderboard"><th>Name</th><th>Score</th><th>Organisation Name</th></tr></thead>';
@@ -70,7 +69,6 @@ $tableresults .= '<tbody id="Leaderboard">';
 		
 	}
 $tableresults .= '</tbody></table>';
-echo "</div>";
 
 echo makePageStart("CyberPath | Leaderboard", "stylesheet.css");
 echo makeNavMenu("CyberPath");
@@ -97,7 +95,7 @@ echo makeNavMenu("CyberPath");
 print $tableresults;
 
 ?>
-
+<div class="box">
 <div id="inputdataname">
 <label for="nameinput">Name</label>
 <input type="text" id="nameinput">
@@ -108,6 +106,7 @@ print $tableresults;
 </div>
 <div id="inputdatabtn">
 <button id="inputbutton" type="button">Add to Score</button>
+</div>
 </div>
 
 <!--<script>

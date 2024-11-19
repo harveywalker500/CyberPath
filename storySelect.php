@@ -15,7 +15,7 @@ try {
 echo makePageStart("CyberPath | Story Selection", "stylesheet.css");
 echo makeNavMenu("CyberPath");
 ?>
-
+<div class="displayBody">
 <h1 class="title">Story Selection</h1>
 <p>Select a story to begin!</p>
 
@@ -62,7 +62,7 @@ echo makeNavMenu("CyberPath");
         ?>
     </div>
 </div>
-
+    </div>
 <?php
 echo makeFooter();
 echo makePageEnd();

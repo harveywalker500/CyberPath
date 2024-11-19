@@ -12,7 +12,7 @@ require 'functions.php';
 session_start(); // Starts the session
 loggedIn(); // Ensures the user is logged in before loading the page
 
-echo makePageStart("CyberPath | Analytics", "css/analytics.css");
+echo makePageStart("CyberPath | Analytics", "../../css/analytics.css");
 echo makeNavMenu("CyberPath");
 
 ?>
@@ -97,7 +97,7 @@ echo makeFooter();
 
 </script>
 
-<script src="analytics.js"></script>
+<script src="../js/analytics.js"></script>
 <?php
 echo makePageEnd();
 ?>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Leaderboard </title>
+<link media="all" rel="../css/stylesheet" href="../css/dev2.css">
+<script src="../jquery.js"></script>
+<!--<script src="jquery.cookie.js"></script>-->
+<script src="js/dev2.js"></script>
+</head>
+
+<body>
+<header>
+</header>
+<main>
+<table class="table table-striped">
+  <thead>  <tr  class="leaderboard">
+        <th>Name</th>
+        <th>Score</th>
+        
+    </tr>
+	</thead>
+
+    <tbody id="Leaderboard">
+        
+    </tbody>
+</table>
+
+<div id="inputdataname">
+<label for="nameinput">Name</label>
+<input type="text" id="nameinput">
+</div>
+<div id="inputdatascore">
+<label for="scoreinput">Score</label>
+<input type="text" id="scoreinput">
+</div>
+<div id="inputdatabtn">
+<button id="inputbutton" type="button">Add to Score</button>
+</div>
+
+<script>
+	var myArray = [
+	    {'name':'Michael', 'score':'30'},
+	    {'name':'Mila', 'score':'32'},
+	   
+	]
+	
+	buildTable(myArray)
+
+
+
+	function buildTable(data){
+		var table = document.getElementById('Leaderboard')
+
+		for (var i = 0; i < data.length; i++){
+			var row = `<tr>
+							<td>${data[i].name}</td>
+							<td>${data[i].score}</td>
+							
+					  </tr>`
+			table.innerHTML += row
+
+
+		}
+	}
+
+</script>
+</main>
+<footer>
+</footer>
+
+</body>
+
+</html>

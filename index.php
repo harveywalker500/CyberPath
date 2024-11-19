@@ -67,7 +67,7 @@ if (isset($_SESSION['username'])) {
     echo "<section class='section'>";
     echo "<div class='content'>";
     echo "<p>Welcome to CyberPath, your destination for interactive learning and challenges in cybersecurity. Whether you're a beginner or a seasoned pro, we have a range of stories and quizzes designed to test your knowledge and improve your skills.</p>";
-    echo "<p>If you're new here, you can <a href='register.php'>sign up</a> to start your journey. If you're returning, please <a href='loginForm.php'>log in</a> to continue where you left off.</p>";
+    echo "<p>If you're new here, you can <a href='src/php/register.php'>sign up</a> to start your journey. If you're returning, please <a href='src/php/loginForm.php'>log in</a> to continue where you left off.</p>";
     echo "</div>";
     echo "</section>";
     echo "</div>";

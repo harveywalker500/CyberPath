@@ -130,7 +130,7 @@ function loggedIn(){//Function that redirects users to loginform.php if they are
 function logOut(){//Function to log out of account
     $_SESSION = array();//Reset session array
     session_destroy();//Destroys current session
-    header('Location: index.php');//Redirects user to home page.
+    header('Location: ../../index.php');//Redirects user to home page.
     exit();//Terminates script
 }
 

@@ -52,7 +52,7 @@ $episodeName = $quizlist[0]['episodeName'];
 
 <div class="container">
 <h1 class="title has-text-centered">Quiz for <?php echo htmlspecialchars($episodeName); ?></h1>
-    <form action="../../quizResults.php" method="POST">
+    <form action="quizResults.php" method="POST">
         <?php
         // Loop through each question in the quiz and create the form inputs
         foreach ($quizlist as $row) {

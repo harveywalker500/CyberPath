@@ -66,7 +66,7 @@ function linktoScores($userid){
 echo "<div class='displayBody'>\n";
 echo "<h1 class='title'>Leaderboard</h1>\n";
 echo "<p>Check out the leaderboard below to see how you compare to other users!</p>\n";
-echo "<div class='box'>\n";
+echo "<div class='box-leaderboard'>\n";
 $getUserinfo = getScores();
 $tableresults = '<table class="table table-striped" id="resultstable">' . "\n";
 $tableresults .= '<thead><tr class="leaderboard"><th>Name</th><th>Score</th><th>Organisation Name</th></tr></thead>' . "\n";

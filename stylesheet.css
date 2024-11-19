@@ -151,6 +151,10 @@ footer.footer {
 
 .box {
     padding: 2rem;
+    width: 100%;
+}
+
+.box-leaderboard{
     width: 100vh;
 }
 

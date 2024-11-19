@@ -5,6 +5,8 @@ include 'functions.php';
 session_start(); // Starts the session
 loggedIn(); // Ensures the user is logged in before loading the page
 //var_dump($getUserinfo);
+echo makePageStart("CyberPath | Leaderboard", "stylesheet.css");
+echo makeNavMenu("CyberPath");
 
 function getScores() {
     try {
@@ -60,6 +62,7 @@ function linktoScores($userid){
 		}
 
 }
+echo "<div class='box'>";
 $getUserinfo = getScores();
 $tableresults = '<table class="table table-striped" id="resultstable">';
 $tableresults .= '<thead><tr class="leaderboard"><th>Name</th><th>Score</th><th>Organisation Name</th></tr></thead>';
@@ -70,8 +73,7 @@ $tableresults .= '<tbody id="Leaderboard">';
 	}
 $tableresults .= '</tbody></table>';
 
-echo makePageStart("CyberPath | Leaderboard", "stylesheet.css");
-echo makeNavMenu("CyberPath");
+
 
 ?>
 
@@ -95,7 +97,7 @@ echo makeNavMenu("CyberPath");
 print $tableresults;
 
 ?>
-<div class="box">
+
 <div id="inputdataname">
 <label for="nameinput">Name</label>
 <input type="text" id="nameinput">

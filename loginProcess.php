@@ -1,7 +1,7 @@
 <?php
     require_once("functions.php");
     session_start();
-    echo makePageStart("Login", "stylesheet.css");
+    echo makePageStart("Login", "css/stylesheet.css");
 
     echo makeNavMenu("CyberPath");
     try{

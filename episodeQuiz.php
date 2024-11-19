@@ -5,7 +5,7 @@ require_once("functions.php");
 session_start(); // Starts the session.
 loggedIn(); // Ensures the user is logged in before loading the page.
 
-echo makePageStart("CyberPath | Quiz", "stylesheet.css");
+echo makePageStart("CyberPath | Quiz", "css/stylesheet.css");
 echo makeNavMenu("CyberPath");
 
 // Use $_POST to retrieve episodeID from the form submission

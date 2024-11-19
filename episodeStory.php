@@ -5,7 +5,7 @@ require_once("functions.php");
 session_start(); // Starts the session
 loggedIn(); // Ensures the user is logged in before loading the page
 
-echo makePageStart("CyberPath", "stylesheet.css");
+echo makePageStart("CyberPath", "css/stylesheet.css");
 echo makeNavMenu("CyberPath");
 
 $episodeID = isset($_POST['episodeID']) ? $_POST['episodeID'] : null;
@@ -60,7 +60,7 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
         <div class="column is-two-thirds">
             <div class="box">
                 <div id="storyText">
-                <img src="happyRobot.png" alt="Character" class="character">
+                <img src="images/happyRobot.png" alt="Character" class="character">
                     <div class="speech-bubble">
                         <p><?php echo htmlspecialchars($currentStory['storyText']); ?></p>
                     </div>
@@ -118,7 +118,7 @@ $currentStory = $storyList[$_SESSION['currentIndex']];
                     // If the answer was correct, load the next question
                     if (response.correct) {
                         const robotBubble = `<div class="character-container">
-                                                <img src="happyRobot.png" alt="Character" class="character">
+                                                <img src="images/happyRobot.png" alt="Character" class="character">
                                                 <div class="speech-bubble">${response.storyText}</div>
                                             </div>`;
                         $('#storyText').html(robotBubble);

@@ -3,7 +3,7 @@
 require_once("functions.php");
 session_start(); //Starts the session.
 
-echo makePageStart("CyberPath", "stylesheet.css");
+echo makePageStart("CyberPath", "css/stylesheet.css");
 echo makeNavMenu("CyberPath");
 ?>
 

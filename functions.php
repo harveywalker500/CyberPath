@@ -149,7 +149,7 @@ function makeNavMenu($navMenuHeader) {
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="index.php">
-                <img src="CyberPath.png" alt="Site Logo" style="width: 100px; height: 100px; max-height: none;">
+                <img src="images/CyberPath.png" alt="Site Logo" style="width: 100px; height: 100px; max-height: none;">
             </a>
             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
                 <span aria-hidden="true"></span>

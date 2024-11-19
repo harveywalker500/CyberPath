@@ -12,7 +12,7 @@ try {
     exit; // Exit if there's an error fetching episodes
 }
 
-echo makePageStart("CyberPath | Story Selection", "stylesheet.css");
+echo makePageStart("CyberPath | Story Selection", "css/stylesheet.css");
 echo makeNavMenu("CyberPath");
 ?>
 <div class="displayBody">

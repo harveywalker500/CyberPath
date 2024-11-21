@@ -122,9 +122,16 @@ function check_login(){//Checks if user is logged-in based on session variable "
 function loggedIn(){//Function that redirects users to loginform.php if they are not logged in.
     if (!check_login())
         {
-            header('Location: loginForm.php');//Redirects user
+            header('Location: ../../loginForm.php');//Redirects user
             exit();//Terminates script
         }
+}
+
+if (!$hasPermission) {
+    header('Location: ../../index.php');
+    echo makeFooter("This is the footer");
+    echo makePageEnd();
+    exit;
 }
 
 function logOut(){//Function to log out of account

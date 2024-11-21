@@ -4,12 +4,16 @@
 // Include functions file and start session
 require_once("functions.php");
 session_start();
+loggedIn(); // Ensures the user is logged in before loading the page
+
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['userID'])) {
     header("Location: loginForm.php");
     exit();
 }
+
+
 
 // Check if the user is already part of an organisation
 $userID = $_SESSION['userID'];
@@ -107,6 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 echo makePageStart("Manage Organisation - CyberPath", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");
+
 ?>
 
 <div class="container">

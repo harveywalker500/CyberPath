@@ -20,7 +20,7 @@ if ($episodeID === null) {
 $hasPermission = userStoryPermission($_SESSION['userID'], $episodeID);
 
 if (!$hasPermission) {
-    header('Location: index.php');
+    header('Location: ../../index.php');
     echo makeFooter("This is the footer");
     echo makePageEnd();
     exit;

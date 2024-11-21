@@ -14,10 +14,7 @@ if ($episodeID === null) {
 }
 $hasPermission = userQuizPermission($_SESSION['userID'], $episodeID);
 
-if (!$hasPermission) {
-    header('Location: index.php');
-    exit;
-}
+
 
 $userAnswers = [];
 foreach ($_POST as $key => $value) {

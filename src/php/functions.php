@@ -127,12 +127,7 @@ function loggedIn(){//Function that redirects users to loginform.php if they are
         }
 }
 
-if (!$hasPermission) {
-    header('Location: ../../index.php');
-    echo makeFooter("This is the footer");
-    echo makePageEnd();
-    exit;
-}
+
 
 function logOut(){//Function to log out of account
     $_SESSION = array();//Reset session array

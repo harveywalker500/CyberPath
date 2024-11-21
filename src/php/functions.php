@@ -86,10 +86,10 @@ function validate_login() {
                 $_SESSION['username'] = $user->username;
                 $_SESSION['userID'] = $user->userID;  // Optionally store the user ID
             } else {
-                $errors[] = "Password is incorrect.";
+                $errors[] = "Login Details are incorrect.";
             }
         } else {
-            $errors[] = "Username is incorrect.";
+            $errors[] = "Login Details are incorrect.";
         }
     } catch (Exception $e) {
         echo "There was a problem: " . $e->getMessage();

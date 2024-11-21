@@ -16,7 +16,7 @@ echo makeNavMenu("CyberPath");
                     <div class="field">
                         <label for="username" class="label">Username</label>
                         <div class="control">
-                            <input type="text" name="username" id="username" class="input" placeholder="Enter your username">
+                            <input type="text" name="username" id="username" class="input" placeholder="Enter your username" required>
                         </div>
                     </div>
 
@@ -24,7 +24,7 @@ echo makeNavMenu("CyberPath");
                     <div class="field">
                         <label for="password" class="label">Password</label>
                         <div class="control">
-                            <input type="password" name="password" id="password" class="input" placeholder="Enter your password">
+                            <input type="password" name="password" id="password" class="input" placeholder="Enter your password" required>
                         </div>
                     </div>
 

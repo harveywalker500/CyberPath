@@ -109,7 +109,7 @@ $updateStmt->execute();
 
 if($correctAnswers >=3){
     $currentUserProgress = getUserProgress($_SESSION['userID']);
-    if ($currentUserProgress['quizCompleted'] == $episodeID) {
+    if ($currentUserProgress['quizCompleted'] == $episodeID-1) {
         $nextEpisode = $currentUserProgress['quizCompleted'] + 1;
         $updateProgressSql = "
             UPDATE leaderboardTable

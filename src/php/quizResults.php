@@ -107,6 +107,25 @@ $updateStmt->bindParam(':score', $correctAnswers, PDO::PARAM_INT);
 $updateStmt->bindParam(':userID', $_SESSION['userID'], PDO::PARAM_INT);
 $updateStmt->execute();
 
+if($correctAnswers >=3){
+    $currentUserProgress = getUserProgress($_SESSION['userID']);
+    if ($currentUserProgress[2] == $episodeID) {
+        $nextEpisode = $currentUserProgress[2] + 1;
+        $updateProgressSql = "
+            UPDATE leaderboardTable
+            SET episodeProgress = :nextEpisode
+            WHERE userID = :userID
+        ";
+        $updateProgressStmt = $dbConn->prepare($updateProgressSql);
+        $updateProgressStmt->bindParam(':nextEpisode', $nextEpisode, PDO::PARAM_INT);
+        $updateProgressStmt->bindParam(':userID', $_SESSION['userID'], PDO::PARAM_INT);
+        $updateProgressStmt->execute();
+    }
+}
+else{
+    echo "<div class='notification is-warning'>You need to score 3 or more to unlock the next episode.</div>";
+}
+
 echo makeFooter();
 echo makePageEnd();
 ?>

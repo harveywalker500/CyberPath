@@ -85,11 +85,11 @@ foreach ($quizlist as $question) {
 
 // Determine the appropriate message based on the score
 if ($correctAnswers > 3) {
-    $message = "<strong>Well Done</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. You can now move on to the next episode!";
+    $message = "<strong>Well Done</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. <strong>You can now move on to the next episode!</strong>";
 } elseif ($correctAnswers >= 1 && $correctAnswers <= 3) {
-    $message = "<strong>Unlucky</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Better luck next time! You cannot move on to the next episode until you score 4!";
+    $message = "<strong>Unlucky</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Better luck next time! <strong>You cannot move on to the next episode until you score 4! </strong>";
 } else {
-    $message = "<strong>Ouch!</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Don't worry, you can do better next time! You cannot move on to the next episode until you score 4!";
+    $message = "<strong>Ouch!</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Don't worry, you can do better next time! <strong>You cannot move on to the next episode until you score 4! </strong>";
 }
 
 // Display the message

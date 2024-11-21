@@ -112,7 +112,7 @@ if($correctAnswers >=3){
     if ($currentUserProgress['quizCompleted'] == $episodeID-1) {
         $nextEpisode = $currentUserProgress['quizCompleted'] + 1;
         $updateProgressSql = "
-            UPDATE leaderboardTable
+            UPDATE userProgressTable
             SET quizCompleted = :nextEpisode
             WHERE userID = :userID
         ";

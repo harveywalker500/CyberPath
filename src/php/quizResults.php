@@ -85,11 +85,11 @@ foreach ($quizlist as $question) {
 
 // Determine the appropriate message based on the score
 if ($correctAnswers > 3) {
-    $message = "<strong>Well Done</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct.";
+    $message = "<strong>Well Done</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. You can now move on to the next episode!";
 } elseif ($correctAnswers >= 1 && $correctAnswers <= 3) {
-    $message = "<strong>Unlucky</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Better luck next time!";
+    $message = "<strong>Unlucky</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Better luck next time! You cannot move on to the next episode until you score 4!";
 } else {
-    $message = "<strong>Ouch!</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Don't worry, you can do better next time!";
+    $message = "<strong>Ouch!</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Don't worry, you can do better next time! You cannot move on to the next episode until you score 4!";
 }
 
 // Display the message
@@ -107,7 +107,7 @@ $updateStmt->bindParam(':score', $correctAnswers, PDO::PARAM_INT);
 $updateStmt->bindParam(':userID', $_SESSION['userID'], PDO::PARAM_INT);
 $updateStmt->execute();
 
-if($correctAnswers >=3){
+if($correctAnswers >=4){
     $currentUserProgress = getUserProgress($_SESSION['userID']);
     if ($currentUserProgress['quizCompleted'] == $episodeID-1) {
         $nextEpisode = $currentUserProgress['quizCompleted'] + 1;
@@ -122,9 +122,7 @@ if($correctAnswers >=3){
         $updateProgressStmt->execute();
     }
 }
-else{
-    echo "<div class='notification is-warning'>You need to score 3 or more to unlock the next episode.</div>";
-}
+
 
 echo makeFooter();
 echo makePageEnd();

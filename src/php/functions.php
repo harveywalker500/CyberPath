@@ -122,7 +122,7 @@ function check_login(){//Checks if user is logged-in based on session variable "
 function loggedIn(){//Function that redirects users to loginform.php if they are not logged in.
     if (!check_login())
         {
-            header('Location: ../../loginForm.php');//Redirects user
+            header('Location: ../../src/php/loginForm.php');//Redirects user
             exit();//Terminates script
         }
 }
@@ -229,7 +229,7 @@ HTML;
 function makePageEndIndex() {
     return <<<HTML
     </div> <!-- End of content div -->
-    <script src="src/js/burger.js"></script>
+    <script src="../../src/js/burger.js"></script>
     </body>
     </html>
 HTML;

@@ -85,11 +85,11 @@ foreach ($quizlist as $question) {
 
 // Determine the appropriate message based on the score
 if ($correctAnswers > 3) {
-    $message = "<strong>Well Done</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct.";
+    $message = "<strong>Well Done</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. <strong>You can now move on to the next episode!</strong>";
 } elseif ($correctAnswers >= 1 && $correctAnswers <= 3) {
-    $message = "<strong>Unlucky</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Better luck next time!";
+    $message = "<strong>Unlucky</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Better luck next time! <strong>You cannot move on to the next episode until you score 4! </strong>";
 } else {
-    $message = "<strong>Ouch!</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Don't worry, you can do better next time!";
+    $message = "<strong>Ouch!</strong> " . $_SESSION['username'] . ", you got {$correctAnswers} out of " . count($quizlist) . " questions correct. Don't worry, you can do better next time! <strong>You cannot move on to the next episode until you score 4! </strong>";
 }
 
 // Display the message
@@ -106,6 +106,23 @@ $updateStmt = $dbConn->prepare($updateScoreSql);
 $updateStmt->bindParam(':score', $correctAnswers, PDO::PARAM_INT);
 $updateStmt->bindParam(':userID', $_SESSION['userID'], PDO::PARAM_INT);
 $updateStmt->execute();
+
+if($correctAnswers >=4){
+    $currentUserProgress = getUserProgress($_SESSION['userID']);
+    if ($currentUserProgress['quizCompleted'] == $episodeID-1) {
+        $nextEpisode = $currentUserProgress['quizCompleted'] + 1;
+        $updateProgressSql = "
+            UPDATE userProgressTable
+            SET quizCompleted = :nextEpisode
+            WHERE userID = :userID
+        ";
+        $updateProgressStmt = $dbConn->prepare($updateProgressSql);
+        $updateProgressStmt->bindParam(':nextEpisode', $nextEpisode, PDO::PARAM_INT);
+        $updateProgressStmt->bindParam(':userID', $_SESSION['userID'], PDO::PARAM_INT);
+        $updateProgressStmt->execute();
+    }
+}
+
 
 echo makeFooter();
 echo makePageEnd();

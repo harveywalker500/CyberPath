@@ -9,6 +9,12 @@ $errors = [];
 // Initialize form variables to empty strings
 $username = $password = $confirmPassword = $forename = $surname = $email = "";
 
+// Password validation metrics
+$containsUpperCase = false;
+$containsLowerCase = false;
+$containsSpecialChar = false;
+$specialChar = "!@#$%^&*()-_=+[]{};:'\",.<>?/|\\`~";
+
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Capture the form data
@@ -18,6 +24,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $forename = trim($_POST['forename'] ?? '');
     $surname = trim($_POST['surname'] ?? '');
     $email = trim($_POST['email'] ?? '');
+
+    // Check for uppercase, lowercase and special character in password
+    for ($i = 0; $i < strlen($password); $i++) {
+        $char = $password[$i];
+        if(ctype_upper($char)) {
+            $containsUpperCase = true;
+        }
+        if(ctype_lower($char)) {
+            $containsLowerCase = true;
+        }
+        if(strpos($specialChar, $char) !== false) {
+            $containsSpecialChar = true;
+        }
+    }
 
     // Validation checks
     if (empty($username) || empty($password) || empty($confirmPassword) || empty($forename) || empty($surname) || empty($email)) {
@@ -30,6 +50,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (strlen($password) < 6) {
         $errors[] = "Password must be at least 6 characters long.";
+    }
+
+    if (!$containsUpperCase) {
+        $errors[] = "Password must include at least 1 uppercase letter.";
+    }
+
+    if (!$containsLowerCase) {
+        $errors[] = "Password must include at least 1 lowercase letter.";
+    }
+
+    if(!$containsSpecialChar) {
+        $errors[] = "Password must contain at least 1 special character.";
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {

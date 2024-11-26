@@ -2,9 +2,9 @@
 //now a php file for database connection
 include 'functions.php';
 
-//session_start(); // Starts the session
-//loggedIn(); // Ensures the user is logged in before loading the page
-//var_dump($getUserinfo);
+session_start(); // Starts the session
+loggedIn(); // Ensures the user is logged in before loading the page
+var_dump($getUserinfo);
 echo makePageStart("CyberPath | Leaderboard", "../../css/stylesheet.css");
 print '<link href="../../css/datatables.min.css" rel="stylesheet">';
 echo makeNavMenu("CyberPath");

@@ -257,3 +257,19 @@ p {
 .navbar-menu.is-active{
     background-color: #0A183B;
 }
+
+#inputdatascore label, #inputdataname label, #inputorgname label {
+	width:8rem;
+	min-width:250px;
+	margin-right:2rem;
+	float:left;
+	clear:both;
+}
+#inputdatascore input, #inputdataname input, #inputorgname input{
+	float:left;
+}
+#inputdatabtn {
+	float:left;
+	clear:both;
+}
+.box.leaderboard-box {overflow:hidden}

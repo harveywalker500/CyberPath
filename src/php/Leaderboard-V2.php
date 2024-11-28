@@ -6,7 +6,8 @@ session_start(); // Starts the session
 loggedIn(); // Ensures the user is logged in before loading the page
 //var_dump($getUserinfo);
 echo makePageStart("CyberPath | Leaderboard", "../../css/stylesheet.css");
-print '<link href="../../css/datatables.min.css" rel="stylesheet">';
+//print '<link href="../../css/datatables.min.css" rel="stylesheet">';
+//print '<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">';
 echo makeNavMenu("CyberPath");
 
 
@@ -228,8 +229,10 @@ echo $tableresults;
 	}
 
 </script>-->
-<script src="../js/dev2.js"></script>
-<script src="../js/datatables.min.js"></script>
+<!--<script src="../js/dev2.js"></script>
+
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>-->
+
 <!-- ../js/ -->
 <?php
 echo makeFooter();

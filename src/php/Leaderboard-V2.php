@@ -17,7 +17,7 @@ function getScores() {
         
         // Query to retrieve user and organisation data
         $sql = "SELECT userTable.organisationID, userTable.username, userTable.userID, organisationTable.name FROM userTable ";
-        $sql .= "INNER JOIN organisationTable ON userTable.organisationID = organisationTable.organisationID ";
+        $sql .= "LEFT JOIN organisationTable ON userTable.organisationID = organisationTable.organisationID";
         $stmt = $connection->query($sql);
 		
 		// Fetch user records into an associative array
@@ -31,6 +31,9 @@ function getScores() {
 				$thisscorearr = linktoScoresArray($thisuserid,$i);
 
 				$checkforzero = chkforzerovalue($thisscorearr);
+
+				$userdata[$i][0] = $row['username'];
+            	$userdata[$i][8] = $row['name'] ?? 'No Organisation'; 
 				
 			    $userdata[$i][0] = $row['username'];
 				$userdata[$i][8] = $row['name'];				

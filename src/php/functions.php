@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 function getConnection(){ //function to get the connection to the database, allows users to query
     try{
         $connection = new PDO("mysql:host=nuwebspace_db; dbname=w22009720","w22009720", "Bwjddnxa");//PDO is data abstraction layer
+        //$connection = new PDO('mysql:host=localhost; dbname=hello','root','');
         $connection ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//sets attributes on PDO connection. Turns errors and exception reporting on.
         return $connection;
         
@@ -38,6 +39,96 @@ function makePageStart($title, $stylesheet)
     <body>
 HTML;
 }
+
+
+function logStoryCompletion($userID, $storyID, $startTime, $endTime) {
+    $db = getconnection();
+
+    $query = "
+        INSERT INTO storyCompletionLog (userID, storyID, startTime, endTime)
+        VALUES (:userID, :storyID, :startTime, :endTime)
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        ':userID' => $userID,
+        ':storyID' => $storyID,
+        ':startTime' => $startTime,
+        ':endTime' => $endTime
+    ]);
+}
+
+
+function updateOrganisationMetric($organisationID, $metricType, $metricValue) {
+    $db = getconnection();
+
+    $query = "
+        INSERT INTO organisationMetrics (organisationID, metricType, metricValue)
+        VALUES (:organisationID, :metricType, :metricValue)
+        ON DUPLICATE KEY UPDATE
+        metricValue = :metricValue, recordedAt = CURRENT_TIMESTAMP
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        ':organisationID' => $organisationID,
+        ':metricType' => $metricType,
+        ':metricValue' => $metricValue
+    ]);
+}
+
+
+function updateEmployeeStatus($userID, $isActive) {
+    $db = getconnection();
+
+    $query = "
+        INSERT INTO employeeStatus (userID, isActive)
+        VALUES (:userID, :isActive)
+        ON DUPLICATE KEY UPDATE
+        isActive = :isActive, updatedAt = CURRENT_TIMESTAMP
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        ':userID' => $userID,
+        ':isActive' => $isActive
+    ]);
+}
+
+
+function logEmployeeActivity($userID, $activityType) {
+    $db = getconnection();
+
+    $query = "
+        INSERT INTO employeeActivityLog (userID, activityDate, activityType)
+        VALUES (:userID, NOW(), :activityType)
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        ':userID' => $userID,
+        ':activityType' => $activityType
+    ]);
+}
+
+
+function updateSystemMetric($metricType, $metricValue) {
+    $db = getconnection();
+
+    $query = "
+        INSERT INTO systemMetrics (metricType, metricValue)
+        VALUES (:metricType, :metricValue)
+        ON DUPLICATE KEY UPDATE
+        metricValue = :metricValue, recordedAt = CURRENT_TIMESTAMP
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        ':metricType' => $metricType,
+        ':metricValue' => $metricValue
+    ]);
+}
+
 
 function show_errors($errors) {//function to show errors, parameter should be array of errors or empty
     echo "<h1 class='error-heading'>Errors</h1>\n";
@@ -88,6 +179,9 @@ function validate_login() {
             if (password_verify($input['password'], $user->password)) {
                 $_SESSION['username'] = $user->username;
                 $_SESSION['userID'] = $user->userID;  // Optionally store the user ID
+                updateEmployeeStatus($user->id, 1); // Update user status to active
+                logEmployeeActivity($user->id, 'Login'); // Log user login activity
+
             } else {
                 $errors[] = "Login Details are incorrect.";
             }
@@ -133,6 +227,8 @@ function loggedIn(){//Function that redirects users to loginform.php if they are
 
 
 function logOut(){//Function to log out of account
+    updateEmployeeStatus($_SESSION['userID'], 0);//Updates user status to inactive
+    logEmployeeActivity($_SESSION['userID'], 'Logout');//Logs user logout activity
     $_SESSION = array();//Reset session array
     session_destroy();//Destroys current session
     header('Location: ../../index.php');//Redirects user to home page.

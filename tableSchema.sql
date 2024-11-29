@@ -2,7 +2,7 @@
 CREATE TABLE organisationTable (
     organisationID INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    teamLeaderID INT,
+    teamLeaderID INT
 );
 
 -- Step 2: Create the userTable without the organisationID foreign key initially
@@ -13,7 +13,7 @@ CREATE TABLE userTable (
     forename VARCHAR(50) NOT NULL,
     surname VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    organisationID INT,
+    organisationID INT
 );
 
 -- Step 3: Add the foreign key constraint on teamLeaderID in organisationTable to reference userTable
@@ -77,3 +77,41 @@ CREATE TABLE storyTable (
 );
 
 
+
+
+CREATE TABLE episodeCompletionLog (
+    logID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    episodeID INT NOT NULL,
+    startTime DATETIME NOT NULL,
+    endTime DATETIME NOT NULL,
+    durationInSeconds INT GENERATED ALWAYS AS (TIMESTAMPDIFF(SECOND, startTime, endTime)) STORED,
+    FOREIGN KEY (userID) REFERENCES userTable(userID)
+);
+
+CREATE TABLE storyCompletionLog (
+    logID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    storyID INT NOT NULL,
+    startTime DATETIME NOT NULL,
+    endTime DATETIME NOT NULL,
+    durationInSeconds INT GENERATED ALWAYS AS (TIMESTAMPDIFF(SECOND, startTime, endTime)) STORED,
+    FOREIGN KEY (userID) REFERENCES userTable(userID)
+);
+
+
+CREATE TABLE employeeStatus (
+    statusID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    isActive BOOLEAN NOT NULL DEFAULT 1, -- 1 = Active, 0 = Inactive
+    updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (userID) REFERENCES userTable(userID)
+);
+
+CREATE TABLE employeeActivityLog (
+    logID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    activityDate DATETIME NOT NULL,
+    activityType VARCHAR(50) NOT NULL, -- e.g., "Login", "Logout", "Task Completed"
+    FOREIGN KEY (userID) REFERENCES userTable(userID)
+);

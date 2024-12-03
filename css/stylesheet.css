@@ -1,8 +1,14 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
 body {
     margin: 0;
-    padding-top: 4rem; /* Space for fixed navbar */
-    min-height: 100vh; /* Ensure body takes the full height of the viewport */
-    height: auto;
+    padding-top: rem; /* Space for fixed navbar */
+    height: 100vh; /* Ensure body takes the full height of the viewport */
     display: flex;
     flex-direction: column; /* Stack content vertically */
     background-color: #DAF1FA; /* Light blue background for space feel */
@@ -273,3 +279,263 @@ p {
 	clear:both;
 }
 .box.leaderboard-box {overflow:hidden}
+
+
+
+
+
+
+/* ------------------------------------------------------------------ Analytics Style Start ---------------------------------------------------------------- */
+
+
+
+/* Dashboard Layout */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-top: 4rem;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background: #ffffff;
+    color: #333;
+    padding: 20px;
+    border-right: 1px solid #e0e0e0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #4CAF50;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-link {
+    display: block;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.sidebar-link:hover {
+    background: #f0f8e8;
+    color: #4CAF50;
+}
+
+/* Main Content */
+.content {
+    flex: 1;
+    padding: 30px;
+    background-color: #f4f4f9;
+    overflow-y: auto;
+}
+
+.content-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.content-header h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.content-header p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Cards */
+.card-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    flex: 1;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #4CAF50;
+}
+
+.card p {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* Charts */
+.button-group {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.button-group button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button-group button:hover {
+    background-color: #0056b3;
+}
+
+.chart-container {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+canvas {
+    width: 100%;
+    height: 400px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+
+
+
+
+/* overview */
+.overview-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.metric {
+    text-align: center;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.metric h3 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.metric p {
+    font-size: 24px;
+    color: #007bff;
+    font-weight: bold;
+}
+
+
+
+
+/* organization */
+
+.userprogress-container, #organization-comparison{
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.controls label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.controls select {
+    padding: 8px 16px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+
+
+
+.controls {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.controls label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.controls select {
+    padding: 8px 16px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+
+
+
+/* ------------------------------------------------------------------ Analytics Style End ---------------------------------------------------------------- */

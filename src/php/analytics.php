@@ -12,7 +12,7 @@ require 'functions.php';
 session_start(); // Starts the session
 loggedIn(); // Ensures the user is logged in before loading the page
 
-echo makePageStart("CyberPath | Analytics", "../../css/analytics.css");
+echo makePageStart("CyberPath | Analytics", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");
 
 ?>

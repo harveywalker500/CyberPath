@@ -4,15 +4,15 @@
  * Author: Md Rifat
  * Description: This file contains the implementation of fetching and processing analytics data from the server.
  */
-
+session_start();
 
 require 'functions.php'; // Database connection and helper functions
 
 header('Content-Type: application/json');
 
 // Get filters
-//$organizationID = $_GET['organizationID'] ?? null;
-$organisationID = 1;
+$organisationID = isset($_SESSION['userID']) ? getUserOrganisation($_SESSION['userID']) : null;
+
 // Get request type
 $type = $_GET['type'] ?? '';
 
@@ -108,7 +108,7 @@ if ($type === 'organization-comparison') {
 
 
 if ($type === 'user-progress') {
-    $timeRange = $_GET['timeRange'] ?? 'month'; // Default to 'month' if not provided
+    $timeRange = $_GET['timeRange'] ?? 'month'; // Default to 'month'
 
     $dateCondition = ($timeRange === 'week') 
         ? "DATE_SUB(NOW(), INTERVAL 1 WEEK)" 
@@ -117,15 +117,15 @@ if ($type === 'user-progress') {
     $query = "
         SELECT 
             u.forename AS userName,
-            DATE(ec.startTime) AS date,
+            DATE(ec.startTime) AS progressDate,
             COUNT(DISTINCT ec.episodeID) AS episodesCompleted,
             COUNT(DISTINCT sc.storyID) AS storiesCompleted
         FROM userTable u
         LEFT JOIN episodeCompletionLog ec ON u.userID = ec.userID AND ec.startTime >= $dateCondition
         LEFT JOIN storyCompletionLog sc ON u.userID = sc.userID AND sc.startTime >= $dateCondition
-        WHERE ec.startTime IS NOT NULL OR sc.startTime IS NOT NULL
-        GROUP BY u.forename, DATE(ec.startTime)
-        ORDER BY DATE(ec.startTime) ASC
+        WHERE u.userID IN (2, 7, 8, 11)
+        GROUP BY u.userName, DATE(ec.startTime)
+        ORDER BY progressDate ASC
     ";
 
     $stmt = $pdo->query($query);

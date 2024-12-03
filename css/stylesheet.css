@@ -295,6 +295,7 @@ p {
     flex-direction: column;
     height: 100%;
     margin-top: 4rem;
+    overflow: hidden;
 }
 
 /* Sidebar */
@@ -420,13 +421,14 @@ p {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
-    max-width: 1000px;
+    /* max-width: 1000px; */
     margin: 0 auto;
 }
 
 canvas {
     width: 100%;
     height: 400px;
+    margin: 0 auto;
 }
 
 h2 {
@@ -477,37 +479,13 @@ h2 {
 /* organization */
 
 .userprogress-container, #organization-comparison{
-    margin: 20px;
+    margin: 20px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 80%;
 }
-
-.controls {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.controls label {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.controls select {
-    padding: 8px 16px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-left: 10px;
-}
-
-.chart-container {
-    position: relative;
-    height: 400px;
-    width: 100%;
-}
-
 
 
 .controls {

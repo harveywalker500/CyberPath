@@ -7,7 +7,7 @@
 
 body {
     margin: 0;
-    padding-top: rem; /* Space for fixed navbar */
+    padding-top: 3.25rem; /* Space for fixed navbar */
     height: 100vh; /* Ensure body takes the full height of the viewport */
     display: flex;
     flex-direction: column; /* Stack content vertically */

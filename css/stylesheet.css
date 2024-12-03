@@ -38,9 +38,8 @@ footer.footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     height: auto;
-    padding-top: inherit;
+    padding: 100px 20px; /* Space above and below the content */
 }
 
 /* Container styling */

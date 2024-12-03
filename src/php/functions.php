@@ -279,7 +279,6 @@ HTML;
             
             if ($organisationDetails && $organisationDetails['teamLeaderID'] == $userID) {
                 // Display "Manage Organisation" link if user is the team leader
-                $output .= "<a class=\"navbar-item\" href='../../src/php/organisationPage.php?id=" . $userOrganisationID . "'>Manage Organisation</a>\n";
                 $output .= "<a class=\"navbar-item\" href='../../src/php/analytics.php?id=" . $userOrganisationID . "'>Analytics</a>\n";
             }
         }

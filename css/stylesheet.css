@@ -8,7 +8,7 @@
 body {
     margin: 0;
     padding-top: 3.25rem; /* Space for fixed navbar */
-    height: 100vh; /* Ensure body takes the full height of the viewport */
+    height: auto;
     display: flex;
     flex-direction: column; /* Stack content vertically */
     background-color: #DAF1FA; /* Light blue background for space feel */

@@ -136,6 +136,7 @@ function linktoScoresArray($userid,$j){
 		}
 
 }
+echo "<div class='container'>\n";
 echo "<div class='displayBody'>\n";
 echo "<h1 class='title'>Leaderboard</h1>\n";
 echo "<p>Check out the leaderboard below to see how you compare to other users!</p>\n";

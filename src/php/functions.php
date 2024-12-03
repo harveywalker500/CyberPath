@@ -30,7 +30,7 @@ function makePageStart($title, $stylesheet)
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery CDN -->
 		<script src="../js/dev2.js"></script>
-        <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script <!-- DataTables CDN -->
+        <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script> <!-- DataTables CDN -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="$stylesheet">
 		<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">  
@@ -279,7 +279,6 @@ HTML;
             
             if ($organisationDetails && $organisationDetails['teamLeaderID'] == $userID) {
                 // Display "Manage Organisation" link if user is the team leader
-                $output .= "<a class=\"navbar-item\" href='../../src/php/organisationPage.php?id=" . $userOrganisationID . "'>Manage Organisation</a>\n";
                 $output .= "<a class=\"navbar-item\" href='../../src/php/analytics.php?id=" . $userOrganisationID . "'>Analytics</a>\n";
             }
         }

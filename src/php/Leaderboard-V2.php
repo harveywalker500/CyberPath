@@ -202,6 +202,7 @@ echo $tableresults;
 </div>
 </div>
 </div>
+</div>
 
 <!--<script>
 	var myArray = [

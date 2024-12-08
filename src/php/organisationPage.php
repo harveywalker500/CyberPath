@@ -36,28 +36,24 @@ try {
     $teamLeaderOrg = $stmt->fetch(PDO::FETCH_ASSOC);
     
     
-        // Check if the user is already part of any other organisation
-        $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
+    // Check if the user is already part of any other organisation
+    $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
+    $stmt = $dbConn->prepare($sql);
+    $stmt->execute([':userID' => $userID]);
+    $currentOrgID = $stmt->fetchColumn();
+    $isTeamLeader = false;
+
+    // Fetch current organisation name
+    if ($currentOrgID) {
+        $sql = "SELECT name FROM organisationTable WHERE organisationID = :organisationID";
         $stmt = $dbConn->prepare($sql);
-        $stmt->execute([':userID' => $userID]);
-        $currentOrgID = $stmt->fetchColumn();
-        $isTeamLeader = false;
-
-        // Fetch current organisation name
-        if ($currentOrgID) {
-            $sql = "SELECT name FROM organisationTable WHERE organisationID = :organisationID";
-            $stmt = $dbConn->prepare($sql);
-            $stmt->execute([':organisationID' => $currentOrgID]);
-            $currentOrgName = $stmt->fetchColumn();
-        } else {
-            $currentOrgName = null;
-        }
-    } catch (Exception $e) {
-        $errors[] = "Error fetching data: " . $e->getMessage();
+        $stmt->execute([':organisationID' => $currentOrgID]);
+        $currentOrgName = $stmt->fetchColumn();
     }
+} catch (Exception $e) {
+    $errors[] = "Error fetching data: " . $e->getMessage();
+}
     
-
-
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['createOrganisation'])) {
@@ -113,9 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } 
     }
-}
-} catch (Exception $e) {
-    $errors[] = "Error fetching data: " . $e->getMessage();
 }
 
 echo makePageStart("Manage Organisation - CyberPath", "../../css/stylesheet.css");

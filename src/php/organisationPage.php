@@ -48,71 +48,66 @@ try {
         $currentOrgName = $stmt->fetchColumn();
     }
 
+    // Check if the form is submitted
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['createOrganisation'])) {
+            $organisationName = trim($_POST['organisationName'] ?? '');
 
-// Check if the form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['createOrganisation'])) {
-        $organisationName = trim($_POST['organisationName'] ?? '');
-
-        if (empty($organisationName)) {
-            $errors[] = "Please provide an organisation name.";
-        }
-
-        if (empty($errors)) {
-            try {
-                // Insert the new organisation into the database
-                $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
-                $stmt = $dbConn->prepare($sql);
-                // Include the current user as the team leader
-                $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
-
-                // Get the newly created organisation ID
-                $organisationID = $dbConn->lastInsertId();
-
-                // Assign the user to the newly created organisation
-                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-                $stmt = $dbConn->prepare($sql);
-                $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
-
-                header("Location: organisationPage.php");
-                exit();
-
-                $successMessage = "Organisation created and you have been assigned as the team leader.";
-              
-            } catch (Exception $e) {
-                $errors[] = "Error creating organisation: " . $e->getMessage();
+            if (empty($organisationName)) {
+                $errors[] = "Please provide an organisation name.";
             }
-        }
-    } elseif (isset($_POST['joinOrganisation'])) {
-        $organisationID = $_POST['organisationID'] ?? null;
 
-        if (!$organisationID) {
-            $errors[] = "Please select an organisation.";
-        }
+            if (empty($errors)) {
+                try {
+                    // Insert the new organisation into the database
+                    $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
+                    $stmt = $dbConn->prepare($sql);
+                    // Include the current user as the team leader
+                    $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
 
-        if (empty($errors)) {
-            try {
-                // Assign the user to the selected organisation
-                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-                $stmt = $dbConn->prepare($sql);
-                $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+                    // Get the newly created organisation ID
+                    $organisationID = $dbConn->lastInsertId();
 
-                header("Location: organisationPage.php");
-                exit();
+                    // Assign the user to the newly created organisation
+                    $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                    $stmt = $dbConn->prepare($sql);
+                    $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+                    $successMessage = "Organisation created and you have been assigned as the team leader.";
 
-                $successMessage = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
-            } catch (Exception $e) {
-                $errors[] = "Error joining organisation: " . $e->getMessage();
+                    header("Location: organisationPage.php");
+                    exit();
+
+                } catch (Exception $e) {
+                    $errors[] = "Error creating organisation: " . $e->getMessage();
+                }
+            }
+        } elseif (isset($_POST['joinOrganisation'])) {
+            $organisationID = $_POST['organisationID'] ?? null;
+
+            if (!$organisationID) {
+                $errors[] = "Please select an organisation.";
+            }
+
+            if (empty($errors)) {
+                try {
+                    // Assign the user to the selected organisation
+                    $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                    $stmt = $dbConn->prepare($sql);
+                    $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+                    $successMessage = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
+
+                    header("Location: organisationPage.php");
+                    exit();
+
+                } catch (Exception $e) {
+                    $errors[] = "Error joining organisation: " . $e->getMessage();
+                }
             }
         }
     }
-}
 } catch (Exception $e) {
     $errors[] = "Error joining organisation: " . $e->getMessage();
 }
-
-
-
 
 echo makePageStart("Manage Organisation - CyberPath", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");

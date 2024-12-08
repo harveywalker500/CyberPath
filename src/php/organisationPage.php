@@ -58,10 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = "Please provide an organisation name.";
         }
 
-        // If the user is a team leader, they cannot create a new organisation
-        if ($isTeamLeader) {
-            $errors[] = "You are already a team leader of an existing organisation. You cannot create a new organisation.";
-        }
+        
 
         if (empty($errors)) {
             try {

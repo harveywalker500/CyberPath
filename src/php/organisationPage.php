@@ -47,9 +47,7 @@ try {
         $stmt->execute([':organisationID' => $currentOrgID]);
         $currentOrgName = $stmt->fetchColumn();
     }
-} catch (Exception $e) {
-    $errors[] = "Error fetching data: " . $e->getMessage();
-}
+
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -76,12 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
-                // Refetch data
-                $organisations = fetchOrgs($dbConn);
-                $currentOrgName = getCurrentOrgs($dbConn, $organisationID);
+                header("Location: organisationPage.php");
+                exit();
 
                 $successMessage = "Organisation created and you have been assigned as the team leader.";
-                $organisations = fetchOrgs($dbConn);
+              
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
@@ -100,9 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
-                // Refetch data
-                $organisations = fetchOrgs($dbConn);
-                $currentOrgName = getCurrentOrgs($dbConn, $organisationID);
+                header("Location: organisationPage.php");
+                exit();
 
                 $successMessage = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
             } catch (Exception $e) {
@@ -111,22 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
-function fetchOrgs($dbConn) {
-
-    $sql = "SELECT organisationID, name FROM organisationTable";
-    $stmt = $dbConn->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $errors[] = "Error joining organisation: " . $e->getMessage();
 }
 
-function getCurrentOrgs($dbConn, $organisationID) {
 
-    $sql = "SELECT name FROM organisationTable where organisationID = :organisationID";
-    $stmt = $dbConn->prepare($sql);
-    $stmt->execute(['organisationID' => $organisationID]);
-    return $stmt->fetchColumn();
-}
+
 
 echo makePageStart("Manage Organisation - CyberPath", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");

@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
-                $successMessage = "Organisation created and you have been assigned to it successfully!";
+                $successMessage = "You have created '($newOrg'} and been assigned as the team leader";
                 $organisations = fetchOrgs($dbConn);
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();

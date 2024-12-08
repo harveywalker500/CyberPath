@@ -13,8 +13,6 @@ if (!isset($_SESSION['userID'])) {
     exit();
 }
 
-
-
 // Check if the user is already part of an organisation
 $userID = $_SESSION['userID'];
 // Initalise success message
@@ -35,20 +33,18 @@ try {
     $stmt->execute([':userID' => $userID]);
     $teamLeaderOrg = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    if ($teamLeaderOrg) {
-        // If the user is already a team leader, don't allow them to create a new organisation
-        $isTeamLeader = true;
-        $currentOrgID = $teamLeaderOrg['organisationID'];
-    } else {
+    
         // Check if the user is already part of any other organisation
         $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
         $stmt = $dbConn->prepare($sql);
         $stmt->execute([':userID' => $userID]);
         $currentOrgID = $stmt->fetchColumn();
         $isTeamLeader = false;
-    }
-
-
+    
+} catch (Exception $e) {
+    $errors[] = "Error fetching data: " . $e->getMessage();
+}
+    
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['createOrganisation'])) {
@@ -58,31 +54,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = "Please provide an organisation name.";
         }
 
-        
-
         if (empty($errors)) {
             try {
                 // Insert the new organisation into the database
-                $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
+                $sql = "SELECT COUNT(*) FROM OrganisationTable where name = :name";
                 $stmt = $dbConn->prepare($sql);
                 // Include the current user as the team leader
                 $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
+                $count = $stmt->fetchColumn();
 
+                if($count > 0) {
+                    $errors[] = "An organisation with this name already exists.";
+                } else {
+                    // Assign the user to the newly created organisation
+                    $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
+                    $stmt = $dbConn->prepare($sql);
+                    $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+    
                 // Get the newly created organisation ID
                 $organisationID = $dbConn->lastInsertId();
 
-                // Assign the user to the newly created organisation
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
-                $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+                $stmt->execute([':organisationID' => $organisationID,':userID' => $userID]);
 
                 $successMessage = "Organisation created and you have been assigned to it successfully!";
 
                 $sql = "SELECT organisationID, name FROM organisationTable";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute();
-                $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+                $organisations = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                }
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
@@ -96,6 +98,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($errors)) {
             try {
+                // Only one instance of an org can exist
+                if ($currentOrgID && $currentOrgID != $organisationID) {
+                    $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
+                    $stmt = $dbConn->prepare($sql);
+                    $stmt->execute([':userID' => $userID]);
+                }
+
                 // Assign the user to the selected organisation
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
@@ -106,9 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } 
     }
-}
-} catch (Exception $e) {
-    $errors[] = "Error fetching data: " . $e->getMessage();
 }
 
 echo makePageStart("Manage Organisation - CyberPath", "../../css/stylesheet.css");

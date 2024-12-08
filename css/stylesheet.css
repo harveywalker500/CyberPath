@@ -64,6 +64,17 @@ footer.footer {
     max-width: 400px; /* Limit the width of the form */
 }
 
+.current-org {
+    margin-top: 20px; 
+    text-align: center; 
+    padding: 10px; 
+    background-color: #e0f7fa; 
+    border-radius: 5px;
+    width: 100%; 
+    box-sizing: border-box;
+}
+
+
 /* Character and speech bubble styles */
 .character {
     width: 100px; /* Adjust as necessary */

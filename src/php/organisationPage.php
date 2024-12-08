@@ -25,13 +25,13 @@ $errors =[];
 // Connect to database and fetch all organisations from the database
 try {
     $dbConn = getConnection();
-    $sqlQuery = "SELECT organisationID, name FROM organisationTable";
-    $stmt = $dbConn->prepare($sqlQuery);
+    $sql = "SELECT organisationID, name FROM organisationTable";
+    $stmt = $dbConn->prepare($sql);
     $stmt->execute();
     $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sqlQuery = "SELECT organisationID, teamLeaderID FROM organisationTable WHERE teamLeaderID = :userID";
-    $stmt = $dbConn->prepare($sqlQuery);
+    $sql = "SELECT organisationID, teamLeaderID FROM organisationTable WHERE teamLeaderID = :userID";
+    $stmt = $dbConn->prepare($sql);
     $stmt->execute([':userID' => $userID]);
     $teamLeaderOrg = $stmt->fetch(PDO::FETCH_ASSOC);
     
@@ -41,8 +41,8 @@ try {
         $currentOrgID = $teamLeaderOrg['organisationID'];
     } else {
         // Check if the user is already part of any other organisation
-        $sqlQuery = "SELECT organisationID FROM userTable WHERE userID = :userID";
-        $stmt = $dbConn->prepare($sqlQuery);
+        $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
+        $stmt = $dbConn->prepare($sql);
         $stmt->execute([':userID' => $userID]);
         $currentOrgID = $stmt->fetchColumn();
         $isTeamLeader = false;
@@ -66,8 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($errors)) {
             try {
                 // Insert the new organisation into the database
-                $sqlQuery = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
-                $stmt = $dbConn->prepare($sqlQuery);
+                $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
+                $stmt = $dbConn->prepare($sql);
                 // Include the current user as the team leader
                 $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
 
@@ -75,14 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $organisationID = $dbConn->lastInsertId();
 
                 // Assign the user to the newly created organisation
-                $sqlQuery = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-                $stmt = $dbConn->prepare($sqlQuery);
+                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
                 $successMessage = "Organisation created and you have been assigned to it successfully!";
 
-                $sqlQuery = "SELECT organisationID, name FROM organisationTable";
-                $stmt = $dbConn->prepare($sqlQuery);
+                $sql = "SELECT organisationID, name FROM organisationTable";
+                $stmt = $dbConn->prepare($sql);
                 $stmt->execute();
                 $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -100,8 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($errors)) {
             try {
                 // Assign the user to the selected organisation
-                $sqlQuery = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-                $stmt = $dbConn->prepare($sqlQuery);
+                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
                 $successMessage = "You have successfully joined the organisation.";
             } catch (Exception $e) {

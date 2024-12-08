@@ -76,6 +76,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Invalid email format.";
     }
 
+    // Check if username and email address is already in database
+    try {
+        $dbConn = getConnection();
+        $stmt = $dbConn -> prepare("SELECT * FROM userTable where username = :username OR email = :email");
+        $stmt -> execute([':username' => $username, ':email' => $email]);
+        $result = $stmt->fetchAll();
+
+        if (count($result) > 9) {
+            foreach ($result as $row) {
+                if ($row['username'] == $username) {
+                    $errors[] = "The username is already taken.";
+                }
+                if ($row['email'] == $email) {
+                    $errors[] = "The email address is already used.";
+            }
+        }
+    }
+    } catch (Exception $e) {
+        $errors[] = $e->getMessage();
+    }
+    
+    
     // If no errors, proceed with account creation
     if (empty($errors)) {
         try {
@@ -115,10 +137,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: loginForm.php");
             exit();
         } catch (Exception $e) {
-            $errors[] = "Error registering user: " . $e->getMessage();
+            $errors[] = $e->getMessage();
         }
     }
 }
+    
+
+
 
 echo makePageStart("Register | CyberPath", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");

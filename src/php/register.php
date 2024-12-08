@@ -44,6 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Please fill in all fields.";
     }
 
+    if ($containsSpecialChar($forename)) {
+        $errors[] = "Forename cannot contain special characters.";
+    }
+
+    if ($containsSpecialChar($surname)) {
+        $errors[] = "Surname cannot contain special characters.";
+    }
+
     if ($password !== $confirmPassword) {
         $errors[] = "Passwords do not match.";
     }

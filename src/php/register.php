@@ -44,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Please fill in all fields.";
     }
 
-    if ($containsSpecialChar($forename)) {
+    if ($ctype_alpha($forename)) {
         $errors[] = "Forename cannot contain special characters.";
     }
 
-    if ($containsSpecialChar($surname)) {
+    if ($ctype_alpha($surname)) {
         $errors[] = "Surname cannot contain special characters.";
     }
 

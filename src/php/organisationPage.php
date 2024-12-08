@@ -33,7 +33,6 @@ try {
     $stmt->execute([':userID' => $userID]);
     $teamLeaderOrg = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
     // Check if the user is already part of any other organisation
     $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
     $stmt = $dbConn->prepare($sql);
@@ -48,13 +47,38 @@ try {
         $stmt->execute([':organisationID' => $currentOrgID]);
         $currentOrgName = $stmt->fetchColumn();
     }
-} catch (Exception $e) {
-    $errors[] = "Error fetching data: " . $e->getMessage();
-}
+
+    if (isset($_POST['joinOrganisation]'])) {
+         $organisationID = $_POST['organisationID'] ?? null;
+
+        if (!$organisationID) {
+            $errors[] = "Select an organisation.";
+    }     elseif ($_SESSION['isTeamLeader'] && $organisationID == $_SESSION['currentOrgID']) {
+             $errors[] = "You are already the team leader of this organisation.";
+    }
+
+    if(empty($errors)) {
+        // Assign the user to the newly created organisation
+        try {
+                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+
+                // Refetch data
+                $organisations = fetchOrgs($dbConn);
+                $currentOrgName = getCurrentOrgs($dbConn, $organisationID);
+
+                $successMessage = "Organisation created and you have been assigned as the team leader.";
+
+            } catch (Exception $e) {
+                $errors[] = "Error creating organisation: " . $e->getMessage();
+            }
+        }
+    }
+
 
 // Check if the form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['createOrganisation'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['createOrganisation'])) {
         $organisationName = trim($_POST['organisationName'] ?? '');
 
         if (empty($organisationName)) {
@@ -71,43 +95,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Get the newly created organisation ID
                 $organisationID = $dbConn->lastInsertId();
-
-                // Assign the user to the newly created organisation
+                
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
-                $successMessage = "Organisation created and you have been assigned as the team leader.";
-                $organisations = fetchOrgs($dbConn);
+                $_SESSION['isTeamLeader'] = true;
+                $_SESSION['currentOrgID'] = $organisationID;
+
+                $successMessage = "Organisation successfully created and you are the team leader.";
+                $organisations = fetchOrgs($dbConn);  
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
         }
-    } elseif (isset($_POST['joinOrganisation'])) {
-        $organisationID = $_POST['organisationID'] ?? null;
-
-        if (!$organisationID) {
-            $errors[] = "Please select an organisation.";
-        }
-
-        if (empty($errors)) {
-            try {
-                // Assign the user to the selected organisation
-                $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-                $stmt = $dbConn->prepare($sql);
-                $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
-
-                // Refetch data
-                $organisations = fetchOrgs($dbConn);
-                $currentOrgName = getCurrentOrgs($dbConn, $organisationID);
-
-                $successMessage = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
-            } catch (Exception $e) {
-                $errors[] = "Error joining organisation: " . $e->getMessage();
-            }
-        }
     }
+} catch (Exception $e) {
+    $errors[] = "Error creating organisation: " . $e->getMessage();
 }
+
 
 function fetchOrgs($dbConn) {
 

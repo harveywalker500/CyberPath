@@ -81,6 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $successMessage = "Organisation created and you have been assigned to it successfully!";
 
+                $sqlQuery = "SELECT organisationID, name FROM organisationTable";
+                $stmt = $dbConn->prepare($sqlQuery);
+                $stmt->execute();
+                $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }

@@ -26,12 +26,12 @@ try {
     $sql = "SELECT organisationID, name FROM organisationTable";
     $stmt = $dbConn->prepare($sql);
     $stmt->execute();
-    $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $organisations = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $sql = "SELECT organisationID, teamLeaderID FROM organisationTable WHERE teamLeaderID = :userID";
     $stmt = $dbConn->prepare($sql);
     $stmt->execute([':userID' => $userID]);
-    $teamLeaderOrg = $stmt->fetch(PDO::FETCH_ASSOC);
+    $teamLeaderOrg = $stmt->fetch(PDO::FETCH_COLUMN);
     
     
         // Check if the user is already part of any other organisation
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Assign the user to the newly created organisation
                     $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
                     $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+                    $stmt->execute(['name' => $organisationName, 'teamLeaderID' => $userID]);
     
                 // Get the newly created organisation ID
                 $organisationID = $dbConn->lastInsertId();

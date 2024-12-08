@@ -140,14 +140,6 @@ echo makeNavMenu("CyberPath");
 
         <div class="columns">
             
-            <!-- Display current organisation -->
-             <?php if ($currentOrgID) :?>
-                <div class="column is-full has-text-centered">
-                        <p class="subtitle">You are part of: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                    </div>
-                </div>
-                <?php endif; ?>
-
             <!-- Create Organisation Form -->
             <div class="column is-half">
                 <h2 class="subtitle">Create an Organisation</h2>
@@ -192,6 +184,13 @@ echo makeNavMenu("CyberPath");
                             <button class="button is-primary" type="submit" name="joinOrganisation">Join Organisation</button>
                         </div>
                     </div>
+
+                     <!-- Display current organisation -->
+                     <?php if ($currentOrgID) :?>
+                <       <div class="column is-full has-text-centered">
+                            <p class="subtitle">You are part of: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                        </div>
+                <?php endif; ?>
                 </form>
             </div>
         </div>

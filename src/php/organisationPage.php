@@ -76,6 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
+                // Refetch data
+                $organisations = fetchOrgs($dbConn);
+                $currentOrgName = getCurrentOrgs($dbConn, $organisationID);
+
                 $successMessage = "Organisation created and you have been assigned as the team leader.";
                 $organisations = fetchOrgs($dbConn);
             } catch (Exception $e) {

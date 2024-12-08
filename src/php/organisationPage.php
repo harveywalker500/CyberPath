@@ -78,11 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
 
                 $successMessage = "Organisation created and you have been assigned to it successfully!";
-
-                $sql = "SELECT organisationID, name FROM organisationTable";
-                $stmt = $dbConn->prepare($sql);
-                $stmt->execute();
-                $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $organisations = fetchOrgs($dbConn);
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
@@ -114,16 +110,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 function fetchOrgs($dbConn) {
+
     $sql = "SELECT organisationID, name FROM organisationTable";
     $stmt = $dbConn->prepare($sql);
-    $stmt-> execute();
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getCurrentOrgs($dbConn, $organisationID) {
+
     $sql = "SELECT name FROM organisationTable where organisationID = :organisationID";
     $stmt = $dbConn->prepare($sql);
-    $stmt-> execute(['organisationID' => $organisationID]);
+    $stmt->execute(['organisationID' => $organisationID]);
     return $stmt->fetchColumn();
 }
 
@@ -216,7 +214,7 @@ echo makeNavMenu("CyberPath");
     </div>
 </div>
 
-<script> 
+<script>
     // Changing organisation confirm message
     function confirmChange() {
         if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {

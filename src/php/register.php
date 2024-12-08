@@ -115,6 +115,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: loginForm.php");
             exit();
         } catch (Exception $e) {
+            if ($e->getCode() === '23000') {
+                $errors[] = "The username or email address is already taken.";
+            }
             $errors[] = "Error registering user: " . $e->getMessage();
         }
     }

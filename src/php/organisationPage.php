@@ -187,8 +187,8 @@ echo makeNavMenu("CyberPath");
 
                      <!-- Display current organisation -->
                      <?php if ($currentOrgID) :?>
-                <       <div class="column is-full has-text-centered">
-                            <p class="subtitle">You are part of: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                       <div class="column is is-centered">
+                            <p class="subtitle">You are part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
                         </div>
                 <?php endif; ?>
                 </form>

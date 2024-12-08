@@ -117,11 +117,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (Exception $e) {
             if ($e->getCode() === '23000') {
                 $errors[] = "The username or email address is already taken.";
+            } else {
+                $errors[] = "Error registering user: " . $e->getMessage();
             }
-            $errors[] = "Error registering user: " . $e->getMessage();
         }
     }
 }
+
 
 echo makePageStart("Register | CyberPath", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");

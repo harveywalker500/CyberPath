@@ -73,6 +73,8 @@ try {
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
                     $_SESSION['successMessage'] = "Organisation created and you have been assigned as the team leader.";
+
+                    // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
 
@@ -95,6 +97,8 @@ try {
                     $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
                     $_SESSION['successMessage'] = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
 
+
+                    // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
 

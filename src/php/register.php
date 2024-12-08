@@ -83,18 +83,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt -> execute([':username' => $username, ':email' => $email]);
         $result = $stmt->fetchAll();
 
-        if (count($result) > 9) {
+        if ($result) {
             foreach ($result as $row) {
                 if ($row['username'] == $username) {
                     $errors[] = "The username is already taken.";
                 }
-                if ($row['email'] == $email) {
+                if ($row['email'] == email) {
                     $errors[] = "The email address is already used.";
             }
         }
     }
     } catch (Exception $e) {
-        $errors[] = $e->getMessage();
+        $errors[] = "Error with database: " . $e->getMessage();
     }
     
     
@@ -137,10 +137,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: loginForm.php");
             exit();
         } catch (Exception $e) {
-            $errors[] = $e->getMessage();
+            $errors[] = "Error registering user: " . $e->getMessage();
         }
     }
-}
     
 
 

@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = "SELECT COUNT(*) FROM OrganisationTable where name = :name";
                 $stmt = $dbConn->prepare($sql);
                 // Include the current user as the team leader
-                $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
+                $stmt->execute([':name' => $organisationName]);
                 $count = $stmt->fetchColumn();
 
                 if($count > 0) {

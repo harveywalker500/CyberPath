@@ -13,8 +13,6 @@ if (!isset($_SESSION['userID'])) {
     exit();
 }
 
-
-
 // Check if the user is already part of an organisation
 $userID = $_SESSION['userID'];
 // Initalise success message
@@ -102,12 +100,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+
+                // Refetch data
+                $organisations = fetchOrgs($dbConn);
+                $currentOrgName = getCurrentOrgs($dbConn, $organisationID);
+
                 $successMessage = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
             } catch (Exception $e) {
                 $errors[] = "Error joining organisation: " . $e->getMessage();
             }
         }
     }
+}
+
+function fetchOrgs($dbConn) {
+    $sql = "SELECT organisationID, name FROM organisationTable";
+    $stmt = $dbConn->prepare($sql);
+    $stmt-> execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getCurrentOrgs($dbConn, $organisationID) {
+    $sql = "SELECT name FROM organisationTable where organisationID = :organisationID";
+    $stmt = $dbConn->prepare($sql);
+    $stmt-> execute(['organisationID' => $organisationID]);
+    return $stmt->fetchColumn();
 }
 
 echo makePageStart("Manage Organisation - CyberPath", "../../css/stylesheet.css");

@@ -42,6 +42,19 @@ try {
         $stmt->execute([':userID' => $userID]);
         $currentOrgID = $stmt->fetchColumn();
         $isTeamLeader = false;
+
+        // Fetch current organisation name
+        if ($currentOrgID) {
+            $sql = "SELECT name FROM organisationTable WHERE organisationID = :organisationID";
+            $stmt = $dbConn->prepare($sql);
+            $stmt->execute([':organisationID' => $currentOrgID]);
+            $currentOrgName = $stmt->fetchColumn();
+        } else {
+            $currentOrgName = null;
+        }
+    } catch (Exception $e) {
+        $errors[] = "Error fetching data: " . $e->getMessage();
+    }
     
 
 
@@ -141,7 +154,7 @@ echo makeNavMenu("CyberPath");
                     </div>
                 </div>
                 <?php endif; ?>
-                
+
             <!-- Create Organisation Form -->
             <div class="column is-half">
                 <h2 class="subtitle">Create an Organisation</h2>

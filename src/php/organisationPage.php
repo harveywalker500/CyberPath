@@ -72,8 +72,7 @@ try {
                     $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
-                    $successMessage = "Organisation created and you have been assigned as the team leader.";
-
+                    $_SESSION['successMessage'] = "Organisation created and you have been assigned as the team leader.";
                     header("Location: organisationPage.php");
                     exit();
 
@@ -94,7 +93,7 @@ try {
                     $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
-                    $successMessage = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
+                    $_SESSION['successMessage'] = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
 
                     header("Location: organisationPage.php");
                     exit();
@@ -105,6 +104,9 @@ try {
             }
         }
     }
+    $successMessage = isset($_SESSION['successMessage']) ? $_SESSION['successMessage'] : "";
+    unset($_SESSION['successMessage']);
+
 } catch (Exception $e) {
     $errors[] = "Error joining organisation: " . $e->getMessage();
 }

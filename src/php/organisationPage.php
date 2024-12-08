@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
-                $successMessage = "You have successfully joined the organisation.";
+                $successMessage = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
             } catch (Exception $e) {
                 $errors[] = "Error joining organisation: " . $e->getMessage();
             }
@@ -188,7 +188,7 @@ echo makeNavMenu("CyberPath");
                     <?php if ($currentOrgID) : ?>
                         <div class="column is is-centered">
                             <div class="column has-text-centered">
-                                <p class="subtitle">You are part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                                <p class="subtitle">You are currently part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
                             </div>
                         </div>
 
@@ -199,7 +199,7 @@ echo makeNavMenu("CyberPath");
     </div>
 </div>
 
-<script>
+<script> 
     // Changing organisation confirm message
     function confirmChange() {
         if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {

@@ -139,10 +139,11 @@ echo makeNavMenu("CyberPath");
         <?php endif; ?>
 
         <div class="columns">
+            
             <!-- Display current organisation -->
              <?php if ($currentOrgID) :?>
-                <div class="column is-full has-text-centered">
-                    <div class="box">
+                <div class="column is-full">
+                    <div class="current-org-box">
                         <p class="subtitle">You are part of: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
                     </div>
                 </div>

@@ -28,13 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check for uppercase, lowercase and special character in password
     for ($i = 0; $i < strlen($password); $i++) {
         $char = $password[$i];
-        if(ctype_upper($char)) {
+        if (ctype_upper($char)) {
             $containsUpperCase = true;
         }
-        if(ctype_lower($char)) {
+        if (ctype_lower($char)) {
             $containsLowerCase = true;
         }
-        if(strpos($specialChar, $char) !== false) {
+        if (strpos($specialChar, $char) !== false) {
             $containsSpecialChar = true;
         }
     }
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Password must include at least 1 lowercase letter.";
     }
 
-    if(!$containsSpecialChar) {
+    if (!$containsSpecialChar) {
         $errors[] = "Password must contain at least 1 special character.";
     }
 

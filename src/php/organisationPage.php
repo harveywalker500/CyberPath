@@ -20,7 +20,7 @@ $userID = $_SESSION['userID'];
 // Initalise success message
 $successMessage = "";
 // Initialise error array
-$errors =[];
+$errors = [];
 
 // Connect to database and fetch all organisations from the database
 try {
@@ -34,8 +34,8 @@ try {
     $stmt = $dbConn->prepare($sql);
     $stmt->execute([':userID' => $userID]);
     $teamLeaderOrg = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    
+
+
     // Check if the user is already part of any other organisation
     $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
     $stmt = $dbConn->prepare($sql);
@@ -53,7 +53,7 @@ try {
 } catch (Exception $e) {
     $errors[] = "Error fetching data: " . $e->getMessage();
 }
-    
+
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['createOrganisation'])) {
@@ -85,7 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute();
                 $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
             } catch (Exception $e) {
                 $errors[] = "Error creating organisation: " . $e->getMessage();
             }
@@ -107,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } catch (Exception $e) {
                 $errors[] = "Error joining organisation: " . $e->getMessage();
             }
-        } 
+        }
     }
 }
 
@@ -139,7 +138,7 @@ echo makeNavMenu("CyberPath");
         <?php endif; ?>
 
         <div class="columns">
-            
+
             <!-- Create Organisation Form -->
             <div class="column is-half">
                 <h2 class="subtitle">Create an Organisation</h2>
@@ -185,12 +184,15 @@ echo makeNavMenu("CyberPath");
                         </div>
                     </div>
 
-                     <!-- Display current organisation -->
-                     <?php if ($currentOrgID) :?>
-                       <div class="column is is-centered">
-                            <p class="subtitle">You are part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                    <!-- Display current organisation -->
+                    <?php if ($currentOrgID) : ?>
+                        <div class="column is is-centered">
+                            <div class="column has-text-centered">
+                                <p class="subtitle">You are part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                            </div>
                         </div>
-                <?php endif; ?>
+
+                    <?php endif; ?>
                 </form>
             </div>
         </div>

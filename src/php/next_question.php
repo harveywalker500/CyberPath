@@ -68,7 +68,6 @@ if ($selectedAnswer === $currentStory['correctAnswer']) {
             "completed" => true,
             "message" => "You have completed all questions in this episode!"
         ]);
-        header("Refresh:5; url=index.php");
         exit;
     }
 

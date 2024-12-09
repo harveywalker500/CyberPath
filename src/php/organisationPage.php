@@ -84,7 +84,7 @@ try {
             }
         } elseif (isset($_POST['joinOrganisation'])) {
             $organisationID = $_POST['organisationID'] ?? null;
-
+ 
             if (!$organisationID) {
                 $errors[] = "Please select an organisation.";
             }
@@ -95,7 +95,7 @@ try {
                     $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
-                    $_SESSION['successMessage'] = "You have successfully joined  " . htmlspecialchars($currentOrgName) . ".";
+                    $_SESSION['successMessage'] = "You have successfully joined the organisation";
 
 
                     // Refreshes the page and data from database

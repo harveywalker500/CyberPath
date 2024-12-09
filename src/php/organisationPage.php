@@ -13,21 +13,20 @@ if (!isset($_SESSION['userID'])) {
     exit();
 }
 
-// Check if the user is already part of an organisation
-$userID = $_SESSION['userID'];
-// Initalise success message
-$successMessage = "";
-// Initialise error array
-$errors = [];
+
+$userID = $_SESSION['userID']; // Get UserID from database when logged in
+$successMessage = ""; // Initalise success message
+$errors = []; // Initialise error array
 
 // Connect to database and fetch all organisations from the database
 try {
-    $dbConn = getConnection();
+    $dbConn = getConnection(); // Establish database connection
     $sql = "SELECT organisationID, name FROM organisationTable";
     $stmt = $dbConn->prepare($sql);
     $stmt->execute();
     $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Fetch all organisations 
     $sql = "SELECT organisationID, teamLeaderID FROM organisationTable WHERE teamLeaderID = :userID";
     $stmt = $dbConn->prepare($sql);
     $stmt->execute([':userID' => $userID]);
@@ -82,6 +81,7 @@ try {
                     $errors[] = "Error creating organisation: " . $e->getMessage();
                 }
             }
+            // Joining existing organisation
         } elseif (isset($_POST['joinOrganisation'])) {
             $organisationID = $_POST['organisationID'] ?? null;
  
@@ -95,7 +95,7 @@ try {
                     $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
-                    $_SESSION['successMessage'] = "You have successfully joined the organisation";
+                    $_SESSION['successMessage'] = "You have successfully joined the organisation.";
 
 
                     // Refreshes the page and data from database
@@ -108,6 +108,7 @@ try {
             }
         }
     }
+    // Clear success messages
     $successMessage = isset($_SESSION['successMessage']) ? $_SESSION['successMessage'] : "";
     unset($_SESSION['successMessage']);
 
@@ -115,6 +116,7 @@ try {
     $errors[] = "Error joining organisation: " . $e->getMessage();
 }
 
+// Generate the HTML page structure
 echo makePageStart("Manage Organisation - CyberPath", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");
 

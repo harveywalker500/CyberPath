@@ -18,7 +18,10 @@ function getConnection(){ //function to get the connection to the database, allo
 
 function makePageStart($title, $stylesheet) 
 {
-    return <<<HTML
+    // Get the current script filename
+    $currentPage = basename($_SERVER['PHP_SELF']);
+
+    $html = <<<HTML
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -29,15 +32,25 @@ function makePageStart($title, $stylesheet)
         <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery CDN -->
-		<script src="../js/dev2.js"></script>
         <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script> <!-- DataTables CDN -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="$stylesheet">
 		<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">  
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
 HTML;
+
+        // Conditionally add dev2.js only if the current page is Leaderboard-V2.php
+        if ($currentPage === 'Leaderboard-V2.php') {
+            $html .= '<script src="../js/dev2.js"></script>';
+        }
+    
+        // Closing the head and body tags
+        $html .= <<<HTML
+        </head>
+        <body>
+HTML;
+ // Return the final HTML string
+    return $html;
 }
 
 

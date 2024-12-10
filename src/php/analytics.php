@@ -20,14 +20,15 @@ $organisationID = isset($_SESSION['userID']) ? getUserOrganisation($_SESSION['us
 $organisationName = "";
 try {
     $pdo = getConnection();
-    $stmt = $pdo->prepare("SELECT organisationName FROM organisationTable WHERE organisationID = :organisationID");
+    $stmt = $pdo->prepare("SELECT name FROM organisationTable WHERE organisationID = :organisationID");
     $stmt->bindParam(':organisationID', $organisationID, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($result) {
-        $organisationName = $result['organisationName'];
+        $organisationName = $result['name'] ?? "Unknown";
     }
 } catch (Exception $e) {
+    $organisationName = "Unknown";
     error_log("Error fetching organization name: " . $e->getMessage());
 }
 

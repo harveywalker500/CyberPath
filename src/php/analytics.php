@@ -76,9 +76,10 @@ echo makeNavMenu("CyberPath");
             <option value="month" selected>Last Month</option>
         </select>
     </div>
-    <div class="chart-container">
-        <canvas id="userProgressChart"></canvas>
-    </div>
+    <div id="userProgressWrapper" style="max-height: 400px; overflow-x: auto;">
+    <canvas id="userProgressChart"></canvas>
+</div>
+
 </section>
 
 
@@ -96,9 +97,9 @@ echo makeNavMenu("CyberPath");
             <option value="avgEpisodeTime">Average Episode Time</option>
         </select>
     </div>
-    <div class="chart-container">
-        <canvas id="organizationComparisonChart"></canvas>
-    </div>
+    <div id="organizationComparisonWrapper" style="max-height: 400px; overflow-y: auto;">
+    <canvas id="organizationComparisonChart"></canvas>
+</div>
 </section>
 
 

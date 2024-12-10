@@ -299,45 +299,6 @@ p {
     overflow: hidden;
 }
 
-/* Sidebar */
-.sidebar {
-    width: 260px;
-    background: #ffffff;
-    color: #333;
-    padding: 20px;
-    border-right: 1px solid #e0e0e0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
-}
-
-.sidebar-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #4CAF50;
-}
-
-.sidebar-menu {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar-link {
-    display: block;
-    padding: 15px 20px;
-    margin-bottom: 10px;
-    color: #333;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    border-radius: 8px;
-    transition: all 0.3s ease-in-out;
-}
-
-.sidebar-link:hover {
-    background: #f0f8e8;
-    color: #4CAF50;
-}
-
 /* Main Content */
 .content {
     flex: 1;
@@ -416,15 +377,6 @@ p {
     background-color: #0056b3;
 }
 
-.chart-container {
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-    /* max-width: 1000px; */
-    margin: 0 auto;
-}
 
 canvas {
     width: 100%;
@@ -509,10 +461,28 @@ h2 {
     margin-left: 10px;
 }
 
-.chart-container {
-    position: relative;
-    height: 400px;
+
+#organizationComparisonWrapper {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+#organizationComparisonChart {
     width: 100%;
+}
+
+#userProgressWrapper {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+#userProgressChart {
+    width: 100%;
+    min-height: 300px;
 }
 
 

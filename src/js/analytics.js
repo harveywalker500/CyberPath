@@ -1,12 +1,18 @@
-function generateColors(count) {
-    const colors = [];
-    for (let i = 0; i < count; i++) {
-        const hue = (i * (360 / count)) % 360; // Distribute hues evenly
-        colors.push(`hsl(${hue}, 70%, 60%)`); // HSL format for distinct colors
-    }
-    return colors;
-}
+// Generate persistent colors for users or organizations
+const generateColors = (() => {
+    const colorCache = {};
+    return (keys) => {
+        return keys.map((key, index) => {
+            if (!colorCache[key]) {
+                const hue = (index * (360 / keys.length)) % 360;
+                colorCache[key] = `hsl(${hue}, 70%, 60%)`;
+            }
+            return colorCache[key];
+        });
+    };
+})();
 
+// Fetch overview metrics
 function fetchOverview() {
     fetch("../php/fetch_analytics.php?type=overview")
         .then(response => response.json())
@@ -20,11 +26,11 @@ function fetchOverview() {
         });
 }
 
-
+// Persistent chart instance
 let currentUserChart;
 
 // Fetch user progress data
-function fetchUserProgress(timeRange = 'month') {
+function fetchUserProgress(timeRange = "month") {
     fetch(`../php/fetch_analytics.php?type=user-progress&timeRange=${timeRange}`)
         .then(response => response.json())
         .then(data => {
@@ -37,94 +43,112 @@ function fetchUserProgress(timeRange = 'month') {
         .catch(error => console.error("Error fetching user progress data:", error));
 }
 
-// Render the user progress chart
+// Render user progress chart
 function renderUserProgressChart(data, timeRange) {
     const ctx = document.getElementById("userProgressChart").getContext("2d");
 
-    // Extract unique users and dates
+    // Extract unique users and progress dates
     const users = [...new Set(data.map(item => item.userName))];
-    const dates = [...new Set(data.map(item => item.date))].sort();
+    const dates = [...new Set(data.map(item => item.progressDate))].sort(); // Use progressDate instead of date
+    const colors = generateColors(users); // Generate persistent colors for users
 
     // Prepare datasets for each user
-    const datasets = users.map(user => {
-        // Cumulative progress for each date
-        const cumulativeData = dates.map(date => {
-            const entry = data.find(d => d.userName === user && d.date === date);
-            return entry ? entry.episodesCompleted + entry.storiesCompleted : 0;
-        });
+    const datasets = users.map((user, index) => {
+        let cumulativeEpisodes = 0;
+        let cumulativeStories = 0;
 
-        // Generate a unique color for each user
-        const colorHue = Math.random() * 360;
-        const backgroundColor = `hsl(${colorHue}, 70%, 50%)`;
-        const borderColor = `hsl(${colorHue}, 80%, 40%)`;
+        const userProgress = dates.map(date => {
+            const entry = data.find(d => d.userName === user && d.progressDate === date);
+
+            if (entry) {
+                cumulativeEpisodes += entry.episodesCompleted || 0;
+                cumulativeStories += entry.storiesCompleted || 0;
+            }
+
+            // Return cumulative progress (episodes + stories)
+            return cumulativeEpisodes + cumulativeStories;
+        });
 
         return {
             label: user,
-            data: cumulativeData,
-            backgroundColor: backgroundColor,
-            borderColor: borderColor,
+            data: userProgress,
+            backgroundColor: colors[index],
+            borderColor: colors[index].replace("60%", "50%"),
             borderWidth: 2,
-            fill: false
+            tension: 0.4, // Smoother line
+            fill: false,
         };
     });
+
+    // Adjust the wrapper for scrolling if necessary
+    const wrapper = document.getElementById("userProgressWrapper");
+    if (users.length > 15 || dates.length > 15) {
+        wrapper.style.maxHeight = "500px"; // Adjust height for large data
+        wrapper.style.overflowX = "auto"; // Enable horizontal scrolling
+        wrapper.style.overflowY = "hidden"; // Prevent vertical scrolling
+    } else {
+        wrapper.style.maxHeight = ""; // Reset if data is small
+        wrapper.style.overflowX = "";
+        wrapper.style.overflowY = "";
+    }
 
     // Destroy previous chart instance if it exists
     if (currentUserChart) {
         currentUserChart.destroy();
     }
 
+    // Create the chart
     currentUserChart = new Chart(ctx, {
         type: "line",
         data: {
-            labels: dates, // Time progression (weekly or monthly)
-            datasets: datasets
+            labels: dates, // Use sorted dates as X-axis labels
+            datasets: datasets,
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false, // Allow resizing
             plugins: {
                 title: {
                     display: true,
-                    text: `User Progress (${timeRange.charAt(0).toUpperCase() + timeRange.slice(1)})`
+                    text: `User Progress (${timeRange.charAt(0).toUpperCase() + timeRange.slice(1)})`,
                 },
                 legend: {
                     display: true,
-                    position: "top"
+                    position: "top",
                 },
                 tooltip: {
                     callbacks: {
-                        label: (tooltipItem) => `${tooltipItem.dataset.label}: ${tooltipItem.raw}`
-                    }
-                }
+                        label: (tooltipItem) => {
+                            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+                        },
+                    },
+                },
             },
             scales: {
                 x: {
                     title: {
                         display: true,
-                        text: "Date"
-                    }
+                        text: "Date",
+                    },
                 },
                 y: {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: "Cumulative Progress (Episodes + Stories)"
-                    }
-                }
-            }
-        }
+                        text: "Cumulative Progress (Episodes + Stories)",
+                    },
+                },
+            },
+        },
     });
 }
 
-// Event listener for time range selection
-document.getElementById("time-range-select").addEventListener("change", (event) => {
-    const selectedRange = event.target.value;
-    fetchUserProgress(selectedRange);
-});
 
 
+// Persistent chart instance
 let currentChart;
 
-// Fetch data and render the chart
+// Fetch organization comparison data
 function fetchOrganizationComparison() {
     fetch("../php/fetch_analytics.php?type=organization-comparison")
         .then(response => response.json())
@@ -132,10 +156,8 @@ function fetchOrganizationComparison() {
             if (data.error) {
                 console.error("Error:", data.error);
             } else {
-                // Render chart for the first metric by default ("Total Users")
                 renderComparisonChart(data, "totalUsers");
 
-                // Add event listener to the dropdown for metric selection
                 document.getElementById("metric-select").addEventListener("change", (event) => {
                     const selectedMetric = event.target.value;
                     renderComparisonChart(data, selectedMetric);
@@ -145,14 +167,25 @@ function fetchOrganizationComparison() {
         .catch(error => console.error("Error fetching organization comparison data:", error));
 }
 
-// Render the chart for a specific metric
+// Render organization comparison chart
 function renderComparisonChart(data, metric) {
     const ctx = document.getElementById("organizationComparisonChart").getContext("2d");
 
     const labels = data.map(org => org.organization); // Organization names as labels
     const values = data.map(org => org[metric]); // Metric values for each organization
     const chartLabel = metric.replace(/([A-Z])/g, ' $1').trim(); // Format the metric name for the label
-    const colors = generateColors(data.length); // Generate unique colors for each organization
+    const colors = generateColors(labels); // Generate unique colors for each organization
+
+    // Adjust the height of the chart wrapper based on the number of organizations
+    const wrapper = document.getElementById("organizationComparisonWrapper");
+    const organizationCount = labels.length;
+    if (organizationCount > 15) {
+        wrapper.style.maxHeight = "500px"; // Set a maximum height
+        wrapper.style.overflowY = "auto"; // Enable vertical scrolling
+    } else {
+        wrapper.style.maxHeight = ""; // Reset the height if less than 15 organizations
+        wrapper.style.overflowY = ""; // Remove scrolling
+    }
 
     // Destroy previous chart instance if it exists
     if (currentChart) {
@@ -166,13 +199,14 @@ function renderComparisonChart(data, metric) {
             datasets: [{
                 label: chartLabel,
                 data: values,
-                backgroundColor: colors, // Apply unique colors
-                borderColor: colors.map(color => color.replace("60%", "50%")), // Slightly darker border
+                backgroundColor: colors,
+                borderColor: colors.map(color => color.replace("60%", "50%")),
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,
@@ -190,7 +224,7 @@ function renderComparisonChart(data, metric) {
             },
             plugins: {
                 legend: {
-                    display: false // Only one dataset, no need for legend
+                    display: false
                 },
                 tooltip: {
                     callbacks: {
@@ -203,9 +237,14 @@ function renderComparisonChart(data, metric) {
 }
 
 
+
+// Event Listeners and Initialization
 document.addEventListener("DOMContentLoaded", () => {
     fetchOverview();
     fetchOrganizationComparison();
     fetchUserProgress();
 
+    document.getElementById("time-range-select").addEventListener("change", (event) => {
+        fetchUserProgress(event.target.value);
+    });
 });

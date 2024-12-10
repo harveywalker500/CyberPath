@@ -32,11 +32,10 @@ if ($type === 'overview') {
      FROM userTable 
      WHERE organisationID = :orgID) AS totalUsers,
 
-    -- Active users (logged in within the past 7 days)
-    (SELECT COUNT(DISTINCT userID) 
-     FROM employeeActivityLog 
-     WHERE activityType = 'Login' 
-       AND activityDate >= DATE_SUB(NOW(), INTERVAL 7 DAY) 
+    -- Active users (based on employeeStatus table)
+    (SELECT COUNT(*) 
+     FROM employeeStatus 
+     WHERE isActive = 1 
        AND userID IN (SELECT userID FROM userTable WHERE organisationID = :orgID)) AS activeUsers,
 
     -- Completed stories
@@ -58,8 +57,7 @@ if ($type === 'overview') {
     (SELECT AVG(durationInSeconds) 
      FROM episodeCompletionLog 
      WHERE userID IN (SELECT userID FROM userTable WHERE organisationID = :orgID)) AS avgEpisodeTime
-
-";
+    ";
 
 
 
@@ -77,9 +75,9 @@ if ($type === 'organization-comparison') {
     SELECT 
         o.name AS organization,
         (SELECT COUNT(*) FROM userTable WHERE organisationID = o.organisationID) AS totalUsers,
-        (SELECT COUNT(DISTINCT userID) FROM employeeActivityLog 
-            WHERE activityType = 'Login' 
-            AND activityDate >= DATE_SUB(NOW(), INTERVAL 7 DAY) 
+        (SELECT COUNT(*) 
+            FROM employeeStatus 
+            WHERE isActive = 1 
             AND userID IN (SELECT userID FROM userTable WHERE organisationID = o.organisationID)) AS activeUsers,
         (SELECT COUNT(*) FROM storyCompletionLog 
             WHERE userID IN (SELECT userID FROM userTable WHERE organisationID = o.organisationID)) AS completedStories,
@@ -121,16 +119,24 @@ if ($type === 'user-progress') {
             COUNT(DISTINCT ec.episodeID) AS episodesCompleted,
             COUNT(DISTINCT sc.storyID) AS storiesCompleted
         FROM userTable u
-        LEFT JOIN episodeCompletionLog ec ON u.userID = ec.userID AND ec.startTime >= $dateCondition
-        LEFT JOIN storyCompletionLog sc ON u.userID = sc.userID AND sc.startTime >= $dateCondition
-        WHERE u.userID IN (2, 7, 8, 11)
+        LEFT JOIN episodeCompletionLog ec 
+            ON u.userID = ec.userID AND ec.startTime >= :dateCondition
+        LEFT JOIN storyCompletionLog sc 
+            ON u.userID = sc.userID AND sc.startTime >= :dateCondition
+        WHERE u.organisationID = :organisationID
         GROUP BY u.userName, DATE(ec.startTime)
         ORDER BY progressDate ASC
     ";
 
-    $stmt = $pdo->query($query);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        ':dateCondition' => $dateCondition,
+        ':organisationID' => $organisationID
+    ]);
+
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode($data);
     exit;
 }
+

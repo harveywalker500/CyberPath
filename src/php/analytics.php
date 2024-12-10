@@ -15,6 +15,23 @@ loggedIn(); // Ensures the user is logged in before loading the page
 echo makePageStart("CyberPath | Analytics", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");
 
+$organisationID = isset($_SESSION['userID']) ? getUserOrganisation($_SESSION['userID']) : null;
+
+$organisationName = "";
+try {
+    $pdo = getConnection();
+    $stmt = $pdo->prepare("SELECT organisationName FROM organisationTable WHERE organisationID = :organisationID");
+    $stmt->bindParam(':organisationID', $organisationID, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result) {
+        $organisationName = $result['organisationName'];
+    }
+} catch (Exception $e) {
+    error_log("Error fetching organization name: " . $e->getMessage());
+}
+
+
 ?>
 
 <div class="dashboard">
@@ -32,6 +49,7 @@ echo makeNavMenu("CyberPath");
         <div class="content">
             <header class="content-header">
                 <h1>Team Leader Dashboard</h1>
+                <p>Organization: <strong><?php echo htmlspecialchars($organisationName); ?></strong></p>
                 <p>Track and analyze your team’s performance.</p>
                 <button id="exportPDF" class="button">Export PDF</button>
             </header>
@@ -105,7 +123,7 @@ echo makeNavMenu("CyberPath");
 
 
         </div>
-        
+
 </div>
 
 

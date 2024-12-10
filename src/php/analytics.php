@@ -49,14 +49,14 @@ try {
         <div class="content">
             <header class="content-header">
                 <h1>Team Leader Dashboard</h1>
-                <p>Organization: <strong><?php echo htmlspecialchars($organisationName); ?></strong></p>
+                <p>Organisation: <strong><?php echo htmlspecialchars($organisationName); ?></strong></p>
                 <p>Track and analyze your team’s performance.</p>
                 <button id="exportPDF" class="button">Export PDF</button>
             </header>
 
             <!-- Overview Section -->
             <section id="overview">
-                <h2>Organization Analytics</h2>
+                <h2>Organisation Analytics</h2>
                 <div id="organizationAnalytics" class="analytics-overview">
                     <div class="overview-item" data-metric="totalUsers">
                         <span class="label">Total Users</span>
@@ -104,7 +104,7 @@ try {
 
 
             <section id="organization-comparison">
-                <h2>Organizational Comparison</h2>
+                <h2>Organisational Comparison</h2>
                 <div class="controls">
                     <label for="metric-select">Select Metric:</label>
                     <select id="metric-select">

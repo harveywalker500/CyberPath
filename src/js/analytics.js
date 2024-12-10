@@ -17,14 +17,102 @@ function fetchOverview() {
     fetch("../php/fetch_analytics.php?type=overview")
         .then(response => response.json())
         .then(data => {
+            // Populate Overview metrics
             document.getElementById("totalUsers").innerText = data.totalUsers;
             document.getElementById("activeUsers").innerText = data.activeUsers;
             document.getElementById("completedStories").innerText = data.completedStories;
             document.getElementById("completedEpisodes").innerText = data.completedEpisodes;
             document.getElementById("avgStoryTime").innerText = `${Math.round(data.avgStoryTime / 60)} mins`;
             document.getElementById("avgEpisodeTime").innerText = `${Math.round(data.avgEpisodeTime / 60)} mins`;
-        });
+
+            // Add event listeners for tooltips
+            addOverviewTooltips(data);
+        })
+        .catch(error => console.error("Error fetching overview metrics:", error));
 }
+
+// Add hover tooltips for overview metrics
+function addOverviewTooltips(data) {
+    const tooltip = document.getElementById("tooltip"); // Tooltip container
+
+    // Map of metric keys to types for backend requests
+    const metricMap = {
+        totalUsers: "total-users",
+        activeUsers: "active-users",
+        completedStories: "completed-stories",
+        completedEpisodes: "completed-episodes",
+        avgStoryTime: "avg-story-time",
+        avgEpisodeTime: "avg-episode-time",
+    };
+
+    // Add hover event listeners to each metric
+    Object.keys(metricMap).forEach((metric) => {
+        // const element = document.getElementById(metric); // Target element by ID
+        const element = document.querySelector(`.overview-item[data-metric='${metric}']`); // Targets the entire card
+
+        element.addEventListener("mouseenter", async (e) => {
+            // Fetch detailed data for the hovered metric
+            const type = metricMap[metric];
+            const details = await fetchMetricDetails(type);
+
+            // Populate tooltip content based on metric type
+            let tooltipContent = "";
+            if (type === "total-users" || type === "active-users") {
+                tooltipContent = `<strong>Users:</strong><ul>${details
+                    .map((user) => `<li>${user.name}</li>`)
+                    .join("")}</ul>`;
+            } else if (type === "completed-stories") {
+                tooltipContent = `<strong>Story Completion:</strong><ul>${details
+                    .map(
+                        (user) =>
+                            `<li>${user.name}: ${Math.round(
+                                user.storyTime / 60
+                            )} mins</li>`
+                    )
+                    .join("")}</ul>`;
+            } else if (type === "completed-episodes") {
+                tooltipContent = `<strong>Episode Completion:</strong><ul>${details
+                    .map(
+                        (user) =>
+                            `<li>${user.name}: ${Math.round(
+                                user.episodeTime / 60
+                            )} mins</li>`
+                    )
+                    .join("")}</ul>`;
+            } else if (type === "avg-story-time" || type === "avg-episode-time") {
+                tooltipContent = `<strong>${metric.replace(/([A-Z])/g, " $1")}:</strong> ${details.avgTime} mins`;
+            }
+
+            // Update tooltip content and position
+            tooltip.innerHTML = tooltipContent;
+            tooltip.style.top = `${e.clientY + 10}px`;
+            tooltip.style.left = `${e.clientX + 10}px`;
+            tooltip.classList.add("visible");
+        });
+
+        // Hide tooltip on mouse leave
+        element.addEventListener("mouseleave", () => {
+            tooltip.classList.remove("visible");
+        });
+    });
+}
+
+// Fetch detailed metric data for tooltips
+async function fetchMetricDetails(type) {
+    try {
+        const response = await fetch(`../php/fetch_analytics.php?type=${type}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching metric details:", error);
+        return [];
+    }
+}
+
+
+
+
+
 
 // Persistent chart instance
 let currentUserChart;
@@ -235,6 +323,8 @@ function renderComparisonChart(data, metric) {
         }
     });
 }
+
+
 
 
 

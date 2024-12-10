@@ -396,35 +396,87 @@ h2 {
 
 
 /* overview */
-.overview-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+/* Wrapper for analytics section */
+.analytics-overview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin: 20px 0;
     padding: 20px;
-    background: #fff;
-    border-radius: 10px;
+    background: #f7faff;
+    border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.metric {
-    text-align: center;
+/* Each metric container */
+.overview-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    padding: 15px;
     background: #ffffff;
-    padding: 20px;
+    border: 1px solid #ddd;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.metric h3 {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 10px;
+/* Hover effect */
+.overview-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background: #eef7ff;
 }
 
-.metric p {
-    font-size: 24px;
-    color: #007bff;
+/* Metric label */
+.label {
+    font-size: 14px;
     font-weight: bold;
+    color: #555;
+    margin-bottom: 8px;
 }
+
+/* Metric value */
+.value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff; /* Blue color for emphasis */
+}
+
+/* Tooltip styling */
+.tooltip {
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    color: #333;
+    max-width: 300px;
+    z-index: 1000;
+    display: none;
+}
+
+.tooltip.visible {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .overview-item {
+        width: 100%;
+    }
+
+    .analytics-overview {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 
 
 
@@ -484,6 +536,7 @@ h2 {
     width: 100%;
     min-height: 300px;
 }
+
 
 
 

@@ -140,3 +140,63 @@ if ($type === 'user-progress') {
     exit;
 }
 
+
+if ($type === 'total-users') {
+    $query = "SELECT forename AS name FROM userTable WHERE organisationID = :orgID";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['orgID' => $organisationID]);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+} 
+
+if ($type === 'active-users') {
+    $query = "
+            SELECT u.forename AS name
+            FROM userTable u
+            JOIN employeeStatus es ON u.userID = es.userID
+            WHERE es.isActive = 1 AND u.organisationID = :orgID
+        ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['orgID' => $organisationID]);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+} 
+
+
+if ($type === 'completed-stories') {
+    $query = "SELECT u.forename AS name, SUM(scl.durationInSeconds) AS storyTime
+              FROM storyCompletionLog scl
+              JOIN userTable u ON scl.userID = u.userID
+              WHERE u.organisationID = :orgID
+              GROUP BY u.userID";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['orgID' => $organisationID]);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+} 
+
+if ($type === 'completed-episodes') {
+    $query = "SELECT u.forename AS name, SUM(ecl.durationInSeconds) AS episodeTime
+              FROM episodeCompletionLog ecl
+              JOIN userTable u ON ecl.userID = u.userID
+              WHERE u.organisationID = :orgID
+              GROUP BY u.userID";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['orgID' => $organisationID]);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+}
+
+if ($type === 'avg-story-time') {
+    $query = "SELECT AVG(durationInSeconds) AS avgTime FROM storyCompletionLog scl
+              JOIN userTable u ON scl.userID = u.userID
+              WHERE u.organisationID = :orgID";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['orgID' => $organisationID]);
+    echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
+} 
+
+if ($type === 'avg-episode-time') {
+    $query = "SELECT AVG(durationInSeconds) AS avgTime FROM episodeCompletionLog ecl
+              JOIN userTable u ON ecl.userID = u.userID
+              WHERE u.organisationID = :orgID";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['orgID' => $organisationID]);
+    echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
+}

@@ -72,23 +72,23 @@ function logStoryCompletion($userID, $storyID, $startTime, $endTime) {
 }
 
 
-function updateOrganisationMetric($organisationID, $metricType, $metricValue) {
-    $db = getconnection();
+// function updateOrganisationMetric($organisationID, $metricType, $metricValue) {
+//     $db = getconnection();
 
-    $query = "
-        INSERT INTO organisationMetrics (organisationID, metricType, metricValue)
-        VALUES (:organisationID, :metricType, :metricValue)
-        ON DUPLICATE KEY UPDATE
-        metricValue = :metricValue, recordedAt = CURRENT_TIMESTAMP
-    ";
+//     $query = "
+//         INSERT INTO organisationMetrics (organisationID, metricType, metricValue)
+//         VALUES (:organisationID, :metricType, :metricValue)
+//         ON DUPLICATE KEY UPDATE
+//         metricValue = :metricValue, recordedAt = CURRENT_TIMESTAMP
+//     ";
 
-    $stmt = $db->prepare($query);
-    $stmt->execute([
-        ':organisationID' => $organisationID,
-        ':metricType' => $metricType,
-        ':metricValue' => $metricValue
-    ]);
-}
+//     $stmt = $db->prepare($query);
+//     $stmt->execute([
+//         ':organisationID' => $organisationID,
+//         ':metricType' => $metricType,
+//         ':metricValue' => $metricValue
+//     ]);
+// }
 
 
 function updateEmployeeStatus($userID, $isActive) {
@@ -125,22 +125,22 @@ function logEmployeeActivity($userID, $activityType) {
 }
 
 
-function updateSystemMetric($metricType, $metricValue) {
-    $db = getconnection();
+// function updateSystemMetric($metricType, $metricValue) {
+//     $db = getconnection();
 
-    $query = "
-        INSERT INTO systemMetrics (metricType, metricValue)
-        VALUES (:metricType, :metricValue)
-        ON DUPLICATE KEY UPDATE
-        metricValue = :metricValue, recordedAt = CURRENT_TIMESTAMP
-    ";
+//     $query = "
+//         INSERT INTO systemMetrics (metricType, metricValue)
+//         VALUES (:metricType, :metricValue)
+//         ON DUPLICATE KEY UPDATE
+//         metricValue = :metricValue, recordedAt = CURRENT_TIMESTAMP
+//     ";
 
-    $stmt = $db->prepare($query);
-    $stmt->execute([
-        ':metricType' => $metricType,
-        ':metricValue' => $metricValue
-    ]);
-}
+//     $stmt = $db->prepare($query);
+//     $stmt->execute([
+//         ':metricType' => $metricType,
+//         ':metricValue' => $metricValue
+//     ]);
+// }
 
 
 function show_errors($errors) {//function to show errors, parameter should be array of errors or empty
@@ -192,8 +192,8 @@ function validate_login() {
             if (password_verify($input['password'], $user->password)) {
                 $_SESSION['username'] = $user->username;
                 $_SESSION['userID'] = $user->userID;  // Optionally store the user ID
-                updateEmployeeStatus($user->id, 1); // Update user status to active
-                logEmployeeActivity($user->id, 'Login'); // Log user login activity
+                updateEmployeeStatus($_SESSION['userID'], 1); // Update user status to active
+                logEmployeeActivity($_SESSION['userID'], 'Login'); // Log user login activity
 
             } else {
                 $errors[] = "Login Details are incorrect.";

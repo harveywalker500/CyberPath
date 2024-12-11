@@ -118,7 +118,7 @@ async function fetchMetricDetails(type) {
 let currentUserChart;
 
 // Fetch user progress data
-function fetchUserProgress(timeRange = "month") {
+function fetchUserProgress(timeRange = "all") {
     fetch(`../php/fetch_analytics.php?type=user-progress&timeRange=${timeRange}`)
         .then(response => response.json())
         .then(data => {
@@ -131,13 +131,39 @@ function fetchUserProgress(timeRange = "month") {
         .catch(error => console.error("Error fetching user progress data:", error));
 }
 
-// Render user progress chart
+
 function renderUserProgressChart(data, timeRange) {
     const ctx = document.getElementById("userProgressChart").getContext("2d");
 
+    // Parse the current date
+    const currentDate = new Date();
+
+    // Ensure all progressDate values are valid dates
+    const filteredData = data.filter(item => {
+        const progressDate = new Date(item.progressDate);
+        if (isNaN(progressDate)) {
+            console.error(`Invalid date format for progressDate: ${item.progressDate}`);
+            return false; // Skip invalid dates
+        }
+
+        // Filter data based on the selected time range
+        if (timeRange === "week") {
+            const sevenDaysAgo = new Date(currentDate);
+            sevenDaysAgo.setDate(currentDate.getDate() - 7);
+            return progressDate >= sevenDaysAgo && progressDate <= currentDate;
+        } else if (timeRange === "month") {
+            const thirtyDaysAgo = new Date(currentDate);
+            thirtyDaysAgo.setDate(currentDate.getDate() - 30);
+            return progressDate >= thirtyDaysAgo && progressDate <= currentDate;
+        } else if (timeRange === "all") {
+            return true; // Include all data
+        }
+        return false; // Fallback case (shouldn't occur)
+    });
+
     // Extract unique users and progress dates
-    const users = [...new Set(data.map(item => item.userName))];
-    const dates = [...new Set(data.map(item => item.progressDate))].sort(); // Use progressDate instead of date
+    const users = [...new Set(filteredData.map(item => item.userName))];
+    const dates = [...new Set(filteredData.map(item => item.progressDate))].sort();
     const colors = generateColors(users); // Generate persistent colors for users
 
     // Prepare datasets for each user
@@ -146,14 +172,13 @@ function renderUserProgressChart(data, timeRange) {
         let cumulativeStories = 0;
 
         const userProgress = dates.map(date => {
-            const entry = data.find(d => d.userName === user && d.progressDate === date);
+            const entry = filteredData.find(d => d.userName === user && d.progressDate === date);
 
             if (entry) {
                 cumulativeEpisodes += entry.episodesCompleted || 0;
                 cumulativeStories += entry.storiesCompleted || 0;
             }
 
-            // Return cumulative progress (episodes + stories)
             return cumulativeEpisodes + cumulativeStories;
         });
 
@@ -171,11 +196,11 @@ function renderUserProgressChart(data, timeRange) {
     // Adjust the wrapper for scrolling if necessary
     const wrapper = document.getElementById("userProgressWrapper");
     if (users.length > 15 || dates.length > 15) {
-        wrapper.style.maxHeight = "500px"; // Adjust height for large data
-        wrapper.style.overflowX = "auto"; // Enable horizontal scrolling
-        wrapper.style.overflowY = "hidden"; // Prevent vertical scrolling
+        wrapper.style.maxHeight = "500px";
+        wrapper.style.overflowX = "auto";
+        wrapper.style.overflowY = "hidden";
     } else {
-        wrapper.style.maxHeight = ""; // Reset if data is small
+        wrapper.style.maxHeight = "";
         wrapper.style.overflowX = "";
         wrapper.style.overflowY = "";
     }
@@ -230,6 +255,132 @@ function renderUserProgressChart(data, timeRange) {
         },
     });
 }
+
+
+
+
+
+// function renderUserProgressChart(data, timeRange) {
+//     const ctx = document.getElementById("userProgressChart").getContext("2d");
+
+//     // Parse the current date to filter the data based on the time range
+//     const currentDate = new Date();
+
+//     // Filter the data based on the selected time range
+//     const filteredData = data.filter(item => {
+//         const progressDate = new Date(item.progressDate);
+//         if (timeRange === "week") {
+//             // Only include data from the last 7 days
+//             const sevenDaysAgo = new Date(currentDate);
+//             sevenDaysAgo.setDate(currentDate.getDate() - 7);
+//             return progressDate >= sevenDaysAgo && progressDate <= currentDate;
+//         } else if (timeRange === "month") {
+//             // Only include data from the last 30 days
+//             const thirtyDaysAgo = new Date(currentDate);
+//             thirtyDaysAgo.setDate(currentDate.getDate() - 30);
+//             return progressDate >= thirtyDaysAgo && progressDate <= currentDate;
+//         }
+//         return true; // Default: Include all data
+//     });
+
+//     // Extract unique users and progress dates
+//     const users = [...new Set(filteredData.map(item => item.userName))];
+//     const dates = [...new Set(filteredData.map(item => item.progressDate))].sort(); // Use progressDate instead of date
+//     const colors = generateColors(users); // Generate persistent colors for users
+
+//     // Prepare datasets for each user
+//     const datasets = users.map((user, index) => {
+//         let cumulativeEpisodes = 0;
+//         let cumulativeStories = 0;
+
+//         const userProgress = dates.map(date => {
+//             const entry = filteredData.find(d => d.userName === user && d.progressDate === date);
+
+//             if (entry) {
+//                 cumulativeEpisodes += entry.episodesCompleted || 0;
+//                 cumulativeStories += entry.storiesCompleted || 0;
+//             }
+
+//             // Return cumulative progress (episodes + stories)
+//             return cumulativeEpisodes + cumulativeStories;
+//         });
+
+//         return {
+//             label: user,
+//             data: userProgress,
+//             backgroundColor: colors[index],
+//             borderColor: colors[index].replace("60%", "50%"),
+//             borderWidth: 2,
+//             tension: 0.4, // Smoother line
+//             fill: false,
+//         };
+//     });
+
+//     // Adjust the wrapper for scrolling if necessary
+//     const wrapper = document.getElementById("userProgressWrapper");
+//     if (users.length > 15 || dates.length > 15) {
+//         wrapper.style.maxHeight = "500px"; // Adjust height for large data
+//         wrapper.style.overflowX = "auto"; // Enable horizontal scrolling
+//         wrapper.style.overflowY = "hidden"; // Prevent vertical scrolling
+//     } else {
+//         wrapper.style.maxHeight = ""; // Reset if data is small
+//         wrapper.style.overflowX = "";
+//         wrapper.style.overflowY = "";
+//     }
+
+//     // Destroy previous chart instance if it exists
+//     if (currentUserChart) {
+//         currentUserChart.destroy();
+//     }
+
+//     // Create the chart
+//     currentUserChart = new Chart(ctx, {
+//         type: "line",
+//         data: {
+//             labels: dates, // Use sorted dates as X-axis labels
+//             datasets: datasets,
+//         },
+//         options: {
+//             responsive: true,
+//             maintainAspectRatio: false, // Allow resizing
+//             plugins: {
+//                 title: {
+//                     display: true,
+//                     text: `User Progress (${timeRange.charAt(0).toUpperCase() + timeRange.slice(1)})`,
+//                 },
+//                 legend: {
+//                     display: true,
+//                     position: "top",
+//                 },
+//                 tooltip: {
+//                     callbacks: {
+//                         label: (tooltipItem) => {
+//                             return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+//                         },
+//                     },
+//                 },
+//             },
+//             scales: {
+//                 x: {
+//                     title: {
+//                         display: true,
+//                         text: "Date",
+//                     },
+//                 },
+//                 y: {
+//                     beginAtZero: true,
+//                     title: {
+//                         display: true,
+//                         text: "Cumulative Progress (Episodes + Stories)",
+//                     },
+//                 },
+//             },
+//         },
+//     });
+// }
+
+
+
 
 
 

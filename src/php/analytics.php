@@ -93,7 +93,8 @@ try {
                     <label for="time-range-select">Time Range:</label>
                     <select id="time-range-select">
                         <option value="week">Last Week</option>
-                        <option value="month" selected>Last Month</option>
+                        <option value="month">Last Month</option>
+                        <option value="all" selected>All Time</option>
                     </select>
                 </div>
                 <div id="userProgressWrapper" style="max-height: 400px; overflow-x: auto;">

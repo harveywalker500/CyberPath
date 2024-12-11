@@ -115,3 +115,6 @@ CREATE TABLE employeeActivityLog (
     activityType VARCHAR(50) NOT NULL, -- e.g., "Login", "Logout", "Task Completed"
     FOREIGN KEY (userID) REFERENCES userTable(userID)
 );
+
+
+ALTER TABLE employeeStatus ADD CONSTRAINT UNIQUE (userID);

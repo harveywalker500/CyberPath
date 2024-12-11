@@ -15,6 +15,24 @@ loggedIn(); // Ensures the user is logged in before loading the page
 echo makePageStart("CyberPath | Analytics", "../../css/stylesheet.css");
 echo makeNavMenu("CyberPath");
 
+$organisationID = isset($_SESSION['userID']) ? getUserOrganisation($_SESSION['userID']) : null;
+
+$organisationName = "";
+try {
+    $pdo = getConnection();
+    $stmt = $pdo->prepare("SELECT name FROM organisationTable WHERE organisationID = :organisationID");
+    $stmt->bindParam(':organisationID', $organisationID, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result) {
+        $organisationName = $result['name'] ?? "Unknown";
+    }
+} catch (Exception $e) {
+    $organisationName = "Unknown";
+    error_log("Error fetching organization name: " . $e->getMessage());
+}
+
+
 ?>
 
 <div class="dashboard">
@@ -32,80 +50,83 @@ echo makeNavMenu("CyberPath");
         <div class="content">
             <header class="content-header">
                 <h1>Team Leader Dashboard</h1>
+                <p>Organisation: <strong><?php echo htmlspecialchars($organisationName); ?></strong></p>
                 <p>Track and analyze your team’s performance.</p>
                 <button id="exportPDF" class="button">Export PDF</button>
             </header>
 
             <!-- Overview Section -->
             <section id="overview">
-    <h2>Organization Analytics</h2>
-    <div class="overview-container">
-        <div class="metric">
-            <h3>Total Users</h3>
-            <p id="totalUsers">0</p>
+                <h2>Organisation Analytics</h2>
+                <div id="organizationAnalytics" class="analytics-overview">
+                    <div class="overview-item" data-metric="totalUsers">
+                        <span class="label">Total Users</span>
+                        <span class="value" id="totalUsers">5</span>
+                    </div>
+                    <div class="overview-item" data-metric="activeUsers">
+                        <span class="label">Active Users</span>
+                        <span class="value" id="activeUsers">3</span>
+                    </div>
+                    <div class="overview-item" data-metric="completedStories">
+                        <span class="label">Story Completions</span>
+                        <span class="value" id="completedStories">30</span>
+                    </div>
+                    <div class="overview-item" data-metric="completedEpisodes">
+                        <span class="label">Episode Completions</span>
+                        <span class="value" id="completedEpisodes">30</span>
+                    </div>
+                    <div class="overview-item" data-metric="avgStoryTime">
+                        <span class="label">Avg Story Time</span>
+                        <span class="value" id="avgStoryTime">35 mins</span>
+                    </div>
+                    <div class="overview-item" data-metric="avgEpisodeTime">
+                        <span class="label">Avg Episode Time</span>
+                        <span class="value" id="avgEpisodeTime">23 mins</span>
+                    </div>
+                </div>
+                <div id="tooltip" class="tooltip hidden"></div>
+            </section>
+
+            <section id="user-progress" class="userprogress-container">
+                <h2>User Progress Over Time</h2>
+                <div class="controls">
+                    <label for="time-range-select">Time Range:</label>
+                    <select id="time-range-select">
+                        <option value="week">Last Week</option>
+                        <option value="month">Last Month</option>
+                        <option value="all" selected>All Time</option>
+                    </select>
+                </div>
+                <div id="userProgressWrapper" style="max-height: 400px; overflow-x: auto;">
+                <canvas id="userProgressChart"></canvas>
+            </div>
+
+            </section>
+
+
+
+            <section id="organization-comparison">
+                <h2>Organisational Comparison</h2>
+                <div class="controls">
+                    <label for="metric-select">Select Metric:</label>
+                    <select id="metric-select">
+                        <option value="totalUsers">Total Users</option>
+                        <option value="activeUsers">Active Users</option>
+                        <option value="completedStories">Completed Stories</option>
+                        <option value="completedEpisodes">Completed Episodes</option>
+                        <option value="avgStoryTime">Average Story Time</option>
+                        <option value="avgEpisodeTime">Average Episode Time</option>
+                    </select>
+                </div>
+                <div id="organizationComparisonWrapper" style="max-height: 400px; overflow-y: auto;">
+                <canvas id="organizationComparisonChart"></canvas>
+            </div>
+            </section>
+
+
         </div>
-        <div class="metric">
-            <h3>Active Users</h3>
-            <p id="activeUsers">0</p>
-        </div>
-        <div class="metric">
-            <h3>Completed Stories</h3>
-            <p id="completedStories">0</p>
-        </div>
-        <div class="metric">
-            <h3>Completed Episodes</h3>
-            <p id="completedEpisodes">0</p>
-        </div>
-        <div class="metric">
-            <h3>Avg Story Time</h3>
-            <p id="avgStoryTime">0 mins</p>
-        </div>
-        <div class="metric">
-            <h3>Avg Episode Time</h3>
-            <p id="avgEpisodeTime">0 mins</p>
-        </div>
-    </div>
-</section>
 
-<section id="user-progress" class="userprogress-container">
-    <h2>User Progress Over Time</h2>
-    <div class="controls">
-        <label for="time-range-select">Time Range:</label>
-        <select id="time-range-select">
-            <option value="week">Last Week</option>
-            <option value="month" selected>Last Month</option>
-        </select>
-    </div>
-    <div class="chart-container">
-        <canvas id="userProgressChart"></canvas>
-    </div>
-</section>
-
-
-
-<section id="organization-comparison">
-    <h2>Organizational Comparison</h2>
-    <div class="controls">
-        <label for="metric-select">Select Metric:</label>
-        <select id="metric-select">
-            <option value="totalUsers">Total Users</option>
-            <option value="activeUsers">Active Users</option>
-            <option value="completedStories">Completed Stories</option>
-            <option value="completedEpisodes">Completed Episodes</option>
-            <option value="avgStoryTime">Average Story Time</option>
-            <option value="avgEpisodeTime">Average Episode Time</option>
-        </select>
-    </div>
-    <div class="chart-container">
-        <canvas id="organizationComparisonChart"></canvas>
-    </div>
-</section>
-
-
-
-
-        </div>
-    </div>
+</div>
 
 
     

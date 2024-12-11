@@ -299,45 +299,6 @@ p {
     overflow: hidden;
 }
 
-/* Sidebar */
-.sidebar {
-    width: 260px;
-    background: #ffffff;
-    color: #333;
-    padding: 20px;
-    border-right: 1px solid #e0e0e0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
-}
-
-.sidebar-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #4CAF50;
-}
-
-.sidebar-menu {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar-link {
-    display: block;
-    padding: 15px 20px;
-    margin-bottom: 10px;
-    color: #333;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    border-radius: 8px;
-    transition: all 0.3s ease-in-out;
-}
-
-.sidebar-link:hover {
-    background: #f0f8e8;
-    color: #4CAF50;
-}
-
 /* Main Content */
 .content {
     flex: 1;
@@ -416,15 +377,6 @@ p {
     background-color: #0056b3;
 }
 
-.chart-container {
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-    /* max-width: 1000px; */
-    margin: 0 auto;
-}
 
 canvas {
     width: 100%;
@@ -444,35 +396,87 @@ h2 {
 
 
 /* overview */
-.overview-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+/* Wrapper for analytics section */
+.analytics-overview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin: 20px 0;
     padding: 20px;
-    background: #fff;
-    border-radius: 10px;
+    background: #f7faff;
+    border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.metric {
-    text-align: center;
+/* Each metric container */
+.overview-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    padding: 15px;
     background: #ffffff;
-    padding: 20px;
+    border: 1px solid #ddd;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.metric h3 {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 10px;
+/* Hover effect */
+.overview-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background: #eef7ff;
 }
 
-.metric p {
-    font-size: 24px;
-    color: #007bff;
+/* Metric label */
+.label {
+    font-size: 14px;
     font-weight: bold;
+    color: #555;
+    margin-bottom: 8px;
 }
+
+/* Metric value */
+.value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff; /* Blue color for emphasis */
+}
+
+/* Tooltip styling */
+.tooltip {
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    color: #333;
+    max-width: 300px;
+    z-index: 1000;
+    display: none;
+}
+
+.tooltip.visible {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .overview-item {
+        width: 100%;
+    }
+
+    .analytics-overview {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 
 
 
@@ -509,11 +513,30 @@ h2 {
     margin-left: 10px;
 }
 
-.chart-container {
-    position: relative;
-    height: 400px;
+
+#organizationComparisonWrapper {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+#organizationComparisonChart {
     width: 100%;
 }
+
+#userProgressWrapper {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+#userProgressChart {
+    width: 100%;
+    min-height: 300px;
+}
+
 
 
 

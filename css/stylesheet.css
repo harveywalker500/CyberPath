@@ -373,8 +373,12 @@ p {
     font-size: 16px;
 }
 
-.button-group button:hover {
-    background-color: #0056b3;
+.button-group button:hover{
+    background-color: #bfd9f5;
+}
+
+#exportasPDF:hover{
+    background-color: #BDC8E3;
 }
 
 

@@ -52,7 +52,7 @@ try {
                 <h1>Team Leader Dashboard</h1>
                 <p>Organisation: <strong><?php echo htmlspecialchars($organisationName); ?></strong></p>
                 <p>Track and analyze your team’s performance.</p>
-                <button id="exportPDF" class="button">Export PDF</button>
+                <button id="exportasPDF" class="button">Export as PDF</button>
             </header>
 
             <!-- Overview Section -->
@@ -146,7 +146,7 @@ echo makeFooter();
 
 <!-- export js -->
 <script>
-    document.getElementById('exportPDF').addEventListener('click', function () {
+    document.getElementById('exportasPDF').addEventListener('click', function () {
     const pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // Create a PDF document
     const content = document.body; // Select the full page content to be exported
 

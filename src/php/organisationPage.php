@@ -249,13 +249,12 @@ echo makeNavMenu("CyberPath");
 
 
     <!-- Leave Organisation Form -->
-    <form method="POST" action="" onsubmit="return confirmChange();">
         <div class="field">
             <div class="control">
                 <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
             </div>
         </div>
-    </form>
+
     </div>
 </div>
 </div>

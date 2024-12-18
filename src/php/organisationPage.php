@@ -112,15 +112,9 @@ try {
             try {
                     // Delete user from current organisation
                     if($currentOrgID) 
-                        if($teamLeaderOrg['teamLeaderID'] == $userID) {
                     $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':userID' => $userID]);
-
-                    // Delete organisation 
-                    $sql = "DELETE FROM organisationTable WHERE organisationID = :organisationID";
-                    $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([':organisationID' => $currentOrgID]);
 
                     $_SESSION['successMessage'] = "You have successfully left the organisation.";
                     $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
@@ -128,12 +122,6 @@ try {
                     // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
-                    } else {
-                        throw new Exception ("Only the team leader can delete the organisation.");
-                    }
-                    else { 
-                        throw new Exception ("You are not part of any organisations to leave.");
-                    }
             } catch (Exception $e) {
                 $errors[] = "Error leaving organisation: " . $e->getMessage();
             }

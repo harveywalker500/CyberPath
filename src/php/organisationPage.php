@@ -250,7 +250,12 @@ echo makeNavMenu("CyberPath");
     // Changing organisation confirm message
     function confirmChange() {
         if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
-            return confirm("Are you sure you want to leave the current organisation?");
+            if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
+                alert("You cannot leave an organisation if you are a team leader.");
+                return false;
+            } else {
+                return confirm("Are you sure you want to leave the current organisation?");
+            }
         }
         return true;
     }

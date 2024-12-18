@@ -53,18 +53,13 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['createOrganisation'])) {
             $organisationName = trim($_POST['organisationName'] ?? '');
+            
 
-            // Check if already team leader
-            $sql = "SELECT teamLeaderID from organisationTable WHERE teamLeaderID = :userID";
-            $stmt = $dbConn->prepare($sql);
-            $stmt->execute([':userID' => $userID]);
-            $existingTeamLeader = $stmt->fetchColumn();
+            if (empty($organisationName)) {
+                $errors[] = "Please provide an organisation name.";
+            }
 
-            if (!empty($existingTeamLeader)) {
-                $errors[] = "You already a team leader and cannot create another one.";
-            } elseif (empty($organisationName)) {
-                $errors[] = "Please pick an organisation name";
-            } else {
+            if (empty($errors)) {
                 try {
                     // Insert the new organisation into the database
                     $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
@@ -88,9 +83,6 @@ try {
                     $errors[] = "Error creating organisation: " . $e->getMessage();
                 }
             }
-        }
-            
-        
             // Joining existing organisation
         } elseif (isset($_POST['joinOrganisation'])) {
             $organisationID = $_POST['organisationID'] ?? null;

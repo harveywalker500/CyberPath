@@ -228,31 +228,32 @@ echo makeNavMenu("CyberPath");
             <div class="column is-one-third">
                 <h2 class="subtitle">Leave an organisation</h2>
                 <?php if ($currentOrgID) : ?>
-                    <div class="box current-org">
-                        <p class="subtitle">You are currently part of an organisation that is called:</p>
-                        <div class="field">
-                            <div class="control">
-                                <div class="input is-static"><?php echo htmlspecialchars($currentOrgName); ?></div>
-                            </div>
-                        </div>
-                    </div>
-                <?php else : ?>
-                    <div class="box current-org">
-                        <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Leave Organisation Form -->
-                <form method="POST" action="" onsubmit="return confirmChange();">
                     <div class="field">
+                        <label class="label">You are already currently part of an organisation called:</label>
                         <div class="control">
-                            <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                            <div class="input input-static"><?php echo htmlspecialchars($currentOrgName); ?></div>
                         </div>
                     </div>
-                </form>
             </div>
         </div>
+    <?php else : ?>
+        <div class="box current-org">
+            <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+        </div>
+    <?php endif; ?>
+
+
+    <!-- Leave Organisation Form -->
+    <form method="POST" action="" onsubmit="return confirmChange();">
+        <div class="field">
+            <div class="control">
+                <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+            </div>
+        </div>
+    </form>
     </div>
+</div>
+</div>
 </div>
 
 <script>

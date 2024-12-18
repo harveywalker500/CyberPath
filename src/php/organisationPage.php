@@ -106,37 +106,47 @@ try {
                     $errors[] = "Error joining organisation: " . $e->getMessage();
                 }
             }
+
             // Leave existing organisation
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
-                // Delete use from current organisation
-                $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
+                // Get current organisation ID of user
+
+                $sql = "SELECT organisationID FROM userTable WHERE userID = :userID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':userID' => $userID]);
+                $currentOrgID = $stmt->fetchColumn();
 
-
-                $sql ="SELECT userID from userTable where organisationID = :organisationID AND userID != :userID LIMIT 1";
-                $stmt = $dbConn->prepare($sql);
-                $stmt->execute([':organisationID' => $currentOrgID, ':userID' => $userID]);
-                $newTeamLeaderID = $stmt->fetchColumn();
-
-                if ($newTeamLeaderID) {
-                    // Set new team leader
-                    $sql = "UPDATE organisationTable SET teamLeaderID = :teamLeaderID where organisationID = :organisationID";
+                if ($currentOrgID) {
+                    // Delete use from current organisation
+                    $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([':teamLeaderID' => $newteamLeaderID, ':organisationID' => $currentOrgID]);
-                } else {
-                    $sql = "DELETE from organisationTable where organisationID = :organisationID";
+                    $stmt->execute([':userID' => $userID]);
+
+                    // Get next member
+                    $sql = "SELECT userID from userTable where organisationID = :organisationID AND userID != :userID LIMIT 1";
                     $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([':organisationID' => $currentOrgID]);
+                    $stmt->execute([':organisationID' => $currentOrgID, ':userID' => $userID]);
+                    $newTeamLeaderID = $stmt->fetchColumn();
+
+                    if ($newTeamLeaderID) {
+                        // Set new team leader
+                        $sql = "UPDATE organisationTable SET teamLeaderID = :teamLeaderID where organisationID = :organisationID";
+                        $stmt = $dbConn->prepare($sql);
+                        $stmt->execute([':teamLeaderID' => $newteamLeaderID, ':organisationID' => $currentOrgID]);
+                    } else {
+                        $sql = "DELETE from organisationTable where organisationID = :organisationID";
+                        $stmt = $dbConn->prepare($sql);
+                        $stmt->execute([':organisationID' => $currentOrgID]);
+                    }
+
+                    $_SESSION['successMessage'] = "You have successfully left the organisation.";
+                    $currentOrgName = "You are not part of any organisation. Create or join an organisation";
+
+                    // Refreshes the page and data from database
+                    header("Location: organisationPage.php");
+                    exit();
                 }
-
-                $_SESSION['successMessage'] = "You have successfully left the organisation.";
-                $currentOrgName = "You are not part of any organisation. Create or join an organisation";
-
-                // Refreshes the page and data from database
-                header("Location: organisationPage.php");
-                exit();
             } catch (Exception $e) {
                 $errors[] = "Error leaving organisation: " . $e->getMessage();
             }

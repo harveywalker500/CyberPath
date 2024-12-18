@@ -45,6 +45,8 @@ try {
         $stmt = $dbConn->prepare($sql);
         $stmt->execute([':organisationID' => $currentOrgID]);
         $currentOrgName = $stmt->fetchColumn();
+    } else {
+        $currentOrgName = "You are not part of any organisation";
     }
 
     // Check if the form is submitted

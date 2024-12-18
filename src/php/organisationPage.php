@@ -227,53 +227,65 @@ echo makeNavMenu("CyberPath");
             <!-- Display current organisation -->
             <div class="column is-one-third">
                 <h2 class="subtitle">Current Organisation</h2>
-                <div class="box current-org">
-                    <?php if ($currentOrgID) : ?>
-                        <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                        <!-- Leave Organisation Form -->
-                        <form method="POST" action="" onsubmit="return confirmChange();">
-                            <div class="field">
-                                <div class="control">
-                                    <button class="button is-danger is-fullwidth" type="submit" name="leaveOrganisation">Leave Organisation</button>
-                                </div>
-                            </div>
-                        </form>
-                    <?php else : ?>
-                        <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                    <?php endif; ?>
-                </div>
+                <?php if ($currentOrgID) : ?>
+                    <div class="field">
+                        <label class="label">You are already currently part of an organisation:</label>
+                        <div class="control">
+                            <div class="input input-static"><?php echo htmlspecialchars($currentOrgName); ?></div>
+                        </div>
+                    </div>
             </div>
+        </div>
+    <?php else : ?>
+        <div class="box current-org">
+            <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+        </div>
+    <?php endif; ?>
 
-            <script>
-                // Changing organisation confirm message
-                function confirmChange() {
-                    if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
-                        if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-                            alert("You cannot leave an organisation if you are a team leader.");
-                            return false;
-                        } else {
-                            if (<?php echo $teamLeaderOrg ? 'true' : 'false'; ?>) {
-                                alert("You are already a team leader and cannot join a different organisation.");
-                                return false;
-                            } else {
-                                return confirm("Are you sure you want to leave the current organisation?");
-                            }
-                        }
-                    }
-                    return true;
+
+    <!-- Leave Organisation Form -->
+    <form method="POST" action="" onsubmit="return confirmChange();">
+        <div class="field">
+            <div class="control">
+                <button class="button is-danger is-fullwidth" type="submit" name="leaveOrganisation">Leave Organisation</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+    // Changing organisation confirm message
+    function confirmChange() {
+        if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
+            if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
+                alert("You cannot leave an organisation if you are a team leader.");
+                return false;
+            } else {
+                if (<?php echo $teamLeaderOrg ? 'true' : 'false'; ?>) {
+                    alert("You are already a team leader and cannot join a different organisation.");
+                    return false;
+                } else {
+                    return confirm("Are you sure you want to leave the current organisation?");
                 }
+            }
+        }
+        return true;
+    }
 
-                // Creating organisation confirm message
-                function confirmCreate() {
-                    if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-                        alert("You are already a team leader and cannot create another organisation.");
-                        return false;
-                    }
-                    return true;
-                }
-            </script>
+    // Creating organisation confirm message
+    function confirmCreate() {
+        if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
+            alert("You are already a team leader and cannot create another organisation.");
+            return false;
+        }
+        return true;
+    }
+</script>
 
-            <?php
-            echo makeFooter();
-            echo makePageEnd();
-            ?>
+<?php
+echo makeFooter();
+echo makePageEnd();
+?>

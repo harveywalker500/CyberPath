@@ -115,8 +115,6 @@ try {
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
                 // Check if user is team leader
-                if ($teamLeaderOrg) {
-                    $errors[] = "You are already a team leader and cannot create another.";
                 $sql = "SELECT teamLeaderID from organisationTable WHERE organisationID = :currentOrgID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':currentOrgID' => $currentOrgID]);
@@ -136,7 +134,6 @@ try {
                     header("Location: organisationPage.php");
                     exit();
                 }
-            }
             } catch (Exception $e) {
                 $errors[] = "Error leaving organisation: " . $e->getMessage();
             }
@@ -268,7 +265,7 @@ echo makeNavMenu("CyberPath");
                 return false;
             } else {
                 if (<?php echo $teamLeaderOrg ? 'true' : 'false'; ?>) {
-                    alert("You are already a team leader and cannot join or create a new organisation.");
+                    alert("You are already a team leader and cannot join a different organisation.");
                     return false;
                 } else {
                     return confirm("Are you sure you want to leave the current organisation?");

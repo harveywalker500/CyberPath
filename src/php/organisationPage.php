@@ -119,16 +119,16 @@ try {
                 if ($teamLeaderID == $userID) {
                     $errors[] = "You cannot leave an organisaiton if you are a team leader";
                 } else {
-                            $sql = "UPDATE userTable SET organisationID = NULL WHERE organisationID = :currentOrgID";
-                            $stmt = $dbConn->prepare($sql);
-                            $stmt->execute([':userID' => $userID]);
+                    $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = userID";
+                    $stmt = $dbConn->prepare($sql);
+                    $stmt->execute([':userID' => $userID]);
 
-                            $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
-                            $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
+                    $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
+                    $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
 
-                        // Refreshes the page and data from database
-                        header("Location: organisationPage.php");
-                        exit();
+                    // Refreshes the page and data from database
+                    header("Location: organisationPage.php");
+                    exit();
                 }
             } catch (Exception $e) {
                 $errors[] = "Error leaving organisation: " . $e->getMessage();
@@ -218,7 +218,7 @@ echo makeNavMenu("CyberPath");
                     </div>
                 </form>
             </div>
-            
+
 
             <!-- Display current organisation -->
             <div class="column is-one-third">

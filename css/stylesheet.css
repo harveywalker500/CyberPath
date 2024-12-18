@@ -285,6 +285,12 @@ p {
 }
 .box.leaderboard-box {overflow:hidden}
 
+.center-button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 
 
 

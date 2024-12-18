@@ -213,7 +213,7 @@ echo makeNavMenu("CyberPath");
             <div class="column is-one-third">
                 <h2 class="subtitle">Leave an organisation</h2>
                 <?php if ($currentOrgID) : ?>
-                    <div class="box" style="background-color: #DAF1FA;">
+                    <div class="box">
                         <p class="subtitle">You are currently part of an organisation called: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
                     </div>
                 <?php else : ?>

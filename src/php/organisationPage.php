@@ -1,8 +1,11 @@
+<!--  Organisation Page to create or join an organisation  -->
+
 <?php
 // Include functions file and start session
 require_once("functions.php");
 session_start();
 loggedIn(); // Ensures the user is logged in before loading the page
+
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['userID'])) {
@@ -10,21 +13,20 @@ if (!isset($_SESSION['userID'])) {
     exit();
 }
 
+
 $userID = $_SESSION['userID']; // Get UserID from database when logged in
-$successMessage = ""; // Initial success message
+$successMessage = ""; // Initalise success message
 $errors = []; // Initialise error array
 
 // Connect to database and fetch all organisations from the database
 try {
     $dbConn = getConnection(); // Establish database connection
-
-    // Fetch all organisations
     $sql = "SELECT organisationID, name FROM organisationTable";
     $stmt = $dbConn->prepare($sql);
     $stmt->execute();
     $organisations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch organisation where user is team leader
+    // Fetch all organisations 
     $sql = "SELECT organisationID, teamLeaderID FROM organisationTable WHERE teamLeaderID = :userID";
     $stmt = $dbConn->prepare($sql);
     $stmt->execute([':userID' => $userID]);
@@ -80,7 +82,6 @@ try {
                     $errors[] = "Error creating organisation: " . $e->getMessage();
                 }
             }
-
             // Joining existing organisation
         } elseif (isset($_POST['joinOrganisation'])) {
             $organisationID = $_POST['organisationID'] ?? null;
@@ -97,6 +98,7 @@ try {
                     $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
                     $_SESSION['successMessage'] = "You have successfully joined the organisation.";
 
+
                     // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
@@ -106,7 +108,7 @@ try {
             }
 
             // Leave existing organisation
-        } elseif (isset($_POST['leaveOrganisation'])) {
+        } else if (isset($_POST['leaveOrganisation'])) {
             try {
                 // Check if user is team leader
                 $sql = "SELECT teamLeaderID from organisationTable WHERE organisationID = :currentOrgID";
@@ -115,7 +117,7 @@ try {
                 $teamLeaderID = $stmt->fetchColumn();
 
                 if ($teamLeaderID == $userID) {
-                    $errors[] = "You cannot leave an organisation if you are a team leader";
+                    $errors[] = "You cannot leave an organisaiton if you are a team leader";
                 } else {
                     $sql = "SELECT COUNT(*) FROM userTable where organisationID = :currentOrgID";
                     $stmt = $dbConn->prepare($sql);
@@ -134,10 +136,11 @@ try {
                             $stmt->execute([':currentOrgID' => $currentOrgID]);
 
                             $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
+                            
                         } else {
                             $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                             $stmt = $dbConn->prepare($sql);
-                            $stmt->execute([':userID' => $userID]);
+                            $stmt->execute(['userID' => $userID]);
 
                             $_SESSION['successMessage'] = "You have successfully left the organisation.";
                         }
@@ -211,16 +214,18 @@ echo makeNavMenu("CyberPath");
 
             <!-- Join Organisation Form -->
             <div class="column is-one-third">
-                <h2 class="subtitle">Join an Organisation</h2>
-                <form method="POST" action="">
+                <h2 class="subtitle">Join an Existing Organisation</h2>
+                <form method="POST" action="" onsubmit="return confirmChange();">
                     <div class="field">
                         <label class="label">Select Organisation</label>
                         <div class="control">
                             <div class="select">
                                 <select name="organisationID" required>
-                                    <option value="">Select an organisation</option>
-                                    <?php foreach ($organisations as $org): ?>
-                                        <option value="<?php echo htmlspecialchars($org['organisationID']); ?>"><?php echo htmlspecialchars($org['name']); ?></option>
+                                    <option value=""> Select an Organisation </option>
+                                    <?php foreach ($organisations as $organisation): ?>
+                                        <option value="<?php echo $organisation['organisationID']; ?>">
+                                            <?php echo htmlspecialchars($organisation['name']); ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -234,22 +239,51 @@ echo makeNavMenu("CyberPath");
                     </div>
                 </form>
             </div>
+            
 
-            <!-- Leave Organisation Form -->
+            <!-- Display current organisation -->
             <div class="column is-one-third">
-                <h2 class="subtitle">Leave Organisation</h2>
-                <form method="POST" action="">
+                <h2 class="subtitle">Leave an organisation</h2>
+                <?php if ($currentOrgID) : ?>
+                    <div class="box current-org">
+                        <p class="subtitle">You are currently part of an organisation that is called:<br> <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                    </div>
+                <?php else : ?>
+                    <div class="box current-org">
+                        <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Leave Organisation Form -->
+                <form method="POST" action="" onsubmit="return confirmChange();">
                     <div class="field">
                         <div class="control">
-                            <button class="button is-danger" type="submit" name="leaveOrganisation" onclick="return confirm('Are you sure you want to leave this organisation?');">Leave Organisation</button>
+                            <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
                         </div>
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
+
+<script>
+    // Changing organisation confirm message
+    function confirmChange() {
+        if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
+            return confirm("Are you sure you want to leave the current organisation?");
+        }
+        return true;
+    }
+
+    // Creating organisation confirm message
+    function confirmCreate() {
+        if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
+            return confirm("You are already an organisation leader. Do you wish to continue?");
+        }
+        return true;
+    }
+</script>
 
 <?php
 echo makeFooter();

@@ -229,7 +229,8 @@ echo makeNavMenu("CyberPath");
                 <h2 class="subtitle">Leave an organisation</h2>
                 <?php if ($currentOrgID) : ?>
                     <div class="box current-org">
-                        <p class="subtitle">You are currently part of an organisation that is called:<br> <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                        <p class="subtitle">You are currently part of an organisation that is called:</p>
+                        <input type="text" class="input" value="<?php echo htmlspecialchars($currentOrgName); ?>" readonly>
                     </div>
                 <?php else : ?>
                     <div class="box current-org">

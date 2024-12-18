@@ -193,17 +193,32 @@ function renderUserProgressChart(data, timeRange) {
         };
     });
 
-    // Adjust the wrapper for scrolling if necessary
+   // Adjust the wrapper and canvas for scrolling if necessary
     const wrapper = document.getElementById("userProgressWrapper");
+    const canvas = document.getElementById("userProgressChart");
+
     if (users.length > 15 || dates.length > 15) {
-        wrapper.style.maxHeight = "500px";
-        wrapper.style.overflowX = "auto";
-        wrapper.style.overflowY = "hidden";
+        wrapper.style.maxWidth = "100%"; // Wrapper takes full width
+        wrapper.style.overflowX = "auto"; // Enable horizontal scrolling
+        wrapper.style.overflowY = "hidden"; // Prevent vertical scroll
+        wrapper.style.whiteSpace = "nowrap"; // Prevent wrapping of content
+        wrapper.style.paddingBottom = "10px"; // Add padding for better scrollbar visibility
+        
+        // Dynamically adjust canvas size for large data
+        canvas.style.width = `${dates.length * 50}px`; // Increase width based on data points
+        canvas.style.height = "400px"; // Fixed height for consistency
     } else {
-        wrapper.style.maxHeight = "";
+        wrapper.style.maxWidth = ""; // Reset wrapper styling
         wrapper.style.overflowX = "";
         wrapper.style.overflowY = "";
+        wrapper.style.whiteSpace = "";
+        wrapper.style.paddingBottom = "";
+
+        canvas.style.width = "100%"; // Canvas takes full available space
+        canvas.style.height = "400px"; // Maintain height
     }
+
+
 
     // Destroy previous chart instance if it exists
     if (currentUserChart) {
@@ -289,15 +304,22 @@ function renderComparisonChart(data, metric) {
     const chartLabel = metric.replace(/([A-Z])/g, ' $1').trim(); // Format the metric name for the label
     const colors = generateColors(labels); // Generate unique colors for each organization
 
-    // Adjust the height of the chart wrapper based on the number of organizations
+    // Adjust the height and horizontal scroll of the chart wrapper
     const wrapper = document.getElementById("organizationComparisonWrapper");
     const organizationCount = labels.length;
+
     if (organizationCount > 15) {
-        wrapper.style.maxHeight = "500px"; // Set a maximum height
-        wrapper.style.overflowY = "auto"; // Enable vertical scrolling
+        wrapper.style.maxWidth = "100%"; // Ensure full wrapper width
+        wrapper.style.overflowX = "auto"; // Enable horizontal scrolling
+        wrapper.style.overflowY = "hidden"; // Prevent vertical scroll
+        wrapper.style.whiteSpace = "nowrap"; // Prevent content wrapping
+        wrapper.style.paddingBottom = "10px"; // Add padding for scrollbar visibility
     } else {
-        wrapper.style.maxHeight = ""; // Reset the height if less than 15 organizations
-        wrapper.style.overflowY = ""; // Remove scrolling
+        wrapper.style.maxWidth = ""; 
+        wrapper.style.overflowX = "";
+        wrapper.style.overflowY = "";
+        wrapper.style.whiteSpace = "";
+        wrapper.style.paddingBottom = "";
     }
 
     // Destroy previous chart instance if it exists

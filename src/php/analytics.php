@@ -87,6 +87,7 @@ try {
                 <div id="tooltip" class="tooltip hidden"></div>
             </section>
 
+            <!-- User Progress Canvas section -->
             <section id="user-progress" class="userprogress-container">
                 <h2>User Progress Over Time</h2>
                 <div class="controls">
@@ -97,14 +98,14 @@ try {
                         <option value="all" selected>All Time</option>
                     </select>
                 </div>
-                <div id="userProgressWrapper" style="max-height: 400px; overflow-x: auto;">
+                <div id="userProgressWrapper" style="max-height: 400px; overflow-y: auto;">
                 <canvas id="userProgressChart"></canvas>
             </div>
 
             </section>
 
 
-
+            <!-- Organization Comparison Canvas Section-->
             <section id="organization-comparison">
                 <h2>Organisational Comparison</h2>
                 <div class="controls">

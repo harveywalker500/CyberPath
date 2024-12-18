@@ -386,6 +386,7 @@ canvas {
     width: 100%;
     height: 400px;
     margin: 0 auto;
+    /* min-width: 1200px; */
 }
 
 h2 {
@@ -518,29 +519,18 @@ h2 {
 }
 
 
-#organizationComparisonWrapper {
+#organizationComparisonWrapper, #userProgressWrapper {
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 10px;
     background-color: #f9f9f9;
+    display: block;
+    position: relative;
 }
 
-#organizationComparisonChart {
+#organizationComparisonChart, #userProgressChart {
     width: 100%;
 }
-
-#userProgressWrapper {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    background-color: #f9f9f9;
-}
-
-#userProgressChart {
-    width: 100%;
-    min-height: 300px;
-}
-
 
 
 

@@ -136,6 +136,10 @@ try {
                             $stmt->execute([':currentOrgID' => $currentOrgID]);
 
                             $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
+
+                            // Refreshes the page and data from database
+                        header("Location: organisationPage.php");
+                        exit();
                         } else {
                             $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                             $stmt = $dbConn->prepare($sql);

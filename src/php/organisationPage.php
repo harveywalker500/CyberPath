@@ -53,7 +53,7 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['createOrganisation'])) {
             $organisationName = trim($_POST['organisationName'] ?? '');
-            if ($isTeamLeader) {
+            if ($teamLeaderOrg) {
                 $errors[] = "You are already a team leader and cannot create another.";
             } else {
 

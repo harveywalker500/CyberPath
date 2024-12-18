@@ -53,34 +53,37 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['createOrganisation'])) {
             $organisationName = trim($_POST['organisationName'] ?? '');
-            
+            if ($isTeamLeader) {
+                $errors[] = "You are already a team leader and cannot create another.";
+            } else {
 
-            if (empty($organisationName)) {
-                $errors[] = "Please provide an organisation name.";
-            }
+                if (empty($organisationName)) {
+                    $errors[] = "Please provide an organisation name.";
+                }
 
-            if (empty($errors)) {
-                try {
-                    // Insert the new organisation into the database
-                    $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
-                    $stmt = $dbConn->prepare($sql);
-                    // Include the current user as the team leader
-                    $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
+                if (empty($errors)) {
+                    try {
+                        // Insert the new organisation into the database
+                        $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
+                        $stmt = $dbConn->prepare($sql);
+                        // Include the current user as the team leader
+                        $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
 
-                    // Get the newly created organisation ID
-                    $organisationID = $dbConn->lastInsertId();
+                        // Get the newly created organisation ID
+                        $organisationID = $dbConn->lastInsertId();
 
-                    // Assign the user to the newly created organisation
-                    $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-                    $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
-                    $_SESSION['successMessage'] = "Organisation created and you have been assigned as the team leader.";
+                        // Assign the user to the newly created organisation
+                        $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                        $stmt = $dbConn->prepare($sql);
+                        $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+                        $_SESSION['successMessage'] = "Organisation created and you have been assigned as the team leader.";
 
-                    // Refreshes the page and data from database
-                    header("Location: organisationPage.php");
-                    exit();
-                } catch (Exception $e) {
-                    $errors[] = "Error creating organisation: " . $e->getMessage();
+                        // Refreshes the page and data from database
+                        header("Location: organisationPage.php");
+                        exit();
+                    } catch (Exception $e) {
+                        $errors[] = "Error creating organisation: " . $e->getMessage();
+                    }
                 }
             }
             // Joining existing organisation
@@ -269,11 +272,11 @@ echo makeNavMenu("CyberPath");
     // Creating organisation confirm message
     function confirmCreate() {
         if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-           alert("You are already a team leader and cannot create another organisation.");
-        return false;
+            alert("You are already a team leader and cannot create another organisation.");
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 </script>
 
 <?php

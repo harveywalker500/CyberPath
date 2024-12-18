@@ -239,19 +239,20 @@ echo makeNavMenu("CyberPath");
                             <div class="input input-static"><?php echo htmlspecialchars($currentOrgName); ?></div>
                         </div>
                     </div>
-            </div>
-        </div>
-    <?php else : ?>
-        <div class="box current-org">
-            <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-        </div>
-    <?php endif; ?>
+
+                <?php else : ?>
+                    <div class="box current-org">
+                        <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                    </div>
+                <?php endif; ?>
 
 
-    <!-- Leave Organisation Form -->
-        <div class="field">
-            <div class="control">
-                <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                <!-- Leave Organisation Form -->
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                    </div>
+                </div>
             </div>
         </div>
 

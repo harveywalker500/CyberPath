@@ -111,7 +111,7 @@ try {
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
                 // Check if user is team leader
-                $sql = "SELECT teamLeaderID from OrganisationTable WHERE organisationID = :currentOrgID";
+                $sql = "SELECT teamLeaderID from organisationTable WHERE organisationID = :currentOrgID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':currentOrgID' => $currentOrgID]);
                 $teamLeaderID = $stmt->fetchColumn();

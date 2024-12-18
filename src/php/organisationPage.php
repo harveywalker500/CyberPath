@@ -240,6 +240,17 @@ echo makeNavMenu("CyberPath");
                 </form>
             </div>
 
+            <!-- Leave Organisation Form -->
+            <div class="column is-one-third">
+                <h2 class="subtitle">Leave an organisation</h2>
+                <form method="POST" action="" onsubmit="return confirmLeave();">
+                <div class ="field">
+                    <label class="label">Current Organisation></label>
+                    <div class="control">
+                        <input class="input" type="text" name="currentOrgName" value="<?php echo htmlspecialchars($currentOrgName); ?>" readonly>
+                    </div>
+                </div>
+
             <!-- Display current organisation -->
             <div class="column is-one-third">
                 <h2 class="subtitle">Leave an organisation</h2>
@@ -253,8 +264,6 @@ echo makeNavMenu("CyberPath");
                     </div>
                 <?php endif; ?>
 
-                <!-- Leave Organisation Form -->
-                <form method="POST" action="" onsubmit="return confirmChange();">
                     <div class="field">
                         <div class="control">
                             <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>

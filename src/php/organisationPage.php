@@ -106,6 +106,7 @@ try {
                     $errors[] = "Error joining organisation: " . $e->getMessage();
                 }
             }
+            // Leave existing organisation
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
                 // Delete use from current organisation
@@ -210,8 +211,12 @@ echo makeNavMenu("CyberPath");
 
             <!-- Display current organisation -->
             <div class="column is-one-third">
-            <h2 class="subtitle">Leave an organisation</h2>
+                <h2 class="subtitle">Leave an organisation</h2>
                 <?php if ($currentOrgID) : ?>
+                    <div class="box">
+                        <p class="subtitle">You are currently part of an organisation called: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                    </div>
+                <?php else : ?>
                     <div class="box">
                         <p class="subtitle">You are currently part of an organisation called: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
                     </div>
@@ -229,9 +234,6 @@ echo makeNavMenu("CyberPath");
         </div>
     </div>
 </div>
-
-
- 
 
 <script>
     // Changing organisation confirm message

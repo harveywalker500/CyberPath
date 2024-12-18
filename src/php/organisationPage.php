@@ -119,7 +119,7 @@ try {
                 if ($teamLeaderID == $userID) {
                     $errors[] = "You cannot leave an organisaiton if you are a team leader";
                 } else {
-                    $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = userID";
+                    $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':userID' => $userID]);
 

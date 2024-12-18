@@ -117,6 +117,8 @@ try {
                 // Refreshes the page and data from database
                 header("Location: organisationPage.php");
                 exit();
+            } catch (Exception $e) {
+                $errors[] = "Error leaving organisation: " . $e->getMessage();
             }
         }
     }

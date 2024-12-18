@@ -128,7 +128,7 @@ try {
                     header("Location: organisationPage.php");
                     exit();
                     } else {
-                        $erorrs[] = "Only the team leader can delete the organisation";
+                        throw new Exception ("Only the team leader can delete the organisation");
                     }
             } catch (Exception $e) {
                 $errors[] = "Error leaving organisation: " . $e->getMessage();

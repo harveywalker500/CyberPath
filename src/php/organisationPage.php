@@ -13,7 +13,6 @@ if (!isset($_SESSION['userID'])) {
     exit();
 }
 
-
 $userID = $_SESSION['userID']; // Get UserID from database when logged in
 $successMessage = ""; // Initalise success message
 $errors = []; // Initialise error array
@@ -54,9 +53,8 @@ try {
         if (isset($_POST['createOrganisation'])) {
             $organisationName = trim($_POST['organisationName'] ?? '');
             if ($teamLeaderOrg) {
-                $errors[] = "You are already a team leader and cannot create another.";
+                $errors[] = "You are already a team leader and cannot join another organisation.";
             } else {
-
                 if (empty($organisationName)) {
                     $errors[] = "Please provide an organisation name.";
                 }
@@ -94,7 +92,9 @@ try {
                 $errors[] = "Please select an organisation.";
             }
 
-            if (empty($errors)) {
+            if ($teamLeaderOrg) {
+                $errors[] = "You are already a team leader and cannot join a different organisation.";
+            } else if (empty($errors)) {
                 try {
                     // Assign the user to the selected organisation
                     $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
@@ -110,7 +110,6 @@ try {
                     $errors[] = "Error joining organisation: " . $e->getMessage();
                 }
             }
-
             // Leave existing organisation
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
@@ -123,22 +122,28 @@ try {
                 if ($teamLeaderID == $userID) {
                     $errors[] = "You cannot leave an organisaiton if you are a team leader";
                 } else {
-                    $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
-                    $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([':userID' => $userID]);
+                    try {
+                        $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
+                        $stmt = $dbConn->prepare($sql);
+                        $stmt->execute([':userID' => $userID]);
 
-                    $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
-                    $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
+                        $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
+                        $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
 
-                    // Refreshes the page and data from database
-                    header("Location: organisationPage.php");
-                    exit();
+                        // Refreshes the page and data from database
+                        header("Location: organisationPage.php");
+                        exit();
+                    } catch (Exception $e) {
+                        $errors[] = "Error leaving organisation: " . $e->getMessage();
+                    }
                 }
             } catch (Exception $e) {
                 $errors[] = "Error leaving organisation: " . $e->getMessage();
             }
         }
     }
+
+
     // Clear success messages
     $successMessage = isset($_SESSION['successMessage']) ? $_SESSION['successMessage'] : "";
     unset($_SESSION['successMessage']);
@@ -259,28 +264,11 @@ echo makeNavMenu("CyberPath");
 <script>
     // Changing organisation confirm message
     function confirmChange() {
-        if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
-            if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-                alert("You cannot leave an organisation if you are a team leader.");
-                return false;
-            } else {
-                if (<?php echo $teamLeaderOrg ? 'true' : 'false'; ?>) {
-                    alert("You are already a team leader and cannot join a different organisation.");
-                    return false;
-                } else {
-                    return confirm("Are you sure you want to leave the current organisation?");
-                }
-            }
-        }
         return true;
     }
 
     // Creating organisation confirm message
     function confirmCreate() {
-        if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-            alert("You are already a team leader and cannot create another organisation.");
-            return false;
-        }
         return true;
     }
 </script>

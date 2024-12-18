@@ -46,7 +46,7 @@ try {
         $stmt->execute([':organisationID' => $currentOrgID]);
         $currentOrgName = $stmt->fetchColumn();
     } else {
-        $currentOrgName = "You are currently not part of any organisation. Please create an organisation if you are a team leader, or join an existing one.";
+        $currentOrgName = "You are not part of any organisation. Create or join an organisation";
     }
 
     // Check if the form is submitted
@@ -115,7 +115,7 @@ try {
                 $stmt->execute([':userID' => $userID]);
                 $_SESSION['successMessage'] = "You have successfully left the organisation.";
 
-                $currentOrgName = "You are currently not part of any organisation. Please create an organisation if you are a team leader, or join an existing one.";
+                $currentOrgName = "You are not part of any organisation. Create or join an organisation";
 
                 // Refreshes the page and data from database
                 header("Location: organisationPage.php");

@@ -136,6 +136,7 @@ try {
                             $stmt->execute([':currentOrgID' => $currentOrgID]);
 
                             $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
+                            
                         } else {
                             $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                             $stmt = $dbConn->prepare($sql);
@@ -238,58 +239,53 @@ echo makeNavMenu("CyberPath");
                     </div>
                 </form>
             </div>
+            
 
-            <!-- Leave Organisation Form -->
+            <!-- Display current organisation -->
             <div class="column is-one-third">
                 <h2 class="subtitle">Leave an organisation</h2>
-                <form method="POST" action="" onsubmit="return confirmLeave();">
+                <?php if ($currentOrgID) : ?>
+                    <div class="box current-org">
+                        <p class="subtitle">You are currently part of an organisation that is called:<br> <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                    </div>
+                <?php else : ?>
+                    <div class="box current-org">
+                        <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Leave Organisation Form -->
+                <form method="POST" action="" onsubmit="return confirmChange();">
                     <div class="field">
-                        <label class="label">Current Organisation></label>
                         <div class="control">
-                            <input class="input" type="text" name="currentOrgName" value="<?php echo htmlspecialchars($currentOrgName); ?>" readonly>
+                            <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
                         </div>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    <!-- Display current organisation -->
-                    <div class="column is-one-third">
-                        <h2 class="subtitle">Leave an organisation</h2>
-                        <?php if ($currentOrgID) : ?>
-                            <div class="box current-org">
-                                <p class="subtitle">You are currently part of an organisation that is called:<br> <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                            </div>
-                        <?php else : ?>
-                            <div class="box current-org">
-                                <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                            </div>
-                        <?php endif; ?>
+<script>
+    // Changing organisation confirm message
+    function confirmChange() {
+        if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
+            return confirm("Are you sure you want to leave the current organisation?");
+        }
+        return true;
+    }
 
-                        <form method="POST" action="">
-                            <div class="field">
-                                <div class="control">
-                                    <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <script>
-                        // Changing organisation confirm message
-                        function confirmChange() {
-                            if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
-                                return confirm("Are you sure you want to leave the current organisation?");
-                            }
-                            return true;
-                        }
+    // Creating organisation confirm message
+    function confirmCreate() {
+        if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
+            return confirm("You are already an organisation leader. Do you wish to continue?");
+        }
+        return true;
+    }
+</script>
 
-                        // Creating organisation confirm message
-                        function confirmCreate() {
-                            if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-                                return confirm("You are already an organisation leader. Do you wish to continue?");
-                            }
-                            return true;
-                        }
-                    </script>
-
-                    <?php
-                    echo makeFooter();
-                    echo makePageEnd();
-                    ?>
+<?php
+echo makeFooter();
+echo makePageEnd();
+?>

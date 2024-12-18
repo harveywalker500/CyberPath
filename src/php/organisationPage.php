@@ -114,9 +114,6 @@ try {
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':userID' => $userID]);
 
-                $sql ="UPDATE organisationTable SET teamLeaderID = NULL where teamLeaderID = :userID";
-                $stmt = $dbConn->prepare($sql);
-                $stmt->execute([':userID' => $userID]);
 
                 $sql ="SELECT userID from userTable where organisationID = :organisationID AND userID != :userID LIMIT 1";
                 $stmt = $dbConn->prepare($sql);

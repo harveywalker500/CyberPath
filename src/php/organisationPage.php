@@ -263,36 +263,33 @@ echo makeNavMenu("CyberPath");
                             </div>
                         <?php endif; ?>
 
-                        <div class="field">
-                            <div class="control">
-                                <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                        <form method="POST" action="">
+                            <div class="field">
+                                <div class="control">
+                                    <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                                </div>
                             </div>
-                        </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                        </form>
+                    </div>
+                    <script>
+                        // Changing organisation confirm message
+                        function confirmChange() {
+                            if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
+                                return confirm("Are you sure you want to leave the current organisation?");
+                            }
+                            return true;
+                        }
 
-<script>
-    // Changing organisation confirm message
-    function confirmChange() {
-        if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
-            return confirm("Are you sure you want to leave the current organisation?");
-        }
-        return true;
-    }
+                        // Creating organisation confirm message
+                        function confirmCreate() {
+                            if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
+                                return confirm("You are already an organisation leader. Do you wish to continue?");
+                            }
+                            return true;
+                        }
+                    </script>
 
-    // Creating organisation confirm message
-    function confirmCreate() {
-        if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-            return confirm("You are already an organisation leader. Do you wish to continue?");
-        }
-        return true;
-    }
-</script>
-
-<?php
-echo makeFooter();
-echo makePageEnd();
-?>
+                    <?php
+                    echo makeFooter();
+                    echo makePageEnd();
+                    ?>

@@ -226,7 +226,7 @@ echo makeNavMenu("CyberPath");
 
             <!-- Display current organisation -->
             <div class="column is-one-third">
-                <h2 class="subtitle">Leave an organisation</h2>
+                <h2 class="subtitle">Current Organisation</h2>
                 <?php if ($currentOrgID) : ?>
                     <div class="field">
                         <label class="label">You are already currently part of an organisation:</label>
@@ -247,7 +247,7 @@ echo makeNavMenu("CyberPath");
     <form method="POST" action="" onsubmit="return confirmChange();">
         <div class="field">
             <div class="control">
-                <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                <button class="button is-danger w-full" type="submit" name="leaveOrganisation">Leave Organisation</button>
             </div>
         </div>
     </form>

@@ -259,7 +259,7 @@ echo makeNavMenu("CyberPath");
     // Changing organisation confirm message
     function confirmChange() {
         if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
-            return confirm("Joining a new organisation will remove you from your current organisation. Do you wish to continue?");
+            return confirm("Are you sure you want to leae the current organisation?");
         }
         return true;
     }

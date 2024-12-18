@@ -29,8 +29,8 @@ class registerTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST = [
             'username' => 'testuser',
-            'password' => 'Password1!',
-            'confirm_password' => 'Password1!',
+            'password' => '8idzGtGD-!6sRqqg',
+            'confirm_password' => '8idzGtGD-!6sRqqg',
             'forename' => 'John',
             'surname' => 'Doe',
             'email' => 'invalid-email'
@@ -48,8 +48,8 @@ class registerTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST = [
             'username' => 'testuser',
-            'password' => 'Password1!',
-            'confirm_password' => 'Password2!',
+            'password' => '8idzGtGD-!6sRqqg',
+            'confirm_password' => '6!gco-EmEKZX*yu4',
             'forename' => 'John',
             'surname' => 'Doe',
             'email' => 'john.doe@example.com'
@@ -67,8 +67,8 @@ class registerTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST = [
             'username' => 'testuser',
-            'password' => 'Password1!',
-            'confirm_password' => 'Password1!',
+            'password' => '8idzGtGD-!6sRqqg',
+            'confirm_password' => '8idzGtGD-!6sRqqg',
             'forename' => 'John',
             'surname' => 'Doe',
             'email' => 'john.doe@example.com'

@@ -76,7 +76,6 @@ try {
                     // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
-
                 } catch (Exception $e) {
                     $errors[] = "Error creating organisation: " . $e->getMessage();
                 }
@@ -84,7 +83,7 @@ try {
             // Joining existing organisation
         } elseif (isset($_POST['joinOrganisation'])) {
             $organisationID = $_POST['organisationID'] ?? null;
- 
+
             if (!$organisationID) {
                 $errors[] = "Please select an organisation.";
             }
@@ -101,7 +100,6 @@ try {
                     // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
-
                 } catch (Exception $e) {
                     $errors[] = "Error joining organisation: " . $e->getMessage();
                 }
@@ -125,7 +123,6 @@ try {
     // Clear success messages
     $successMessage = isset($_SESSION['successMessage']) ? $_SESSION['successMessage'] : "";
     unset($_SESSION['successMessage']);
-
 } catch (Exception $e) {
     $errors[] = "Error joining organisation: " . $e->getMessage();
 }
@@ -204,36 +201,34 @@ echo makeNavMenu("CyberPath");
                             <button class="button is-primary" type="submit" name="joinOrganisation">Join Organisation</button>
                         </div>
                     </div>
+                </form>
+            </div>
 
                     <!-- Leave Organisation Form -->
-                     <div class="column is-one-third">
-                         <h2 class="subtitle">Leave Organisation</h2>
-                         <form method="POST" action="" onsubmit="return confirmChange();">
+                    <div class="column is-one-third">
+                        <h2 class="subtitle">Leave Organisation</h2>
+                        <form method="POST" action="" onsubmit="return confirmChange();">
                             <div class="field">
                                 <div class="control">
                                     <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
                                 </div>
                             </div>
-                         </form>
+                        </form>
                     </div>
-                </div>
-            </div>
-        </div>
-                       
-                                        
-                    <!-- Display current organisation -->
-                    <?php if ($currentOrgID) : ?>
-                        <div class="column is is-centered">
-                            <div class="column has-text-centered">
-                                <p class="subtitle">You are currently part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                            </div>
-                        </div>
 
-                    <?php endif; ?>
-                </form>
+    <!-- Display current organisation -->
+    <?php if ($currentOrgID) : ?>
+        <div class="column is is-centered">
+            <div class="column has-text-centered">
+                <p class="subtitle">You are currently part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
             </div>
         </div>
-    </div>
+
+    <?php endif; ?>
+    </form>
+</div>
+</div>
+</div>
 </div>
 
 <script>

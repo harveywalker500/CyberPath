@@ -46,7 +46,7 @@ try {
         $stmt->execute([':organisationID' => $currentOrgID]);
         $currentOrgName = $stmt->fetchColumn();
     } else {
-        $currentOrgName = "You are not part of any organisation. Create or join an organisation";
+        $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
     }
 
     // Check if the form is submitted
@@ -111,7 +111,8 @@ try {
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
                     // Delete user from current organisation
-                    if($teamLeader && $currentOrgID) {
+                    if($currentOrgID) 
+                        if($teamLeaderOrg['teamLeaderID'] == $userID) {
                     $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':userID' => $userID]);
@@ -122,13 +123,16 @@ try {
                     $stmt->execute([':organisationID' => $currentOrgID]);
 
                     $_SESSION['successMessage'] = "You have successfully left the organisation.";
-                    $currentOrgName = "You are not part of any organisation. Create or join an organisation";
+                    $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
 
                     // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
                     } else {
-                        throw new Exception ("Only the team leader can delete the organisation");
+                        throw new Exception ("Only the team leader can delete the organisation.");
+                    }
+                    else { 
+                        throw new Exception ("You are not part of any organisations to leave.");
                     }
             } catch (Exception $e) {
                 $errors[] = "Error leaving organisation: " . $e->getMessage();

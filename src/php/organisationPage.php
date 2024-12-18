@@ -111,6 +111,7 @@ try {
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
                     // Delete user from current organisation
+                    if($teamLeaderOrg && $currentOrgID) {
                     $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':userID' => $userID]);
@@ -126,6 +127,9 @@ try {
                     // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
+                    } else {
+                        $erorrs[] = "Only the team leader can delete the organisation";
+                    }
             } catch (Exception $e) {
                 $errors[] = "Error leaving organisation: " . $e->getMessage();
             }

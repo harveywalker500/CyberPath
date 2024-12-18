@@ -1,18 +1,14 @@
-<!--  Organisation Page to create or join an organisation  -->
-
 <?php
 // Include functions file and start session
 require_once("functions.php");
 session_start();
 loggedIn(); // Ensures the user is logged in before loading the page
 
-
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['userID'])) {
     header("Location: loginForm.php");
     exit();
 }
-
 
 $userID = $_SESSION['userID']; // Get UserID from database when logged in
 $successMessage = ""; // Initalise success message
@@ -98,7 +94,6 @@ try {
                     $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
                     $_SESSION['successMessage'] = "You have successfully joined the organisation.";
 
-
                     // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
@@ -111,15 +106,15 @@ try {
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
                 // Check if user is team leader
-                $sql = "SELECT teamLeaderID from organisationTable WHERE organisationID = :currentOrgID";
+                $sql = "SELECT teamLeaderID FROM organisationTable WHERE organisationID = :currentOrgID";
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute([':currentOrgID' => $currentOrgID]);
                 $teamLeaderID = $stmt->fetchColumn();
 
                 if ($teamLeaderID == $userID) {
-                    $errors[] = "You cannot leave an organisaiton if you are a team leader";
+                    $errors[] = "You cannot leave an organisation if you are a team leader";
                 } else {
-                    $sql = "SELECT COUNT(*) FROM userTable where organisationID = :currentOrgID";
+                    $sql = "SELECT COUNT(*) FROM userTable WHERE organisationID = :currentOrgID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':currentOrgID' => $currentOrgID]);
                     $userCount = $stmt->fetchColumn();
@@ -127,26 +122,28 @@ try {
                     // Delete organisation if user is the team leader
                     if ($teamLeaderID == $userID) {
                         if ($userCount > 0) {
+                            // Remove the user from the organisation
                             $sql = "UPDATE userTable SET organisationID = NULL WHERE organisationID = :currentOrgID";
                             $stmt = $dbConn->prepare($sql);
                             $stmt->execute([':currentOrgID' => $currentOrgID]);
 
+                            // Also, delete the organisation
                             $sql = "DELETE FROM organisationTable WHERE organisationID = :currentOrgID";
                             $stmt = $dbConn->prepare($sql);
                             $stmt->execute([':currentOrgID' => $currentOrgID]);
 
                             $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
-                            
                         } else {
+                            // If no other members, just leave the organisation
                             $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                             $stmt = $dbConn->prepare($sql);
-                            $stmt->execute(['userID' => $userID]);
+                            $stmt->execute([':userID' => $userID]);
 
                             $_SESSION['successMessage'] = "You have successfully left the organisation.";
                         }
                         $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
 
-                        // Refreshes the page and data from database
+                        // Redirects to the page to refresh data
                         header("Location: organisationPage.php");
                         exit();
                     }
@@ -240,21 +237,17 @@ echo makeNavMenu("CyberPath");
                 </form>
             </div>
 
-            <!-- Display current organisation -->
+            <!-- Leave Organisation Form -->
             <div class="column is-one-third">
-                <h2 class="subtitle">Leave an organisation</h2>
-                <?php if ($currentOrgID) : ?>
-                    <div class="box current-org">
-                        <p class="subtitle">You are currently part of an organisation that is called:<br> <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                <h2 class="subtitle">Leave Organisation</h2>
+                <form method="POST" action="" onsubmit="return confirmLeave();">
+                    <div class="field">
+                        <label class="label">Current Organisation</label>
+                        <div class="control">
+                            <input class="input" type="text" name="currentOrgName" value="<?php echo htmlspecialchars($currentOrgName); ?>" readonly>
+                        </div>
                     </div>
-                <?php else : ?>
-                    <div class="box current-org">
-                        <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                    </div>
-                <?php endif; ?>
 
-                <!-- Leave Organisation Form -->
-                <form method="POST" action="" onsubmit="return confirmChange();">
                     <div class="field">
                         <div class="control">
                             <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
@@ -265,24 +258,6 @@ echo makeNavMenu("CyberPath");
         </div>
     </div>
 </div>
-
-<script>
-    // Changing organisation confirm message
-    function confirmChange() {
-        if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
-            return confirm("Are you sure you want to leave the current organisation?");
-        }
-        return true;
-    }
-
-    // Creating organisation confirm message
-    function confirmCreate() {
-        if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-            return confirm("You are already an organisation leader. Do you wish to continue?");
-        }
-        return true;
-    }
-</script>
 
 <?php
 echo makeFooter();

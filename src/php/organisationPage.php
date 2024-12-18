@@ -204,33 +204,29 @@ echo makeNavMenu("CyberPath");
                 </form>
             </div>
 
-                    <!-- Leave Organisation Form -->
-                    <div class="column is-one-third">
-                        <h2 class="subtitle">Leave Organisation</h2>
-                        <form method="POST" action="" onsubmit="return confirmChange();">
-                            <div class="field">
-                                <div class="control">
-                                    <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
-                                </div>
-                            </div>
-                        </form>
+            <!-- Display current organisation -->
+            <div class="column is-one-third">
+                <?php if ($currentOrgID) : ?>
+                    <div class="box">
+                        <p class="subtitle">You are currently part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
                     </div>
-        
+                <?php endif; ?>
 
-    <!-- Display current organisation -->
-    <?php if ($currentOrgID) : ?>
-        <div class="column is is-centered">
-            <div class="column has-text-centered">
-                <p class="subtitle">You are currently part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                <!-- Leave Organisation Form -->
+                <form method="POST" action="" onsubmit="return confirmChange();">
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+</div>
 
-    <?php endif; ?>
-    </form>
-</div>
-</div>
-</div>
-</div>
+
+ 
 
 <script>
     // Changing organisation confirm message

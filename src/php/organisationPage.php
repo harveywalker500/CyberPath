@@ -254,7 +254,12 @@ echo makeNavMenu("CyberPath");
                 alert("You cannot leave an organisation if you are a team leader.");
                 return false;
             } else {
-                return confirm("Are you sure you want to leave the current organisation?");
+                if (<?php echo $teamLeaderOrg ? 'true' : 'false'; ?>) {
+                    alert("You are already a team leader and cannot join a different organisation.");
+                    return false;
+                } else {
+                    return confirm("Are you sure you want to leave the current organisation?");
+                }
             }
         }
         return true;

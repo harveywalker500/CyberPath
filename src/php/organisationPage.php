@@ -184,7 +184,7 @@ echo makeNavMenu("CyberPath");
             <!-- Create Organisation Form -->
             <div class="column is-one-third">
                 <h2 class="subtitle">Create an Organisation</h2>
-                <form method="POST" action="" onsubmit="return confirmCreate();">
+                <form method="POST" action="">
                     <div class="field">
                         <label class="label">Organisation Name</label>
                         <div class="control">
@@ -203,7 +203,7 @@ echo makeNavMenu("CyberPath");
             <!-- Join Organisation Form -->
             <div class="column is-one-third">
                 <h2 class="subtitle">Join an Existing Organisation</h2>
-                <form method="POST" action="" onsubmit="return confirmChange();">
+                <form method="POST" action="">
                     <div class="field">
                         <label class="label">Select Organisation</label>
                         <div class="control">

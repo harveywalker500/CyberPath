@@ -163,7 +163,7 @@ footer.footer {
 
 /* Current organisation display box */
 .box.current-org {
-    background-color: #DAF1FA !important;
+    background-color: #DAF1FA;
 }
 
 .leaderboard-box{

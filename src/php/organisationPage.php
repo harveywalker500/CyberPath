@@ -136,7 +136,6 @@ try {
                             $stmt->execute([':currentOrgID' => $currentOrgID]);
 
                             $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
-                            
                         } else {
                             $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                             $stmt = $dbConn->prepare($sql);
@@ -244,31 +243,31 @@ echo makeNavMenu("CyberPath");
             <div class="column is-one-third">
                 <h2 class="subtitle">Leave an organisation</h2>
                 <form method="POST" action="" onsubmit="return confirmLeave();">
-                <div class ="field">
-                    <label class="label">Current Organisation></label>
-                    <div class="control">
-                        <input class="input" type="text" name="currentOrgName" value="<?php echo htmlspecialchars($currentOrgName); ?>" readonly>
-                    </div>
-                </div>
-
-            <!-- Display current organisation -->
-            <div class="column is-one-third">
-                <h2 class="subtitle">Leave an organisation</h2>
-                <?php if ($currentOrgID) : ?>
-                    <div class="box current-org">
-                        <p class="subtitle">You are currently part of an organisation that is called:<br> <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                    </div>
-                <?php else : ?>
-                    <div class="box current-org">
-                        <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                    </div>
-                <?php endif; ?>
-
                     <div class="field">
+                        <label class="label">Current Organisation></label>
                         <div class="control">
-                            <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                            <input class="input" type="text" name="currentOrgName" value="<?php echo htmlspecialchars($currentOrgName); ?>" readonly>
                         </div>
                     </div>
+
+                    <!-- Display current organisation -->
+                    <div class="column is-one-third">
+                        <h2 class="subtitle">Leave an organisation</h2>
+                        <?php if ($currentOrgID) : ?>
+                            <div class="box current-org">
+                                <p class="subtitle">You are currently part of an organisation that is called:<br> <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                            </div>
+                        <?php else : ?>
+                            <div class="box current-org">
+                                <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="field">
+                            <div class="control">
+                                <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                            </div>
+                        </div>
                 </form>
             </div>
         </div>

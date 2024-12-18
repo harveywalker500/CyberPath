@@ -114,7 +114,7 @@ try {
                 $stmt->execute([':userID' => $userID]);
                 $_SESSION['successMessage'] = "You have successfully left the organisation.";
 
-                $currentOrgID = "You are not part of any organisation.";
+                $currentOrgName = "You are not part of any organisation.";
 
                 // Refreshes the page and data from database
                 header("Location: organisationPage.php");

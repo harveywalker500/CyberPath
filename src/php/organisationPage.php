@@ -111,7 +111,7 @@ try {
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
                     // Delete user from current organisation
-                    if($teamLeaderOrg && $currentOrgID) {
+                    if($teamLeader && $currentOrgID) {
                     $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute([':userID' => $userID]);

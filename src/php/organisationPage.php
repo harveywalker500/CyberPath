@@ -110,11 +110,33 @@ try {
             // Leave existing organisation
         } else if (isset($_POST['leaveOrganisation'])) {
             try {
-                    // Delete user from current organisation
-                    if($currentOrgID) 
+                // Check if user is team leader
+                $sql = "SELECT teamLeaderID from OrganisationTable WHERE organisationID = :currentOrgID";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute([':currentOrgID' => $currentOrgID]);
+                $teamLeaderID = $stmt->fetchColumn();
+
+                // Delete organisation if user is the team leader
+                if ($teamLeaderID == $userID) {
+                    $sql = "DELETE FROM organisationTable WHERE organisationID = :currentOrgID";
+                    $stmt = $dbConn->prepare($sql);
+                    $stmt->execute([':currentOrgID' => $currentOrgID]);
+
+                    // Remove organisation from existing
                     $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                     $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([':userID' => $userID]);
+                    $stmt->execute(['userID' => $userID]);
+
+                    $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
+                    $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
+
+                    // Refreshes the page and data from database
+                    header("Location: organisationPage.php");
+                    exit();
+                } else {
+                    $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
+                    $stmt = $dbConn->prepare($sql);
+                    $stmt->execute(['userID' => $userID]);
 
                     $_SESSION['successMessage'] = "You have successfully left the organisation.";
                     $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
@@ -122,6 +144,7 @@ try {
                     // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
+                }
             } catch (Exception $e) {
                 $errors[] = "Error leaving organisation: " . $e->getMessage();
             }

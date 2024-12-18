@@ -116,29 +116,30 @@ try {
                 $stmt->execute([':currentOrgID' => $currentOrgID]);
                 $teamLeaderID = $stmt->fetchColumn();
 
+                $sql = "SELECT COUNT(*) FROM userTable where organisationID = :currentOrgID";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute([':currentOrgID' => $currentOrgID]);
+                $userCount = $stmt->fetchColumn();
+
                 // Delete organisation if user is the team leader
                 if ($teamLeaderID == $userID) {
-                    $sql = "DELETE FROM organisationTable WHERE organisationID = :currentOrgID";
-                    $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([':currentOrgID' => $currentOrgID]);
+                    if ($userCount > 0) {
+                        $sql = "UPDATE userTable SET organisationID = NULL WHERE organisationID = :currentOrgID";
+                        $stmt = $dbConn->prepare($sql);
+                        $stmt->execute([':currentOrgID' => $currentOrgID]);
 
-                    // Remove organisation from existing
-                    $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
-                    $stmt = $dbConn->prepare($sql);
-                    $stmt->execute(['userID' => $userID]);
+                        $sql = "DELETE FROM organisationTable WHERE organisationID = :currentOrgID";
+                        $stmt = $dbConn->prepare($sql);
+                        $stmt->execute([':currentOrgID' => $currentOrgID]);
 
-                    $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
-                    $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
+                        $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
+                    } else {
+                        $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
+                        $stmt = $dbConn->prepare($sql);
+                        $stmt->execute(['userID' => $userID]);
 
-                    // Refreshes the page and data from database
-                    header("Location: organisationPage.php");
-                    exit();
-                } else {
-                    $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
-                    $stmt = $dbConn->prepare($sql);
-                    $stmt->execute(['userID' => $userID]);
-
-                    $_SESSION['successMessage'] = "You have successfully left the organisation.";
+                        $_SESSION['successMessage'] = "You have successfully left the organisation.";
+                    }
                     $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
 
                     // Refreshes the page and data from database

@@ -136,15 +136,14 @@ try {
                             $stmt->execute([':currentOrgID' => $currentOrgID]);
 
                             $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
-                            
                         } else {
                             $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
                             $stmt = $dbConn->prepare($sql);
                             $stmt->execute(['userID' => $userID]);
 
                             $_SESSION['successMessage'] = "You have successfully left the organisation.";
+                            $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
                         }
-                        $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
 
                         // Refreshes the page and data from database
                         header("Location: organisationPage.php");
@@ -239,7 +238,7 @@ echo makeNavMenu("CyberPath");
                     </div>
                 </form>
             </div>
-            
+
 
             <!-- Display current organisation -->
             <div class="column is-one-third">

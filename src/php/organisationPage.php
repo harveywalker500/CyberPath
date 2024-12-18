@@ -261,18 +261,6 @@ echo makeNavMenu("CyberPath");
 </div>
 </div>
 
-<script>
-    // Changing organisation confirm message
-    function confirmChange() {
-        return true;
-    }
-
-    // Creating organisation confirm message
-    function confirmCreate() {
-        return true;
-    }
-</script>
-
 <?php
 echo makeFooter();
 echo makePageEnd();

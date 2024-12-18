@@ -247,7 +247,7 @@ echo makeNavMenu("CyberPath");
     <form method="POST" action="" onsubmit="return confirmChange();">
         <div class="field">
             <div class="control">
-                <button class="button is-danger is-fullwidth" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
             </div>
         </div>
     </form>
@@ -258,14 +258,30 @@ echo makeNavMenu("CyberPath");
 
 <script>
     // Changing organisation confirm message
-    function confirmCreate() {
-        return confirm('Are you sure you want to create this organisation?');
-    }
     function confirmChange() {
-        return confirm('Are you sure you want to join this organisation?');
+        if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
+            if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
+                alert("You cannot leave an organisation if you are a team leader.");
+                return false;
+            } else {
+                if (<?php echo $teamLeaderOrg ? 'true' : 'false'; ?>) {
+                    alert("You are already a team leader and cannot join a different organisation.");
+                    return false;
+                } else {
+                    return confirm("Are you sure you want to leave the current organisation?");
+                }
+            }
+        }
+        return true;
     }
-    return confirmLeave() {
-        return confirm('Are you sure you want to leave this organisation?')
+
+    // Creating organisation confirm message
+    function confirmCreate() {
+        if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
+            alert("You are already a team leader and cannot create another organisation.");
+            return false;
+        }
+        return true;
     }
 </script>
 

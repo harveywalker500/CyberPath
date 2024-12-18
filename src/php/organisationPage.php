@@ -269,10 +269,11 @@ echo makeNavMenu("CyberPath");
     // Creating organisation confirm message
     function confirmCreate() {
         if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-            return confirm("You are already an organisation leader. Do you wish to continue?");
-        }
-        return true;
+           alert("You are already a team leader and cannot create another organisation.");
+        return false;
     }
+    return true;
+}
 </script>
 
 <?php

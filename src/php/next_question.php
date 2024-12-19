@@ -39,6 +39,9 @@ if ($selectedAnswer === $currentStory['correctAnswer']) {
     // Check if there are no more questions left
     if ($_SESSION['currentIndex'] >= count($storyList)) {
         // Check the current value of storyCompleted in userProgressTable
+
+        logStoryCompletion($_SESSION['userID'], $currentStory['storyID'], date('Y-m-d H:i:s')); // 
+
         $checkSql = "
             SELECT storyCompleted
             FROM userProgressTable

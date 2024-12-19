@@ -54,24 +54,78 @@ HTML;
 }
 
 
-function logStoryCompletion($userID, $storyID, $startTime, $endTime) {
+
+
+function logStoryStart($userID, $storyID, $startTime) {
     $db = getconnection();
 
     $query = "
-        INSERT INTO storyCompletionLog (userID, storyID, startTime, endTime)
-        VALUES (:userID, :storyID, :startTime, :endTime)
+        INSERT INTO storyCompletionLog (userID, storyID, startTime)
+        VALUES (:userID, :storyID, :startTime)
+        ON DUPLICATE KEY UPDATE startTime = :startTime
     ";
 
     $stmt = $db->prepare($query);
     $stmt->execute([
         ':userID' => $userID,
         ':storyID' => $storyID,
-        ':startTime' => $startTime,
-        ':endTime' => $endTime
+        ':startTime' => $startTime
     ]);
 }
 
 
+function logStoryCompletion($userID, $storyID, $endTime) {
+    $db = getconnection();
+
+    $query = "
+        UPDATE storyCompletionLog
+        SET endTime = :endTime
+        WHERE userID = :userID AND storyID = :storyID
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        ':userID' => $userID,
+        ':storyID' => $storyID,
+        ':endTime' => $endTime
+    ]);
+}
+
+function logEpisodeStart($userID, $episodeID, $startTime) {
+    $db = getconnection();
+
+    $query = "
+        INSERT INTO episodeCompletionLog (userID, episodeID, startTime)
+        VALUES (:userID, :episodeID, :startTime)
+        ON DUPLICATE KEY UPDATE startTime = :startTime
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        ':userID' => $userID,
+        ':episodeID' => $episodeID,
+        ':startTime' => $startTime
+    ]);
+}
+
+function logEpisodeCompletion($userID, $episodeID, $endTime) {
+    $db = getconnection();
+
+    $query = "
+        UPDATE episodeCompletionLog
+        SET endTime = :endTime
+        WHERE userID = :userID AND episodeID = :episodeID
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        ':userID' => $userID,
+        ':episodeID' => $episodeID,
+        ':endTime' => $endTime
+    ]);
+}
+
+    
 // function updateOrganisationMetric($organisationID, $metricType, $metricValue) {
 //     $db = getconnection();
 

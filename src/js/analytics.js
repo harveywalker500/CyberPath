@@ -47,47 +47,53 @@ function addOverviewTooltips(data) {
 
     // Add hover event listeners to each metric
     Object.keys(metricMap).forEach((metric) => {
-        // const element = document.getElementById(metric); // Target element by ID
         const element = document.querySelector(`.overview-item[data-metric='${metric}']`); // Targets the entire card
 
+        if (!element) return; // Skip if the element is not found
+
         element.addEventListener("mouseenter", async (e) => {
-            // Fetch detailed data for the hovered metric
-            const type = metricMap[metric];
-            const details = await fetchMetricDetails(type);
+            try {
+                // Fetch detailed data for the hovered metric
+                const type = metricMap[metric];
+                const details = await fetchMetricDetails(type);
 
-            // Populate tooltip content based on metric type
-            let tooltipContent = "";
-            if (type === "total-users" || type === "active-users") {
-                tooltipContent = `<strong>Users:</strong><ul>${details
-                    .map((user) => `<li>${user.name}</li>`)
-                    .join("")}</ul>`;
-            } else if (type === "completed-stories") {
-                tooltipContent = `<strong>Story Completion:</strong><ul>${details
-                    .map(
-                        (user) =>
-                            `<li>${user.name}: ${Math.round(
-                                user.storyTime / 60
-                            )} mins</li>`
-                    )
-                    .join("")}</ul>`;
-            } else if (type === "completed-episodes") {
-                tooltipContent = `<strong>Episode Completion:</strong><ul>${details
-                    .map(
-                        (user) =>
-                            `<li>${user.name}: ${Math.round(
-                                user.episodeTime / 60
-                            )} mins</li>`
-                    )
-                    .join("")}</ul>`;
-            } else if (type === "avg-story-time" || type === "avg-episode-time") {
-                tooltipContent = `<strong>${metric.replace(/([A-Z])/g, " $1")}:</strong> ${details.avgTime} mins`;
+                // Populate tooltip content based on metric type
+                let tooltipContent = "";
+                if (type === "total-users" || type === "active-users") {
+                    tooltipContent = `<strong>Users:</strong><ul>${details
+                        .map((user) => `<li>${user.name}</li>`)
+                        .join("")}</ul>`;
+                } else if (type === "completed-stories") {
+                    tooltipContent = `<strong>Story Completion:</strong><ul>${details
+                        .map(
+                            (user) =>
+                                `<li>${user.name}: ${Math.round(
+                                    user.storyTime / 60
+                                )} mins</li>`
+                        )
+                        .join("")}</ul>`;
+                } else if (type === "completed-episodes") {
+                    tooltipContent = `<strong>Episode Completion:</strong><ul>${details
+                        .map(
+                            (user) =>
+                                `<li>${user.name}: ${Math.round(
+                                    user.episodeTime / 60
+                                )} mins</li>`
+                        )
+                        .join("")}</ul>`;
+                } if (type === "avg-story-time" || type === "avg-episode-time") {
+                    const avgTime = parseFloat(details.avgTime) || 0; // Convert to number and handle null
+                    tooltipContent = `<strong>${metric.replace(/([A-Z])/g, " $1")}:</strong> ${Math.round(avgTime / 60)} mins`;
+                }
+
+                // Update tooltip content and position
+                tooltip.innerHTML = tooltipContent;
+                tooltip.style.top = `${e.clientY + 10}px`;
+                tooltip.style.left = `${e.clientX + 10}px`;
+                tooltip.classList.add("visible");
+            } catch (error) {
+                console.error("Error fetching tooltip data:", error);
             }
-
-            // Update tooltip content and position
-            tooltip.innerHTML = tooltipContent;
-            tooltip.style.top = `${e.clientY + 10}px`;
-            tooltip.style.left = `${e.clientX + 10}px`;
-            tooltip.classList.add("visible");
         });
 
         // Hide tooltip on mouse leave
@@ -95,6 +101,7 @@ function addOverviewTooltips(data) {
             tooltip.classList.remove("visible");
         });
     });
+
 }
 
 // Fetch detailed metric data for tooltips

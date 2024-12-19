@@ -17,6 +17,8 @@ if ($episodeID === null) {
     exit; // Exit if no episodeID is provided
 }
 
+logEpisodeStart($_SESSION['userID'], $episodeID, date('Y-m-d H:i:s'));
+
 $hasPermission = userStoryPermission($_SESSION['userID'], $episodeID);
 
 if (!$hasPermission) {
@@ -53,6 +55,7 @@ if (!isset($_SESSION['currentIndex'])) {
 
 // Get the current story and question based on the current index
 $currentStory = $storyList[$_SESSION['currentIndex']];
+logStoryStart($_SESSION['userID'], $currentStory['storyID'], date('Y-m-d H:i:s'));
 ?>
 
 <div id="content">

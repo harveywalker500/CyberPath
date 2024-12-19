@@ -120,7 +120,7 @@ try {
                 $teamLeaderID = $stmt->fetchColumn();
 
                 if ($teamLeaderID == $userID) {
-                    $errors[] = "You cannot leave an organisaiton if you are a team leader";
+                    $errors[] = "You cannot leave an organisaiton if you are a team leader.";
                 } else {
                     try {
                         $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";

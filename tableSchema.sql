@@ -118,3 +118,5 @@ CREATE TABLE employeeActivityLog (
 
 
 ALTER TABLE employeeStatus ADD CONSTRAINT UNIQUE (userID);
+ALTER TABLE storyCompletionLog MODIFY COLUMN endTime DATETIME NULL;
+ALTER TABLE episodeCompletionLog MODIFY COLUMN endTime DATETIME NULL;

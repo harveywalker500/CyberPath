@@ -13,7 +13,6 @@ if (!isset($_SESSION['userID'])) {
     exit();
 }
 
-
 $userID = $_SESSION['userID']; // Get UserID from database when logged in
 $successMessage = ""; // Initalise success message
 $errors = []; // Initialise error array
@@ -45,51 +44,57 @@ try {
         $stmt = $dbConn->prepare($sql);
         $stmt->execute([':organisationID' => $currentOrgID]);
         $currentOrgName = $stmt->fetchColumn();
+    } else {
+        $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
     }
 
     // Check if the form is submitted
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['createOrganisation'])) {
             $organisationName = trim($_POST['organisationName'] ?? '');
+            if ($teamLeaderOrg) {
+                $errors[] = "You are already a team leader and cannot create another organisation.";
+            } else {
+                if (empty($organisationName)) {
+                    $errors[] = "Please provide an organisation name.";
+                }
 
-            if (empty($organisationName)) {
-                $errors[] = "Please provide an organisation name.";
-            }
+                if (empty($errors)) {
+                    try {
+                        // Insert the new organisation into the database
+                        $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
+                        $stmt = $dbConn->prepare($sql);
+                        // Include the current user as the team leader
+                        $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
 
-            if (empty($errors)) {
-                try {
-                    // Insert the new organisation into the database
-                    $sql = "INSERT INTO organisationTable (name, teamLeaderID) VALUES (:name, :teamLeaderID)";
-                    $stmt = $dbConn->prepare($sql);
-                    // Include the current user as the team leader
-                    $stmt->execute([':name' => $organisationName, ':teamLeaderID' => $userID]);
+                        // Get the newly created organisation ID
+                        $organisationID = $dbConn->lastInsertId();
 
-                    // Get the newly created organisation ID
-                    $organisationID = $dbConn->lastInsertId();
+                        // Assign the user to the newly created organisation
+                        $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
+                        $stmt = $dbConn->prepare($sql);
+                        $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
+                        $_SESSION['successMessage'] = "Organisation created and you have been assigned as the team leader.";
 
-                    // Assign the user to the newly created organisation
-                    $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
-                    $stmt = $dbConn->prepare($sql);
-                    $stmt->execute([':organisationID' => $organisationID, ':userID' => $userID]);
-                    $_SESSION['successMessage'] = "Organisation created and you have been assigned as the team leader.";
-
-                    // Refreshes the page and data from database
-                    header("Location: organisationPage.php");
-                    exit();
-
-                } catch (Exception $e) {
-                    $errors[] = "Error creating organisation: " . $e->getMessage();
+                        // Refreshes the page and data from database
+                        header("Location: organisationPage.php");
+                        exit();
+                    } catch (Exception $e) {
+                        $errors[] = "Error creating organisation: " . $e->getMessage();
+                    }
                 }
             }
             // Joining existing organisation
         } elseif (isset($_POST['joinOrganisation'])) {
             $organisationID = $_POST['organisationID'] ?? null;
- 
+
             if (!$organisationID) {
                 $errors[] = "Please select an organisation.";
             }
 
-            if (empty($errors)) {
+            if ($teamLeaderOrg) {
+                $errors[] = "You are already a team leader and cannot join a different organisation.";
+            } else if (empty($errors)) {
                 try {
                     // Assign the user to the selected organisation
                     $sql = "UPDATE userTable SET organisationID = :organisationID WHERE userID = :userID";
@@ -101,17 +106,47 @@ try {
                     // Refreshes the page and data from database
                     header("Location: organisationPage.php");
                     exit();
-
                 } catch (Exception $e) {
                     $errors[] = "Error joining organisation: " . $e->getMessage();
                 }
             }
+            // Leave existing organisation
+        } else if (isset($_POST['leaveOrganisation'])) {
+            try {
+                // Check if user is team leader
+                $sql = "SELECT teamLeaderID from organisationTable WHERE organisationID = :currentOrgID";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute([':currentOrgID' => $currentOrgID]);
+                $teamLeaderID = $stmt->fetchColumn();
+
+                if ($teamLeaderID == $userID) {
+                    $errors[] = "You cannot leave an organisaiton if you are a team leader.";
+                } else {
+                    try {
+                        $sql = "UPDATE userTable SET organisationID = NULL WHERE userID = :userID";
+                        $stmt = $dbConn->prepare($sql);
+                        $stmt->execute([':userID' => $userID]);
+
+                        $_SESSION['successMessage'] = "You have successfully left and deleted the organisation.";
+                        $currentOrgName = "You are not part of any organisation. Create or join an organisation.";
+
+                        // Refreshes the page and data from database
+                        header("Location: organisationPage.php");
+                        exit();
+                    } catch (Exception $e) {
+                        $errors[] = "Error leaving organisation: " . $e->getMessage();
+                    }
+                }
+            } catch (Exception $e) {
+                $errors[] = "Error leaving organisation: " . $e->getMessage();
+            }
         }
     }
+
+
     // Clear success messages
     $successMessage = isset($_SESSION['successMessage']) ? $_SESSION['successMessage'] : "";
     unset($_SESSION['successMessage']);
-
 } catch (Exception $e) {
     $errors[] = "Error joining organisation: " . $e->getMessage();
 }
@@ -147,9 +182,9 @@ echo makeNavMenu("CyberPath");
         <div class="columns">
 
             <!-- Create Organisation Form -->
-            <div class="column is-half">
+            <div class="column is-one-third">
                 <h2 class="subtitle">Create an Organisation</h2>
-                <form method="POST" action="" onsubmit="return confirmCreate();">
+                <form method="POST" action="">
                     <div class="field">
                         <label class="label">Organisation Name</label>
                         <div class="control">
@@ -166,9 +201,9 @@ echo makeNavMenu("CyberPath");
             </div>
 
             <!-- Join Organisation Form -->
-            <div class="column is-half">
+            <div class="column is-one-third">
                 <h2 class="subtitle">Join an Existing Organisation</h2>
-                <form method="POST" action="" onsubmit="return confirmChange();">
+                <form method="POST" action="">
                     <div class="field">
                         <label class="label">Select Organisation</label>
                         <div class="control">
@@ -190,39 +225,43 @@ echo makeNavMenu("CyberPath");
                             <button class="button is-primary" type="submit" name="joinOrganisation">Join Organisation</button>
                         </div>
                     </div>
-
-                    <!-- Display current organisation -->
-                    <?php if ($currentOrgID) : ?>
-                        <div class="column is is-centered">
-                            <div class="column has-text-centered">
-                                <p class="subtitle">You are currently part of organisation: <strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
-                            </div>
-                        </div>
-
-                    <?php endif; ?>
                 </form>
             </div>
+
+
+            <!-- Display current organisation -->
+            <div class="column is-one-third">
+                <h2 class="subtitle">Current Organisation</h2>
+                <?php if ($currentOrgID) : ?>
+                    <div class="field">
+                        <label class="label">You are already currently part of an organisation:</label>
+                        <div class="control">
+                            <div class="input input-static"><?php echo htmlspecialchars($currentOrgName); ?></div>
+                        </div>
+                    </div>
+
+                <?php else : ?>
+                    <div class="box current-org">
+                        <p class="subtitle"><strong><?php echo htmlspecialchars($currentOrgName); ?></strong></p>
+                    </div>
+                <?php endif; ?>
+
+
+                <!-- Leave Organisation Form -->
+                <form method="POST" action="">
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-danger" type="submit" name="leaveOrganisation">Leave Organisation</button>
+                        </div>
+                    </div>
+                    <form>
+            </div>
         </div>
+
     </div>
 </div>
-
-<script>
-    // Changing organisation confirm message
-    function confirmChange() {
-        if (<?php echo $currentOrgID ? 'true' : 'false'; ?>) {
-            return confirm("Joining a new organisation will remove you from your current organisation. Do you wish to continue?");
-        }
-        return true;
-    }
-
-    // Creating organisation confirm message
-    function confirmCreate() {
-        if (<?php echo $isTeamLeader ? 'true' : 'false'; ?>) {
-            return confirm("You are already an organisation leader. Do you wish to continue?");
-        }
-        return true;
-    }
-</script>
+</div>
+</div>
 
 <?php
 echo makeFooter();

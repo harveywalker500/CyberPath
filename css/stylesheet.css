@@ -161,6 +161,11 @@ footer.footer {
     width: 100%;
 }
 
+/* Current organisation display box */
+.box.current-org {
+    background-color: #DAF1FA;
+}
+
 .leaderboard-box{
     width: 100vh;
 }
@@ -279,6 +284,7 @@ p {
 	clear:both;
 }
 .box.leaderboard-box {overflow:hidden}
+
 
 
 

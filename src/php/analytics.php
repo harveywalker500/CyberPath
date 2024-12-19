@@ -61,27 +61,27 @@ try {
                 <div id="organizationAnalytics" class="analytics-overview">
                     <div class="overview-item" data-metric="totalUsers">
                         <span class="label">Total Users</span>
-                        <span class="value" id="totalUsers">5</span>
+                        <span class="value" id="totalUsers">0</span>
                     </div>
                     <div class="overview-item" data-metric="activeUsers">
                         <span class="label">Active Users</span>
-                        <span class="value" id="activeUsers">3</span>
+                        <span class="value" id="activeUsers">0</span>
                     </div>
                     <div class="overview-item" data-metric="completedStories">
                         <span class="label">Story Completions</span>
-                        <span class="value" id="completedStories">30</span>
+                        <span class="value" id="completedStories">0</span>
                     </div>
                     <div class="overview-item" data-metric="completedEpisodes">
                         <span class="label">Episode Completions</span>
-                        <span class="value" id="completedEpisodes">30</span>
+                        <span class="value" id="completedEpisodes">0</span>
                     </div>
                     <div class="overview-item" data-metric="avgStoryTime">
                         <span class="label">Avg Story Time</span>
-                        <span class="value" id="avgStoryTime">35 mins</span>
+                        <span class="value" id="avgStoryTime">0</span>
                     </div>
                     <div class="overview-item" data-metric="avgEpisodeTime">
                         <span class="label">Avg Episode Time</span>
-                        <span class="value" id="avgEpisodeTime">23 mins</span>
+                        <span class="value" id="avgEpisodeTime">0</span>
                     </div>
                 </div>
                 <div id="tooltip" class="tooltip hidden"></div>

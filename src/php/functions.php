@@ -10,13 +10,13 @@ function getConnection(){ //function to get the connection to the database, allo
         //$connection = new PDO('mysql:host=localhost; dbname=test12','root','');
         $connection ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//sets attributes on PDO connection. Turns errors and exception reporting on.
         return $connection;
-        
+
     }catch(Exception $e) {
         throw new Exception("Connection error".$e->getMessage(), 0 ,$e);
     }
 }
 
-function makePageStart($title, $stylesheet) 
+function makePageStart($title, $stylesheet)
 {
     // Get the current script filename
     $currentPage = basename($_SERVER['PHP_SELF']);
@@ -35,97 +35,43 @@ function makePageStart($title, $stylesheet)
         <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script> <!-- DataTables CDN -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="$stylesheet">
-		<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">  
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">  
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 HTML;
 
-        // Conditionally add dev2.js only if the current page is Leaderboard-V2.php
-        if ($currentPage === 'Leaderboard-V2.php') {
-            $html .= '<script src="../js/dev2.js"></script>';
-        }
-    
-        // Closing the head and body tags
-        $html .= <<<HTML
+    // Conditionally add dev2.js only if the current page is Leaderboard-V2.php
+    if ($currentPage === 'Leaderboard-V2.php') {
+        $html .= '<script src="../js/dev2.js"></script>';
+    }
+
+    // Closing the head and body tags
+    $html .= <<<HTML
         </head>
         <body>
 HTML;
- // Return the final HTML string
+    // Return the final HTML string
     return $html;
 }
 
 
-
-
-function logStoryStart($userID, $storyID, $startTime) {
+function logStoryCompletion($userID, $storyID, $startTime, $endTime) {
     $db = getconnection();
 
     $query = "
-        INSERT INTO storyCompletionLog (userID, storyID, startTime)
-        VALUES (:userID, :storyID, :startTime)
-        ON DUPLICATE KEY UPDATE startTime = :startTime
+        INSERT INTO storyCompletionLog (userID, storyID, startTime, endTime)
+        VALUES (:userID, :storyID, :startTime, :endTime)
     ";
 
     $stmt = $db->prepare($query);
     $stmt->execute([
         ':userID' => $userID,
         ':storyID' => $storyID,
-        ':startTime' => $startTime
-    ]);
-}
-
-
-function logStoryCompletion($userID, $storyID, $endTime) {
-    $db = getconnection();
-
-    $query = "
-        UPDATE storyCompletionLog
-        SET endTime = :endTime
-        WHERE userID = :userID AND storyID = :storyID
-    ";
-
-    $stmt = $db->prepare($query);
-    $stmt->execute([
-        ':userID' => $userID,
-        ':storyID' => $storyID,
+        ':startTime' => $startTime,
         ':endTime' => $endTime
     ]);
 }
 
-function logEpisodeStart($userID, $episodeID, $startTime) {
-    $db = getconnection();
 
-    $query = "
-        INSERT INTO episodeCompletionLog (userID, episodeID, startTime)
-        VALUES (:userID, :episodeID, :startTime)
-        ON DUPLICATE KEY UPDATE startTime = :startTime
-    ";
-
-    $stmt = $db->prepare($query);
-    $stmt->execute([
-        ':userID' => $userID,
-        ':episodeID' => $episodeID,
-        ':startTime' => $startTime
-    ]);
-}
-
-function logEpisodeCompletion($userID, $episodeID, $endTime) {
-    $db = getconnection();
-
-    $query = "
-        UPDATE episodeCompletionLog
-        SET endTime = :endTime
-        WHERE userID = :userID AND episodeID = :episodeID
-    ";
-
-    $stmt = $db->prepare($query);
-    $stmt->execute([
-        ':userID' => $userID,
-        ':episodeID' => $episodeID,
-        ':endTime' => $endTime
-    ]);
-}
-
-    
 // function updateOrganisationMetric($organisationID, $metricType, $metricValue) {
 //     $db = getconnection();
 
@@ -210,7 +156,7 @@ function getEpisodes() {
     try {
         // Get database connection
         $connection = getConnection();
-        
+
         // Query to retrieve episodes
         $sql = "SELECT episodeID, episodeName FROM episodesTable ORDER BY episodeID";
         $stmt = $connection->query($sql);
@@ -285,10 +231,10 @@ function check_login(){//Checks if user is logged-in based on session variable "
 
 function loggedIn(){//Function that redirects users to loginform.php if they are not logged in.
     if (!check_login())
-        {
-            header('Location: ../../src/php/loginForm.php');//Redirects user
-            exit();//Terminates script
-        }
+    {
+        header('Location: ../../src/php/loginForm.php');//Redirects user
+        exit();//Terminates script
+    }
 }
 
 
@@ -311,7 +257,7 @@ function makeNavMenu($navMenuHeader) {
         "../../src/php/storySelect.php" => "Story",
         "../../src/php/quizSelection.php" => "Quiz Selection",
         "../../src/php/Leaderboard-V2.php"  => "Leaderboard"
-        );
+    );
 
     $output = <<<HTML
     <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -338,12 +284,12 @@ HTML;
     // Check if the user is logged in
     if (check_login()) {
         $userID = get_session('userID');
-        
+
         $userOrganisationID = getUserOrganisation($userID); // Get user's organisation ID
 
         if ($userOrganisationID) {
             $organisationDetails = getOrganisation($userOrganisationID); // Get organisation details
-            
+
             if ($organisationDetails && $organisationDetails['teamLeaderID'] == $userID) {
                 // Display "Manage Organisation" link if user is the team leader
                 $output .= "<a class=\"navbar-item\" href='../../src/php/analytics.php?id=" . $userOrganisationID . "'>Analytics</a>\n";

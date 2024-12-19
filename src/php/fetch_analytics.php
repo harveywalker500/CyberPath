@@ -158,18 +158,19 @@ $metricTypes = [
         WHERE u.organisationID = :orgID
         GROUP BY u.userID
     ",
-    'avg-story-time' => "
+    'total-story-time' => "
         SELECT AVG(durationInSeconds) AS avgTime 
         FROM storyCompletionLog scl
         JOIN userTable u ON scl.userID = u.userID
         WHERE u.organisationID = :orgID
     ",
-    'avg-episode-time' => "
+    'total-episode-time' => "
         SELECT AVG(durationInSeconds) AS avgTime 
         FROM episodeCompletionLog ecl
         JOIN userTable u ON ecl.userID = u.userID
         WHERE u.organisationID = :orgID
     "
+
 ];
 
 if (isset($metricTypes[$type])) {
